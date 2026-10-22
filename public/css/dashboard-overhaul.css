@@ -1,0 +1,254 @@
+/* Modern Dashboard Overhaul 0.7.0 - restyling, NOT replacement widgets.
+ * .formatted-number has inline font sizes from GLPI fitText; override that actual
+ * element, not only .content. No monkey-patching of GLPI JS methods is required. */
+.dashboard { --mdo-restyle-enabled: 1; }
+.dashboard.mdo-restyle {
+    color: var(--mdo-ink);
+    background: var(--mdo-canvas) !important;
+    border-radius: 12px;
+    font-family: var(--mdo-font);
+}
+.dashboard.mdo-restyle > .toolbar { color: var(--mdo-muted); }
+.dashboard.mdo-restyle > .toolbar .btn {
+    color: var(--mdo-muted) !important;
+    border-radius: 8px;
+}
+.dashboard.mdo-restyle > .toolbar .btn:hover,
+.dashboard.mdo-restyle > .toolbar .btn.active {
+    color: var(--mdo-accent) !important;
+    background: var(--mdo-accent-soft) !important;
+}
+.dashboard.mdo-restyle .toolbar :is(select.dashboard_select, input.dashboard-name) {
+    background: var(--mdo-surface) !important;
+    color: var(--mdo-ink) !important;
+    border-color: var(--mdo-border) !important;
+    font-weight: 650;
+}
+.dashboard.mdo-restyle .grid-stack-item-content > .card:is(.big-number,.multiple-numbers,.summary-numbers,.g-chart) {
+    box-sizing: border-box;
+    min-width: 0;
+    color: var(--mdo-ink) !important;
+    background: linear-gradient(165deg,var(--mdo-surface),var(--mdo-surface-end)) !important;
+    border: 1px solid var(--mdo-border) !important;
+    border-top: 3px solid var(--mdo-accent) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--mdo-inset),var(--mdo-shadow) !important;
+    text-shadow: none !important;
+    font-family: var(--mdo-font);
+}
+/* KPI content must be intrinsically sized: NEVER a scrollable number span.
+ * In 0.4, overflow:auto on .content + align-content:start on narrow tiles caused
+ * the visible number scrollbar and the top-heavy alignment reported by users. */
+.dashboard.mdo-restyle .grid-stack-item-content > .card.big-number {
+    container-type: inline-size;
+    container-name: mdo-kpi;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 30px;
+    grid-template-rows: max-content max-content;
+    align-content: center !important;
+    align-items: center;
+    gap: 7px 10px;
+    height: 100%;
+    min-height: 0;
+    padding: 14px 16px !important;
+    margin: 0 !important;
+    text-align: start;
+    text-decoration: none;
+    overflow: hidden !important;
+    scrollbar-width: none;
+}
+.dashboard.mdo-restyle .card.big-number > .content {
+    grid-column: 1;
+    grid-row: 1;
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    min-width: 0;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    color: var(--mdo-ink) !important;
+    line-height: 1.12 !important;
+    transform: none !important;
+}
+.dashboard.mdo-restyle .card.big-number .formatted-number {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
+    min-width: 0;
+    font-size: var(--mdo-kpi-number-size,32px) !important;
+    line-height: 1.12 !important;
+    font-weight: 750 !important;
+    letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    color: var(--mdo-ink) !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+.dashboard.mdo-restyle .card.big-number .formatted-number .number {
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+}
+.dashboard.mdo-restyle .card.big-number .formatted-number :is(.unit,.suffix) {
+    font-size: 0.62em !important;
+    font-weight: 650 !important;
+    color: var(--mdo-muted) !important;
+}
+.dashboard.mdo-restyle .card.big-number > .label {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.28 !important;
+    font-weight: 650 !important;
+    color: var(--mdo-muted) !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    overflow: visible !important;
+    text-align: start;
+}
+.dashboard.mdo-restyle .card.big-number > .main-icon {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    position: static !important;
+    inset: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 28px !important;
+    line-height: 1.15 !important;
+    color: var(--mdo-accent) !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: none;
+}
+/* Width controls padding, not vertical anchoring. Users/Groups stay centered. */
+.dashboard.mdo-restyle .card.big-number.mdo-kpi-tight {
+    padding: 10px !important;
+    grid-template-columns: minmax(0,1fr) 24px;
+    gap: 5px 7px;
+}
+.dashboard.mdo-restyle .card.big-number.mdo-kpi-tight > .main-icon { font-size: 23px !important; }
+/* Truly short cards cannot fit arbitrary content. Never invent a tiny number or
+ * add a number scrollbar: retain minimum type sizes, full text in the native
+ * accessible DOM and tooltip, and recommend enlarging such cards. */
+.dashboard.mdo-restyle .card.big-number.mdo-kpi-short {
+    padding: 6px 10px !important;
+    gap: 3px 7px;
+}
+.dashboard.mdo-restyle .card.big-number.mdo-kpi-short > .label {
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+/* Scope these rules to KPI wrappers only; RSS, tabs and task lists still scroll. */
+.dashboard.mdo-restyle .card.big-number::-webkit-scrollbar,
+.dashboard.mdo-restyle .card.big-number > .content::-webkit-scrollbar,
+.dashboard.mdo-restyle .card.big-number .formatted-number::-webkit-scrollbar { display: none; }
+.dashboard.mdo-restyle .card.big-number:hover {
+    border-color: var(--mdo-accent) !important;
+    color: var(--mdo-ink) !important;
+}
+.dashboard.mdo-restyle .card.big-number:focus-visible {
+    outline: 3px solid var(--mdo-accent);
+    outline-offset: -5px;
+}
+.dashboard.mdo-restyle .card:is(.g-chart,.multiple-numbers,.summary-numbers) > .main-label {
+    color: var(--mdo-ink) !important;
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    text-shadow: none !important;
+    display: block;
+    width: auto !important;
+    inset-inline-end: 38px;
+    max-width: calc(100% - 56px);
+    overflow-wrap: anywhere;
+}
+.dashboard.mdo-restyle .card:is(.g-chart,.multiple-numbers,.summary-numbers) > .main-icon {
+    color: var(--mdo-accent) !important;
+    font-size: 24px !important;
+    opacity: 1 !important;
+}
+.dashboard.mdo-restyle .card:is(.multiple-numbers,.summary-numbers) .line {
+    color: var(--mdo-ink) !important;
+    background: transparent !important;
+    border-bottom: 1px solid var(--mdo-border);
+    min-height: 48px;
+}
+.dashboard.mdo-restyle .card:is(.multiple-numbers,.summary-numbers) .line :is(.content,.label,.icon) {
+    color: var(--mdo-ink) !important;
+    text-shadow: none !important;
+}
+.dashboard.mdo-restyle .card:is(.multiple-numbers,.summary-numbers) .formatted-number {
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+    font-weight: 750 !important;
+    font-variant-numeric: tabular-nums;
+}
+.dashboard.mdo-restyle .card:is(.multiple-numbers,.summary-numbers) .line .label {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+    font-weight: 650 !important;
+    white-space: normal;
+}
+/* Legacy SVG charts, if present. ECharts/canvas is handled by the optional adapter. */
+.dashboard.mdo-restyle .card.g-chart .ct-label {
+    color: var(--mdo-muted) !important;
+    fill: var(--mdo-muted) !important;
+    font-size: 13px !important;
+}
+.dashboard.mdo-restyle .card.g-chart .ct-grid { stroke: var(--mdo-border) !important; }
+.dashboard.mdo-restyle .card.g-chart .ct-legend li { color: var(--mdo-ink) !important; font-size: 13px; }
+.dashboard.mdo-restyle .card.g-chart .empty-card.no-data {
+    color: var(--mdo-muted) !important;
+    background: transparent !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+@media print {
+    .dashboard.mdo-restyle .card { box-shadow: none !important; }
+}
+
+/* 0.6: GLPI's original empty-chart message uses top:50% absolute placement.
+ * Keep it visually centered and readable even in small resizable native cards. */
+.dashboard.mdo-restyle .card.g-chart .chart .empty-card.no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+}
+.dashboard.mdo-restyle .card.g-chart .chart .empty-card.no-data > div {
+    position: static !important;
+    top: auto !important;
+    width: auto !important;
+    line-height: 1.4;
+    font-size: clamp(13px, 1.1rem, 16px);
+}

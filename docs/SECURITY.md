@@ -1,0 +1,39 @@
+# Sicurezza e dati — Modern Dashboard Overhaul 0.7.0
+
+## Modello di fiducia
+
+| Elemento | Confine di sicurezza |
+| --- | --- |
+| Utente GLPI | La visualizzazione di dashboard/RSS eredita autenticazione e diritti GLPI; la pagina Configura richiede `config:UPDATE` |
+| Feed RSS esterno | Testi, date, link e metadati sono **non fidati**: usare parser GLPI, normalizzazione, escaping HTML e schemi URL sicuri |
+| Browser | JavaScript del restyling modifica soltanto presentazione/DOM della dashboard; non deve leggere credenziali né inviare telemetria |
+| Container/plugin | Codice su bind mount **read-only**; PHP GLPI gestisce impostazioni con API native in `glpi_configs` |
+| Backup ZIP | SHA-512 protegge dall'alterazione accidentale e aiuta il confronto, **non dimostra provenienza, affidabilità o assenza di malware** |
+
+## Controlli presenti nella 0.7
+
+- Token CSRF incluso nel form e protezione della richiesta demandata al router GLPI 11; `Settings::save` accetta soltanto i cinque flag `0` o `1`, rifiutando input incompleto o non valido.
+- `Session::checkRight('config', UPDATE)` per la pagina amministrativa; selezione RSS soggetta a diritti e visibilità GLPI.
+- Titoli e attributi RSS passano attraverso escaping HTML; link valutati dal formatter e aperti con `rel="noopener noreferrer"`.
+- Nessuna tabella propria, telemetria, archivio permanente delle CVE, password, processo in background o integrazione ad API di scoring.
+- Moduli indipendenti: spegnere Restyling non deve cambiare l'accessibilità dei feed e viceversa.
+
+## Rischi da collaudare
+
+- Verificare in **GLPI reale** i permessi dei feed condivisi e privati con utenti/profili distinti.
+- Provare link non-HTTP(S), markup HTML ostile, date anomale, redirect e feed malformati.
+- Verificare che il salvataggio dei flag non possa essere effettuato da profili senza permessi o senza token valido.
+- Testare il comportamento in caso di upgrade GLPI, perché hook/DOM/JS nativi possono cambiare.
+- Verificare che disattivare il modulo RSS non porti alla perdita di schede quando un utente modifica una dashboard: **non salvarla durante tale fase**.
+
+## Cosa non deve essere distribuito
+
+Mai includere nel pacchetto: `.env` di Docker, certificati o chiavi private, password, backup MySQL, configurazioni `ui.local.php` contenenti personalizzazioni, log con dati personali, nomi interni di host/IP e screenshot con dettagli riservati.
+
+## Segnalazioni di vulnerabilità
+
+Il progetto è in **pilot interno**; non è ancora disponibile un canale pubblico del repository. Segnalare problemi al manutentore attraverso il canale privato concordato per il progetto. Non pubblicare token, password, dati RSS privati o log sensibili.
+
+## CVE critiche del runtime PHP (21 ottobre 2026)
+
+Le vulnerabilità **CVE-2026-109618 e CVE-2026-109619** (CVSS v4 9.2) interessano il runtime PHP, possono consentire RCE non autenticata e non sono risolvibili con un aggiornamento di questo plugin. Il comando `tools/verifica-runtime-php.sh` indica il confronto con le versioni upstream corrette e segnala quando serve verificare backport del distributore. Per dettagli, impatto e patch vedere [SECURITY_PHP_2026.md](SECURITY_PHP_2026.md). L'aggiornamento del container web e il riavvio dei worker vanno gestiti separatamente con backup GLPI e immagini aggiornate.

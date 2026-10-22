@@ -1,0 +1,65 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MDO 0.7.0 isolated GLPI 11 dashboard fixture</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;font-family:system-ui, sans-serif}body{background:#e4ebf4;color:#25374c}
+body[data-bs-theme=dark]{background:#101924;color:#eaf0f9}
+.shell{display:flex;min-height:100vh}.sidebar{width:200px;flex:0 0 200px;background:#162335;color:#e6f0ff;padding:25px 15px}.brand{font-weight:800;color:#dceaff;font-size:23px;margin-bottom:36px}.sidebar div{padding:12px;border-bottom:1px solid #263b54}
+.main{width:calc(100% - 200px);padding:16px 20px}.top{height:52px;display:flex;align-items:center;justify-content:space-between}.tabs-major{margin-bottom:14px;display:flex;gap:20px;flex-wrap:wrap;color:#acc9ef}.tabs-major span:first-child{color:#62a6fa;font-weight:700}
+.dashboard{position:relative;padding-top:56px;min-height:650px;background:#edf2f8;border-radius:12px;}
+.dashboard .toolbar{position:absolute;right:5px;top:0;height:36px;display:flex;gap:7px;align-items:center;max-width:calc(100% - 10px)}
+.dashboard .toolbar.left-toolbar{left:5px;right:auto;max-width:calc(100% - 12px)}
+.change-dashboard{display:flex;gap:6px;min-width:0;align-items:center}
+.toolbar .btn{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;border:1px solid #53708b;padding:5px 9px;background:transparent;border-radius:7px;color:inherit;min-height:32px;font-size:16px}
+.toolbar select{width:160px;max-width:160px}.filters_toolbar{padding:5px;margin-top:3px;height:32px}.filters-control .add-filter{display:none}
+.grid-stack{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:64px;gap:12px;padding:8px 12px 30px}
+.grid-stack-item{min-width:0;min-height:0}.grid-stack-item-content{height:100%;width:100%;min-height:0}.grid-stack-item-content>.card{height:100%;width:100%;position:relative;border:2px solid #94a7ba;border-radius:6px;padding:4px;background:#fff;color:#12273f}
+.grid-stack-item[gs-w="2"]{grid-column:span 2}.grid-stack-item[gs-w="3"]{grid-column:span 3}.grid-stack-item[gs-w="4"]{grid-column:span 4}.grid-stack-item[gs-w="6"]{grid-column:span 6}.grid-stack-item[gs-w="12"]{grid-column:span 12}
+.grid-stack-item[gs-h="2"]{grid-row:span 2}.grid-stack-item[gs-h="3"]{grid-row:span 3}.grid-stack-item[gs-h="4"]{grid-row:span 4}
+.big-number .main-icon{font-size:29px}.formatted-number{display:block;font-size:6px}.formatted-number .number{font-size:6px}.card.big-number>.label{font-size:9px}
+.g-chart{display:flex;flex-direction:column}.g-chart .chart{min-height:0;flex:1;display:grid;place-items:center}
+.pie-demo{width:130px;height:130px;border-radius:50%;background:conic-gradient(#328ed5 0% 40%,#6ad0a7 40% 70%,#a1aec4 70% 100%);display:grid;place-items:center}.pie-demo b{background:#fff;color:#1b334a;border-radius:100%;padding:20px}
+.fake-article{padding:9px;border-bottom:1px solid #8294a551;font-size:14px}
+@media(max-width:850px){.sidebar{display:none}.main{width:100%;padding:5px}.grid-stack{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;padding:8px}.grid-stack-item[gs-w="2"]{grid-column:span 3}.grid-stack-item[gs-w="3"],.grid-stack-item[gs-w="4"],.grid-stack-item[gs-w="6"],.grid-stack-item[gs-w="12"]{grid-column:span 6}}
+@media(max-width:420px){.grid-stack{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-stack-item[gs-w="2"],.grid-stack-item[gs-w="3"]{grid-column:span 2}.grid-stack-item[gs-w="4"],.grid-stack-item[gs-w="6"],.grid-stack-item[gs-w="12"]{grid-column:span 4}}
+</style>
+<link rel="stylesheet" href="../public/css/dashboard-theme.css">
+<link rel="stylesheet" href="../public/css/dashboard-overhaul.css">
+<link rel="stylesheet" href="../public/css/dashboard-tabs.css">
+<link rel="stylesheet" href="../public/css/compact-filters.css">
+<link rel="stylesheet" href="../public/css/chart-text.css">
+<link rel="stylesheet" href="../public/css/security-watch.css">
+</head><body data-bs-theme="dark">
+<div class="shell"><aside class="sidebar"><div class="brand">GLPI / MDO</div><div>Dashboard</div><div>Asset</div><div>Assistenza</div><div>Gestione</div></aside><main class="main"><header class="top"><b>Modern Dashboard Overhaul 0.7.0 · browser fixture</b><small id="theme-indicator">Tema scuro</small></header>
+<div class="tabs-major"><span>Dashboard</span><span>Personal View</span><span>Group View</span><span>Global View</span><span>RSS feed</span></div>
+<section class="dashboard" id="dashboard-777"><span class="toolbar left-toolbar"><div class="change-dashboard"><select class="dashboard_select" aria-label="Dashboard"></select><button type="button" class="add-dashboard btn" title="Aggiungi dashboard">+</button></div><div class="edit-dashboard-properties" style="display:none"><input class="dashboard-name"></div></span>
+<span class="toolbar"><button type="button" class="auto-refresh btn">⟳</button><button type="button" class="night-mode btn" title="Tema">☾</button><button type="button" class="edit-dashboard btn">✎</button><button type="button" class="toggle-fullscreen btn">⛶</button></span>
+<div class="filters_toolbar"><span class="filters"></span><span class="filters-control"><i class="add-filter">+ Filtro</i></span></div>
+<div class="grid-stack" id="grid-stack-777">
+<div class="grid-stack-item" gs-w="3" gs-h="2"><div class="grid-stack-item-content"><a href="#computer" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">646</span></span></span><div class="label">Software</div><i class="main-icon">▣</i></a></div></div>
+<div class="grid-stack-item" gs-w="3" gs-h="2"><div class="grid-stack-item-content"><a href="#pc" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">5</span></span></span><div class="label">Computers</div><i class="main-icon">▤</i></a></div></div>
+<div class="grid-stack-item" gs-w="3" gs-h="2"><div class="grid-stack-item-content"><a href="#net" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">1</span></span></span><div class="label">Network devices</div><i class="main-icon">▥</i></a></div></div>
+<div class="grid-stack-item" gs-w="3" gs-h="2"><div class="grid-stack-item-content"><a href="#printers" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">12</span></span></span><div class="label">Printers</div><i class="main-icon">▩</i></a></div></div>
+<div class="grid-stack-item" gs-w="2" gs-h="2"><div class="grid-stack-item-content"><a href="#users" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">184</span></span></span><div class="label">Users</div><i class="main-icon">♙</i></a></div></div>
+<div class="grid-stack-item" gs-w="2" gs-h="2"><div class="grid-stack-item-content"><a href="#groups" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">26</span></span></span><div class="label">Groups</div><i class="main-icon">♧</i></a></div></div>
+<div class="grid-stack-item" gs-w="2" gs-h="2"><div class="grid-stack-item-content"><a href="#suppliers" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">37</span></span></span><div class="label">Suppliers</div><i class="main-icon">▥</i></a></div></div>
+<div class="grid-stack-item" gs-w="2" gs-h="2"><div class="grid-stack-item-content"><a href="#documents" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">9999</span></span></span><div class="label">Documents</div><i class="main-icon">▣</i></a></div></div>
+<div class="grid-stack-item" gs-w="2" gs-h="2"><div class="grid-stack-item-content"><a href="#entities" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">1</span></span></span><div class="label">Entities</div><i class="main-icon">▱</i></a></div></div>
+<div class="grid-stack-item" gs-w="2" gs-h="2"><div class="grid-stack-item-content"><a href="#locations" class="card big-number"><span class="content"><span class="formatted-number"><span class="number">10</span></span></span><div class="label">Locations</div><i class="main-icon">⌖</i></a></div></div>
+<div class="grid-stack-item" gs-w="4" gs-h="3"><div class="grid-stack-item-content"><div class="card g-chart"><span class="main-label">Hardware per categoria</span><i class="main-icon">◉</i><div class="chart"><div class="pie-demo"><b>37</b></div></div></div></div></div>
+<div class="grid-stack-item" gs-w="4" gs-h="3"><div class="grid-stack-item-content"><div class="card g-chart"><span class="main-label">Ticket per stato</span><div class="chart"><div class="pie-demo"><b>184</b></div></div></div></div></div>
+<div class="grid-stack-item" gs-w="4" gs-h="3"><div class="grid-stack-item-content"><div class="card asw-feed" role="region" aria-label="ACN - CSIRT Italia"><div class="asw-header"><div class="asw-heading"><span class="asw-kicker">RSS FEED</span><h3 class="asw-name">ACN - CSIRT Italia</h3></div><span class="asw-count">10/10</span></div><div class="asw-body" tabindex="0"><ol class="asw-list"><li class="asw-item"><span class="asw-index">01</span><div class="asw-content"><a href="https://www.php.net/" class="asw-title">Notizia RSS di sicurezza con titolo ragionevolmente lungo</a><div class="asw-dates"><span class="asw-date">Pub. 21/10/2026 14:10</span></div></div></li><li class="asw-item"><span class="asw-index">02</span><div class="asw-content"><span class="asw-title">Advisory per vulnerabilità di apparati di rete</span></div></li></ol></div><div class="asw-footer"><span>Fuso orario: Europe/Rome</span></div></div></div></div>
+</div><output id="selection-output" style="display:none"></output></section></main></div>
+<script>
+(function(){
+ const dash=document.querySelector('.dashboard'), select=dash.querySelector('select.dashboard_select');
+ for(let i=0;i<42;i++)select.add(new Option(i===0?'Centrale':('Dashboard '+String(i).padStart(2,'0')+' con nome piuttosto lungo'), 'dash'+i, i===0, i===0));
+ select.addEventListener('change',()=>{document.getElementById('selection-output').textContent=select.value;});
+ dash.querySelector('.night-mode').addEventListener('click',()=>{dash.classList.toggle('theme-dark');dash.querySelector('.night-mode').classList.toggle('active');document.getElementById('theme-indicator').textContent = dash.classList.contains('theme-dark')?'Tema scuro':'Tema chiaro';});
+ dash.querySelector('.edit-dashboard').addEventListener('click',()=>{dash.classList.toggle('edit-mode');dash.querySelector('.edit-dashboard').classList.toggle('active');});
+ dash.querySelector('.add-dashboard').addEventListener('click',()=>{const i=select.options.length;select.add(new Option('Nuova dashboard '+i,'dash'+i,true,true));select.dispatchEvent(new Event('change',{bubbles:true}));});
+ window.echarts={getInstanceByDom(el){return el.__mock||null;}};
+ const chart=dash.querySelector('.g-chart .chart');
+ setTimeout(()=>{ chart.__mock={hits:0,isDisposed(){return false;},getOption(){return {title:[{text:'37'}],legend:[{data:['A','B']}],series:[{name:'Series A',type:'pie',color:['#aa1122','#bb2233'],data:[{value:12},{value:25}]}]};},setOption(patch){this.hits++;this.lastPatch=patch;}};},160);
+})();
+</script>
+<script src="../public/js/dashboard-overhaul.js"></script></body></html>

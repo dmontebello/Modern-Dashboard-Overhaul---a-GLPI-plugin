@@ -1,0 +1,86 @@
+/* Navigation enhancement only: keep native select in DOM and trigger its change.
+ * The original + and permissions remain native. Horizontal overflow is intentional. */
+.dashboard { --mdo-tabs-enabled: 1; }
+.dashboard.mdo-tabs-ready:not(.mini):not(.embed):not(.fullscreen) { padding-top: 58px; }
+.dashboard.mdo-tabs-ready > .toolbar.left-toolbar {
+    right: var(--mdo-toolbar-reserve, 300px);
+    width: auto;
+    min-width: 0;
+}
+.dashboard.mdo-tabs-ready .change-dashboard {
+    display: flex;
+    align-items: flex-start;
+    min-width: 0;
+    width: 100%;
+    gap: 6px;
+}
+.dashboard.mdo-tabs-ready .dashboard_select.mdo-select-bridged { display: none !important; }
+.dashboard.mdo-ui .mdo-dashboard-tabs {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 100%;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 2px 6px;
+    margin: 0;
+    white-space: nowrap;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: auto;
+}
+.dashboard.mdo-ui .mdo-dashboard-tabs::-webkit-scrollbar { height: 7px; }
+.dashboard.mdo-ui .mdo-dashboard-tabs::-webkit-scrollbar-thumb { background: var(--mdo-border); border-radius: 8px; }
+.dashboard.mdo-ui .mdo-dashboard-tabs::-webkit-scrollbar-track { background: var(--mdo-surface); }
+.dashboard.mdo-ui .mdo-dashboard-tab {
+    appearance: none;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    max-width: 280px;
+    margin: 0;
+    padding: 7px 14px;
+    border: 1px solid var(--mdo-border);
+    border-radius: 8px;
+    background: var(--mdo-surface);
+    color: var(--mdo-muted);
+    font-family: var(--mdo-font);
+    font-size: 14px;
+    line-height: 1.35;
+    font-weight: 650;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.dashboard.mdo-ui .mdo-dashboard-tab > span { overflow: hidden; text-overflow: ellipsis; }
+.dashboard.mdo-ui .mdo-dashboard-tab[aria-selected="true"] {
+    color: var(--mdo-accent);
+    background: var(--mdo-accent-soft);
+    border-color: var(--mdo-accent);
+    box-shadow: inset 0 -2px 0 var(--mdo-accent);
+}
+.dashboard.mdo-ui .mdo-dashboard-tab:hover { border-color: var(--mdo-accent); color: var(--mdo-ink); }
+.dashboard.mdo-ui .mdo-dashboard-tab:focus-visible { outline: 3px solid var(--mdo-accent); outline-offset: -3px; }
+.dashboard.mdo-ui .mdo-dashboard-tab:disabled { cursor: not-allowed; opacity: 0.6; }
+.dashboard.mdo-tabs-ready .change-dashboard > .add-dashboard {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    margin: 2px 0 0 !important;
+    text-align: center;
+    align-content: center;
+}
+/* Preserve native edit/filter workflow; do not navigate away from an edit form. */
+.dashboard.mdo-tabs-ready:is(.edit-mode,.filter-mode) .change-dashboard { display: none !important; }
+.dashboard.mdo-tabs-ready.mdo-toolbar-stacked:not(.mini):not(.embed):not(.fullscreen) { padding-top: 120px; }
+.dashboard.mdo-tabs-ready.mdo-toolbar-stacked > .toolbar.left-toolbar {
+    top: 43px;
+    right: 5px;
+    left: 5px;
+}
+.dashboard.mdo-tabs-ready.fullscreen > .toolbar.left-toolbar { right: var(--mdo-toolbar-reserve, 300px); }
+.dashboard.mdo-tabs-ready.fullscreen.mdo-toolbar-stacked { padding-top: 160px; }
+.dashboard.mdo-tabs-ready.fullscreen.mdo-toolbar-stacked > .toolbar.left-toolbar { top: 106px; left: 20px; right: 20px; }
+@media print { .dashboard.mdo-ui .mdo-dashboard-tabs { overflow: visible; flex-wrap: wrap; } }

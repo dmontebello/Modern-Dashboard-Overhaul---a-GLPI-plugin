@@ -1,0 +1,3 @@
+/* Feature switch loaded only when plugin settings enable this option. */
+.dashboard { --mdo-compact-enabled: 1; }
+.dashboard.mdo-ui .filters_toolbar.mdo-empty-filters { display: none !important; }

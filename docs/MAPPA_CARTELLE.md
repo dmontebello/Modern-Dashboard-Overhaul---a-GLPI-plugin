@@ -1,0 +1,68 @@
+# Mappa cartelle — Modern Dashboard Overhaul 0.7.0
+
+Questo albero è un **esempio Docker Compose**, non l'output di una verifica remota. I nomi di servizi/cartelle possono variare. I percorsi di montaggio `mdoverhaul` descrivono la configurazione di riferimento.
+
+```text
+PACCHETTO DISTRIBUITO (sul PC o file server)
+Modern_Dashboard_Overhaul_0.7.0_Pilot.zip
+└── mdoverhaul/
+    ├── setup.php                 [metadati e hook GLPI]
+    ├── hook.php                  [install / uninstall]
+    ├── README.md                 [introduzione + indice]
+    ├── CHANGELOG.md              [storia delle versioni]
+    ├── UPDATE.md                 [aggiornamento e rollback]
+    ├── QA.md                     [stato dei test]
+    ├── LICENSE                   [MIT]
+    ├── SHA512SUMS                [integrità dei file distribuiti]
+    ├── config/
+    │   ├── ui.php                [fallback impostazioni 0.5]
+    │   └── ui.local.php.example  [esempio, NON file locale reale]
+    ├── src/
+    │   ├── Dashboard.php         [RSS: card e HTML]
+    │   ├── FeedFormatter.php     [RSS: normalizzazione]
+    │   └── Settings.php          [cinque flag GLPI]
+    ├── front/
+    │   └── config.php            [WebGUI Configura]
+    ├── public/
+    │   ├── css/                  [Restyling, RSS, impostazioni]
+    │   └── js/                   [integrazione dashboard nativa]
+    ├── docs/                      [architettura, installazione, sicurezza ...]
+    └── tools/                     [controlli SHA-512/sintassi, backup]
+
+DISCO LOCALE DELLA VM/SERVER DOCKER
+/opt/glpi/
+├── docker-compose.yml              [servizi GLPI e MySQL]
+├── docker-compose.override.yml     [mount plugin, HTTPS se presente]
+├── plugins/
+│   ├── mdoverhaul/                <-- CODICE ATTIVO ESTRATTO DALLO ZIP
+│   └── *.zip                      [pacchetti locali, opzionali]
+├── certs/                        [se usati: chiavi TLS, RISERVATE]
+└── https/                        [se usata: personalizzazione HTTPS]
+
+BACKUP SEPARATO (esempio)
+/root/glpi-plugin-backups/
+└── mdoverhaul-<data>.<id>.tar.gz    [solo codice plugin, non database]
+
+BIND MOUNT DOCKER (non è una seconda copia):
+/opt/glpi/plugins/mdoverhaul/
+       │
+       └── read-only (:ro) ──►  CONTAINER GLPI
+                                /var/www/glpi/plugins/mdoverhaul/
+                                     ├── setup.php, hook.php, src/, front/
+                                     └── public/css/, public/js/
+
+DATI PERSISTENTI (NON NELLO ZIP)
+Container GLPI: /var/glpi/          [volume Docker GLPI: config, file, log...]
+Container MySQL: /var/lib/mysql/   [volume Docker database GLPI]
+    ├── dashboard e widget salvati
+    ├── feed RSS nativi GLPI
+    └── glpi_configs / plugin:mdoverhaul [cinque opzioni]
+```
+
+**Flusso d'installazione:** file ZIP → estrazione sul server host → bind mount nel container → PHP caricato da GLPI → CSS/JS serviti al browser. Uno ZIP non è un programma in esecuzione e il bind mount non è una sincronizzazione di cartelle.
+
+**Flusso d'uso:** modifica del tema o della dashboard nel browser; quando si salva **Configura**, i 5 flag vanno nel database GLPI. Il container può continuare ad avere il codice del plugin in sola lettura.
+
+**Flusso di backup:** `tools/backup-plugin.sh` salva **solo il codice**; un ripristino completo richiede anche database/volumi, configurazioni Compose, certificati e tutte le altre risorse GLPI secondo la procedura generale dell'ambiente.
+
+Il nome vecchio `arensecurity` non deve essere reinstallato. Le stringhe `arensecurity_feed_...` e `arensecurity_rss...` che restano nel codice sono **chiavi salvate da GLPI**, mantenute per compatibilità delle dashboard precedenti.

@@ -1,0 +1,105 @@
+# Architettura — Modern Dashboard Overhaul 0.7.0
+
+## 1. In sintesi
+
+**Un solo plugin `mdoverhaul`, due moduli separati**, nessun servizio o database parallelo.
+
+```text
+                     GLPI 11 (plugin mdoverhaul)
+                              │
+                   setup.php + Settings.php
+                              │
+          ┌───────────────────┴───────────────────┐
+          ▼                                       ▼
+  Dashboard Restyling                         Widget RSS
+          │                                       │
+          ├─ CSS dashboard-*                      ├─ Hooks DASHBOARD_TYPES/CARDS
+          ├─ CSS compact-filters / chart-text      ├─ src/Dashboard.php
+          ├─ JS dashboard-overhaul.js              │      │
+          │                                       │      ├─ query RSS visibili
+          ▼                                       │      ├─ RSSFeed::getRSSFeed()
+  Dashboard native GLPI                          │      └─ FeedFormatter.php
+  • contatori/grafici                            │             │
+  • cambio light/dark                            │             ▼
+  • dashboard_select/change                      └──────► Widget HTML/CSS
+  • pulsante nativo +
+
+  Configura → front/config.php → Settings::save()
+                                 │
+                                 ▼
+                         glpi_configs (CORE)
+                      context plugin:mdoverhaul
+```
+
+I moduli utilizzano i permessi e le dashboard di GLPI. RSS generici e RSS di sicurezza sono trattati allo stesso modo; eventuali badge CVE derivano solo dal testo e **non implicano gravità o presenza della vulnerabilità su un asset**.
+
+## 2. Componenti e responsabilità
+
+| Componente | Funzione | Dove viene eseguito |
+| --- | --- | --- |
+| `setup.php` | Metadati 0.6.0, hook, registrazione selettiva dei moduli in base alle impostazioni | PHP GLPI nel container |
+| `hook.php` | Ciclo installazione/disinstallazione; nessuna tabella propria | PHP GLPI |
+| `src/Settings.php` | Cinque flag, validazione, lettura/scrittura configurazione GLPI; fallback configurazione 0.5 | PHP GLPI |
+| `front/config.php` | WebGUI amministrativa, controllo `config:UPDATE`, token CSRF, POST/redirect/GET | PHP GLPI |
+| `src/Dashboard.php` | Catalogo RSS per feed attivi/visibili, provider dati, renderer HTML | PHP GLPI |
+| `src/FeedFormatter.php` | Normalizzazione feed, date/fusi, deduplica e validazione collegamenti | PHP GLPI |
+| `public/js/dashboard-overhaul.js` | UI responsiva, tab, gestione filtri vuoti, cambio tema e adattamento testi grafici | Browser dell'utente |
+| `public/css/dashboard-*.css` | Aspetto e comportamento dashboard native | Browser |
+| `public/css/security-watch.css` | CSS RSS: **nome storico del file**, non dipendenza dalla sicurezza | Browser |
+| `tools/*` | Verifiche integrità/sintassi e backup del solo codice | Shell sul server, su richiesta |
+
+Il plugin non contiene un server web autonomo: GLPI richiama PHP tramite i propri hook; Apache/GLPI servono CSS e JavaScript al browser.
+
+## 3. Configurazione e runtime
+
+- I cinque flag sono `dashboard_restyling`, `rss_widgets`, `compact_empty_filters`, `dashboard_tabs`, `chart_text`.
+- `src/Settings.php` usa `Config::getConfigurationValues('plugin:mdoverhaul')` e `Config::setConfigurationValues(...)` in `glpi_configs` **già esistente**.
+- Quando non esiste ancora un valore salvato nel DB, si usa il fallback `config/ui.php`, eventualmente sovrascritto da `config/ui.local.php` locale. Dopo il primo salvataggio via GUI prevale il DB.
+- `dashboard_restyling=false`: non vengono caricati gli script di manipolazione della dashboard. Il CSS minimo della schermata Configura rimane disponibile.
+- `rss_widgets=false`: non vengono registrati i provider/tipi RSS. I dati GLPI non sono rimossi, ma una dashboard salvata che li usa può visualizzare schede non disponibili; **non salvarla mentre il modulo è disabilitato**.
+- Il bind mount Docker può restare **`:ro`**: i cambi di configurazione scrivono nel database GLPI, non nei file del plugin.
+
+## 4. Restyling: cosa tocca e cosa non tocca
+
+**Modificabile dal plugin:** stile e responsive di contatori `.big-number`, superficie delle schede native, etichette e grafici supportati, barra `.filters_toolbar` vuota, selettore `.dashboard_select` rappresentato come tab orizzontali. I tab attivano la **change event nativa GLPI**; le azioni di creazione/edit/salvataggio restano native. Il toggle `.night-mode` aggiunge/rimuove `.theme-dark` e il plugin ne deriva la palette.
+
+**Non modificato:** provider dati dei widget nativi, query degli asset, coordinate dimensioni salvate nella griglia, permessi, filtri configurati, azioni sui ticket. L'adattamento ECharts aggiorna opzioni di presentazione senza sostituire serie o dati; comportamento e resa richiedono test reali per ogni grafico.
+
+## 5. Widget RSS: percorso dei dati
+
+1. GLPI espone RSS tramite Strumenti → RSS Feed, con URL, visibilità, refresh e attivazione.
+2. `getVisibleFeeds()` verifica utente autenticato, diritto RSS e visibilità/proprietario; usa le normali strutture RSS di GLPI. Non pubblica automaticamente feed privati ad altri utenti.
+3. Il provider richiama **`RSSFeed::getRSSFeed()`** e il parser/cache GLPI. Non impiega download JS nel browser.
+4. `FeedFormatter` normalizza date e link, deduplica gli articoli disponibili e limita gli elementi.
+5. Il renderer produce HTML con escaping; i collegamenti aprono la fonte. Preset: 5/10/15/20; il default è 10. Il feed non può mostrare più articoli di quanti ne restituisce la fonte.
+6. La data/ora nasce dal feed; una pubblicazione sconosciuta **non** viene sostituita dall'ora del download. L'utente vede il fuso noto/fallback GLPI.
+
+I contenuti RSS esterni sono **dati non fidati**. Consultare [SECURITY.md](SECURITY.md) per limiti e prove negative.
+
+## 6. Identificativi e compatibilità
+
+| Identificativo persistito GLPI | Perché non si cambia |
+| --- | --- |
+| `arensecurity_feed_<ID>` | Identifica la scheda del feed salvata nella dashboard |
+| `arensecurity_rss`, `arensecurity_rss_5`, `_15`, `_20` | Identificano i tipi/preselezioni delle schede RSS |
+| `mdoverhaul` | È invece il nome tecnico attuale del plugin e della cartella |
+
+Non rinominare le chiavi dei widget senza migrazione formale e collaudata. Il vecchio plugin `arensecurity` deve restare disattivato.
+
+## 7. Dipendenze, dati persistenti e confini
+
+- **Runtime:** GLPI 11.0.x, PHP incluso nella distribuzione GLPI; browser moderno e librerie JS che già utilizza GLPI. Nessun Node/Python richiesto per l'esecuzione (solo per alcuni test/release).
+- **Storage:** database/volumi di GLPI già esistenti, nessuna tabella propria.
+- **Rete:** il server GLPI contatta soltanto gli URL RSS configurati dall'amministratore, tramite i meccanismi GLPI; il plugin non invia telemetria.
+- **Permessi:** gli utenti vedono soltanto i feed consentiti dal contesto GLPI, mentre Configura richiede il diritto `config:UPDATE`.
+- **Aggiornamenti:** ZIP → cartella host → bind mount nel container; il manifest SHA-512 verifica integrità, non autenticità del software.
+
+## 0.7.0 — Profilo prestazionale e gestione degli eventi
+
+- PHP: la configurazione viene memorizzata soltanto **per la durata della richiesta**, evitando letture ripetute di `Config::getConfigurationValues()`. Il salvataggio invalida la cache locale.
+- JavaScript: nessuna richiesta AJAX/fetch aggiuntiva, telemetria o polling. La scoperta DOM globale non viene avviata sulle pagine GLPI senza dashboard, salvo le route dashboard che possono caricarla asincronamente.
+- ResizeObserver solo sui KPI e grafici che hanno bisogno di reflow; i numeri vengono ricalcolati quando cambia la loro geometria/numero di cifre.
+- Un massimo di tre timeout di recupero per **dashboard** (anziché per singolo grafico). ECharts riceve patch stilistiche per fasce di 32px, non a ogni singolo pixel di resize. Le serie, dati e colori originali restano proprietà di GLPI.
+- RSS: il parser/cache native GLPI resta la fonte dei dati; il formatter scansiona al massimo 100 elementi e deduplica per GUID, URL o titolo, non per ID CVE contenuto nella notizia.
+
+Il benchmark UI descritto in [QA](../QA.md) è un carico simulato, non un profilo complessivo di GLPI reale.

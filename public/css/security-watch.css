@@ -1,0 +1,212 @@
+/* Modern Dashboard Overhaul 0.7.0 - RSS module. Scoped to this plugin; no global theme changes. */
+.card.asw-feed {
+    --asw-bg: var(--tblr-bg-surface, var(--tblr-body-bg, #ffffff));
+    --asw-ink: var(--tblr-body-color, #182433);
+    --asw-line: var(--tblr-border-color, #d5dce5);
+    --asw-accent: var(--tblr-primary, #526f96);
+    box-sizing: border-box;
+    container-name: asw;
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: var(--asw-bg) !important;
+    color: var(--asw-ink) !important;
+    border: 1px solid var(--asw-line);
+    border-top: 5px solid var(--asw-accent);
+    border-radius: 6px;
+    font-family: var(--tblr-body-font-family, system-ui, sans-serif);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    text-align: start;
+}
+/* Optional native dark-renderer parameter, where provided by GLPI. */
+.card.asw-feed[data-asw-dark="1"] {
+    --asw-bg: #1f2b39;
+    --asw-ink: #eef2f7;
+    --asw-line: #495c72;
+    color-scheme: dark;
+}
+.card.asw-feed *, .card.asw-feed *::before, .card.asw-feed *::after {
+    box-sizing: border-box;
+}
+.card.asw-feed .asw-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 0 0 auto;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--asw-line);
+    color: var(--asw-ink) !important;
+    background: var(--asw-bg) !important;
+}
+.card.asw-feed .asw-heading { min-width: 0; flex: 1 1 auto; }
+.card.asw-feed .asw-kicker {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.055em;
+    color: var(--asw-ink) !important;
+}
+.card.asw-feed .asw-name {
+    margin: 2px 0 0;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+    color: var(--asw-ink) !important;
+}
+.card.asw-feed .asw-count, .card.asw-feed .asw-tag {
+    display: inline-block;
+    color: var(--asw-ink) !important;
+    background: var(--asw-bg) !important;
+    border: 1px solid var(--asw-line);
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    font-variant-numeric: tabular-nums;
+}
+.card.asw-feed .asw-count { white-space: nowrap; flex: 0 0 auto; font-weight: 600; }
+.card.asw-feed .asw-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 0 12px;
+    scrollbar-gutter: auto;
+}
+.card.asw-feed .asw-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    column-gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.card.asw-feed .asw-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    min-width: 0;
+    padding: 11px 0;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid var(--asw-line);
+    background: transparent;
+    color: var(--asw-ink) !important;
+}
+.card.asw-feed .asw-index {
+    flex: 0 0 auto;
+    font-size: 0.75rem;
+    line-height: 1.9;
+    font-variant-numeric: tabular-nums;
+    color: var(--asw-ink) !important;
+}
+.card.asw-feed .asw-content { min-width: 0; flex: 1 1 auto; }
+.card.asw-feed .asw-title {
+    display: block;
+    color: var(--asw-ink) !important;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-size: clamp(15px, calc(0.875rem + 0.2cqw), 1.05rem);
+    font-weight: 650;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+.card.asw-feed a.asw-title:hover { text-decoration: underline; text-underline-offset: 3px; }
+.card.asw-feed a.asw-title:focus-visible,
+.card.asw-feed .asw-body:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.card.asw-feed .asw-dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 10px;
+    margin-top: 5px;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--asw-ink) !important;
+    font-variant-numeric: tabular-nums;
+}
+.card.asw-feed .asw-date { display: inline-block; }
+.card.asw-feed .asw-date-label { font-weight: 650; }
+.card.asw-feed .asw-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.card.asw-feed .asw-tag { overflow-wrap: anywhere; max-width: 100%; }
+.card.asw-feed .asw-message { padding: 14px 2px; margin: 0; color: var(--asw-ink) !important; }
+.card.asw-feed .asw-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    flex: 0 0 auto;
+    padding: 7px 14px;
+    border-top: 1px solid var(--asw-line);
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: var(--asw-ink) !important;
+}
+/* Reflow depends on the CARD width, not the browser/screen width. */
+@container asw (min-width: 650px) {
+    .card.asw-feed .asw-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container asw (min-width: 1020px) {
+    .card.asw-feed .asw-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@container asw (max-width: 300px) {
+    .card.asw-feed .asw-header { padding: 8px 10px; gap: 7px; }
+    .card.asw-feed .asw-body { padding: 0 8px; }
+    .card.asw-feed .asw-index { display: none; }
+    .card.asw-feed .asw-footer { padding: 6px 10px; }
+}
+
+/* Shared dashboard-local palette. A global dark body cannot override a light dashboard. */
+.dashboard.mdo-ui .card.asw-feed {
+    --asw-bg: var(--mdo-surface);
+    --asw-ink: var(--mdo-ink);
+    --asw-line: var(--mdo-border);
+    border-radius: 12px;
+    box-shadow: var(--mdo-shadow);
+    border-top-width: 3px;
+    color-scheme: inherit;
+}
+.dashboard.mdo-ui .card.asw-feed .asw-kicker,
+.dashboard.mdo-ui .card.asw-feed .asw-footer {
+    color: var(--mdo-muted) !important;
+}
+.dashboard.mdo-ui .card.asw-feed .asw-name { font-weight: 750; }
+.dashboard.mdo-ui .card.asw-feed .asw-title { font-weight: 650 !important; }
+
+/* 0.6: intentional empty/error state, not a misleading blank panel. */
+.card.asw-feed .asw-empty { min-height: 105px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; padding: 16px; text-align: center; color: var(--asw-ink); }
+.card.asw-feed .asw-empty > .ti { font-size: 27px; line-height: 1; opacity: .8; }
+.card.asw-feed .asw-empty .asw-message { padding: 0; margin: 0; font-size: 14px; line-height: 1.5; max-width: 45ch; }
+
+/* Native dashboard night mode when Dashboard Restyling is disabled. */
+.dashboard.theme-dark:not(.mdo-ui) .card.asw-feed {
+    --asw-bg: #1f2b39;
+    --asw-ink: #eef2f7;
+    --asw-line: #495c72;
+    color-scheme: dark;
+}
+
+/* Dashboard theme toggle must override renderer defaults for RSS cards. */
+.dashboard.mdo-ui.theme-dark .card.asw-feed {
+    --asw-bg: #233245;
+    --asw-ink: #f2f6fc;
+    --asw-line: #465f7b;
+    --asw-accent: #94c4ff;
+    color-scheme: dark;
+}
+.dashboard.mdo-ui:not(.theme-dark) .card.asw-feed[data-asw-dark="1"] {
+    --asw-bg: #ffffff;
+    --asw-ink: #16283f;
+    --asw-line: #c5d2e2;
+    --asw-accent: #1768b4;
+    color-scheme: light;
+}

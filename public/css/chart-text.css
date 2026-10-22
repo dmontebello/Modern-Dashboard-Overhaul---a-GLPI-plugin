@@ -1,0 +1,3 @@
+/* Enables JS styling of EXISTING ECharts instances, never their data/series colors.
+ * Disable Chart typography in GLPI plugin configuration to leave chart drawing native. */
+.dashboard { --mdo-chart-enabled: 1; }

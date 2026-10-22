@@ -1,0 +1,43 @@
+/* Modern Dashboard Overhaul 0.7.0 - dashboard-local tokens. No global palette,
+ * external fonts, blur, image assets or saved grid coordinates are modified. */
+.dashboard {
+    --mdo-restyle-enabled: 0;
+    --mdo-tabs-enabled: 0;
+    --mdo-compact-enabled: 0;
+    --mdo-chart-enabled: 0;
+}
+.dashboard.mdo-ui {
+    --mdo-canvas: #edf2f8;
+    --mdo-surface: #ffffff;
+    --mdo-surface-end: #f5f8fc;
+    --mdo-ink: #16283f;
+    --mdo-muted: #4c617a;
+    --mdo-border: #c5d2e2;
+    --mdo-accent: #1768b4;
+    --mdo-accent-soft: #e3effc;
+    --mdo-shadow: 0 2px 3px rgb(28 54 91 / 5%), 0 6px 16px rgb(28 54 91 / 8%);
+    --mdo-inset: inset 0 1px 0 rgb(255 255 255 / 90%);
+    --mdo-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color-scheme: light;
+}
+.dashboard.mdo-ui.theme-dark {
+    --mdo-canvas: #172332;
+    --mdo-surface: #233245;
+    --mdo-surface-end: #1e2c3c;
+    --mdo-ink: #f2f6fc;
+    --mdo-muted: #b7c8dd;
+    --mdo-border: #465f7b;
+    --mdo-accent: #94c4ff;
+    --mdo-accent-soft: #304965;
+    --mdo-shadow: 0 2px 4px rgb(0 0 0 / 12%), 0 6px 14px rgb(0 0 0 / 10%);
+    --mdo-inset: inset 0 1px 0 rgb(255 255 255 / 5%);
+    color-scheme: dark;
+}
+.dashboard.mdo-ui .mdo-dashboard-tabs,
+.dashboard.mdo-ui .asw-body {
+    scrollbar-width: thin;
+    scrollbar-color: var(--mdo-border) var(--mdo-surface);
+}
+@media (prefers-reduced-motion: reduce) {
+    .dashboard.mdo-ui .mdo-dashboard-tabs { scroll-behavior: auto; }
+}

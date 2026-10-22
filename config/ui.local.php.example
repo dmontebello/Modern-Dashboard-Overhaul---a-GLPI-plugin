@@ -1,0 +1,10 @@
+<?php
+// Optional fallback for 0.5.x -> 0.6 migration only.
+// Changes in the GLPI "Configure" page override these values once saved.
+return [
+    'enabled' => true,
+    'rss_widgets' => true,
+    'compact_empty_filters' => true,
+    'dashboard_tabs' => true,
+    'chart_text' => true,
+];
