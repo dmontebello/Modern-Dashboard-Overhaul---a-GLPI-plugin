@@ -1,0 +1,37 @@
+/* MDO optional Tasks Workspace. All selectors are scoped to the plugin page. */
+.mdo-tasks { --mdo-task-border: var(--tblr-border-color,#344355); --mdo-task-surface: var(--tblr-card-bg,var(--tblr-bg-surface,#222e3d)); --mdo-task-muted: var(--tblr-secondary-color,#a4b7ce); padding-block:12px 30px; max-width: 100%; }
+.mdo-tasks *, .mdo-tasks *::before, .mdo-tasks *::after { box-sizing:border-box; }
+.mdo-tasks-head { display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; justify-content:space-between; margin:0 0 18px; }
+.mdo-tasks-head h1 {font-size:clamp(22px,2.1vw,28px); margin:0 0 4px; font-weight:700; }
+.mdo-tasks-head p {margin-bottom:0; }
+.mdo-tasks-eyebrow {color:var(--tblr-primary,#87b8f5);font-size:11px; font-weight:750;letter-spacing:.12em;margin-bottom:4px!important;}
+.mdo-tasks-actions {display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.mdo-tasks-view-tabs { display:flex;gap:8px; padding:8px 0 14px; border-bottom:1px solid var(--mdo-task-border);margin-bottom:12px; }
+.mdo-tasks-hint {font-size:13px;color:var(--mdo-task-muted);margin:8px 0 12px;}
+.mdo-tasks-summary {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0 18px;}
+.mdo-tasks-stat {color:inherit!important;text-decoration:none!important; min-width:0; padding:14px 16px; border:1px solid var(--mdo-task-border);border-radius:12px;background:var(--mdo-task-surface); display:flex;flex-direction:column;gap:8px;}
+.mdo-tasks-stat:hover {border-color:var(--tblr-primary,#87b8f5);}
+.mdo-tasks-stat span {font-size:13px;color:var(--mdo-task-muted);font-weight:650;}
+.mdo-tasks-stat strong {font-size:26px;line-height:1;font-variant-numeric:tabular-nums;}
+.mdo-tasks-filters {display:grid;grid-template-columns:minmax(170px,1.4fr) repeat(4,minmax(115px,1fr)) auto;gap:10px;align-items:end;margin-bottom:14px;}
+.mdo-tasks-filters label {display:flex;flex-direction:column;gap:5px;color:var(--mdo-task-muted);font-size:12px;min-width:0;}
+.mdo-tasks-filters :is(input,select) {max-width:100%;min-width:0;font-size:13px;}
+.mdo-tasks-filters .btn {min-height:36px;}
+.mdo-tasks-board {display:flex;gap:14px;overflow-x:auto;padding:2px 3px 16px;min-height:400px;scrollbar-width:thin;scrollbar-color:var(--mdo-task-border) transparent;}
+.mdo-tasks-column {display:flex;flex-direction:column;flex:0 0 clamp(270px,28vw,355px);min-width:0;max-height:min(75vh,900px);border:1px solid var(--mdo-task-border);border-radius:12px;background:var(--mdo-task-surface);overflow:hidden;}
+.mdo-tasks-column>header {display:flex;justify-content:space-between;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid var(--mdo-task-border);padding:14px 15px;min-height:55px;}
+.mdo-tasks-column>header h2 {font-size:14px;line-height:1.3;margin:0;font-weight:700;overflow-wrap:anywhere;}
+.mdo-tasks-column>header span {font-size:12px;min-width:26px;text-align:center;border-radius:20px;padding:3px 6px;border:1px solid var(--mdo-task-border);}
+.mdo-tasks-column-body {display:flex;flex-direction:column;gap:10px;padding:12px;overflow-y:auto;min-height:90px;scrollbar-width:thin;}
+.mdo-tasks-card {background:var(--tblr-bg-surface,#243448);border:1px solid var(--mdo-task-border);border-radius:10px; padding:13px;min-width:0;}
+.mdo-tasks-card:hover {border-color:var(--tblr-primary,#87b8f5);}
+.mdo-tasks-card-title {display:block;font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px;overflow-wrap:anywhere;}
+.mdo-tasks-project {display:block;font-size:12px;margin-bottom:6px;white-space:normal;overflow-wrap:anywhere;}
+.mdo-tasks-card p {margin:6px 0 10px;font-size:12px;color:var(--mdo-task-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.mdo-tasks-card-meta {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12px;color:var(--mdo-task-muted);margin:8px 0;}
+.mdo-tasks-progress {width:100%;height:6px;overflow:hidden;border-radius:10px;background:var(--mdo-task-border);margin-bottom:5px;}
+.mdo-tasks-progress>span {display:block;height:100%;background:var(--tblr-primary,#87b8f5);border-radius:inherit;}
+.mdo-tasks-card small {font-size:11px;color:var(--mdo-task-muted);}
+@media(max-width:1200px){.mdo-tasks-filters{grid-template-columns:repeat(3,minmax(0,1fr));}.mdo-tasks-filters .btn{justify-self:start;}}
+@media(max-width:720px){.mdo-tasks-summary{grid-template-columns:repeat(2,minmax(0,1fr));}.mdo-tasks-filters{grid-template-columns:repeat(2,minmax(0,1fr));}.mdo-tasks-head{align-items:stretch;}.mdo-tasks-column{flex-basis:min(88vw,330px);}}
+@media(max-width:430px){.mdo-tasks-filters{grid-template-columns:minmax(0,1fr);}.mdo-tasks-stat{padding:12px;}.mdo-tasks-stat strong{font-size:23px;}}
