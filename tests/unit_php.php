@@ -90,6 +90,9 @@ namespace {
     check(Config::$reads-$start===1,'settings fetched only once per request');
     invalid(static fn()=>Settings::save(['dashboard_restyling'=>'1']),'incomplete POST is rejected');
     $inputs=array_fill_keys(array_keys(Settings::defaults()),'1');
+    // Feature switches default OFF; enable each explicitly below when tested.
+    $inputs['task_workspace']='0';
+    $inputs['kanban_restyling']='0';
     $inputs['rss_widgets']='0';
     Settings::save($inputs);
     check(!Settings::get()['rss_widgets'],'RSS mode saves independently');
