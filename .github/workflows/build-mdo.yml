@@ -24,6 +24,7 @@ jobs:
           php -l src/TaskMenu.php
           php -l src/TaskBoard.php
           php tests/unit_php.php
+          php tests/tasks_php.php
           node --check public/js/dashboard-overhaul.js
           node --check public/js/ticket-mini-dashboard.js
       - name: Build full GLPI ZIP

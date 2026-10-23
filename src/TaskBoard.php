@@ -7,10 +7,11 @@ namespace GlpiPlugin\Mdoverhaul;
 use Dropdown;
 use Project;
 use ProjectTask;
+use Session;
 
 /**
  * Read-only adapter for the optional Kanban/summary.
- * Search/list mode uses GLPI's native Search::show(ProjectTask::class).
+ * Search/list mode uses GLPI's public Search facade with a workspace target.
  * Check item permissions, not only entity visibility, for every returned row.
  */
 final class TaskBoard
@@ -29,9 +30,12 @@ final class TaskBoard
         $states = [];
         // Bounded candidate scan: avoids disclosing unauthorized project counts.
         $candidates = $DB->request([
-            'SELECT' => ['glpi_projecttasks.id'],
+            'SELECT' => ['glpi_projecttasks.*'],
             'FROM' => 'glpi_projecttasks',
-            'WHERE' => ['glpi_projecttasks.is_deleted' => 0],
+            'WHERE' => [
+                'glpi_projecttasks.is_deleted' => 0,
+                'glpi_projecttasks.is_template' => 0,
+            ] + getEntitiesRestrictCriteria('glpi_projecttasks', '', '', 'auto'),
             'ORDER' => ['glpi_projecttasks.id' => 'DESC'],
             'LIMIT' => self::MAX_CANDIDATES + 1,
         ]);
@@ -47,7 +51,10 @@ final class TaskBoard
                 continue;
             }
             $task = new ProjectTask();
-            if (!$task->getFromDB($id) || !$task->canViewItem()) {
+            // Hydrate the complete native row once; can() also honours ITEM_CAN hooks.
+            $task->getFromResultSet($row);
+            $task->post_getFromDB(); // Loads the native task team used by canViewItem().
+            if (!$task->can($id, READ)) {
                 continue;
             }
             $fields = $task->fields;
@@ -57,30 +64,77 @@ final class TaskBoard
             }
             if (!array_key_exists($projectId, $projects)) {
                 $project = new Project();
-                $projects[$projectId] = $project->getFromDB($projectId)
-                    ? (string) ($project->fields['name'] ?? '') : '';
+                $valid = $project->getFromDB($projectId)
+                    && empty($project->fields['is_deleted'])
+                    && empty($project->fields['is_template'])
+                    && Session::haveAccessToEntity($project->getEntityID(), $project->isRecursive());
+                $readable = $valid && $project->can($projectId, READ);
+                $projects[$projectId] = [
+                    'valid' => $valid,
+                    'readable' => $readable,
+                    'name' => $readable ? (string) ($project->fields['name'] ?? '') : '',
+                ];
             }
-            $stateId = (int) ($fields['projecttaskstates_id'] ?? 0);
+            if (!$projects[$projectId]['valid']) {
+                continue;
+            }
+            $stateId = (int) ($fields['projectstates_id'] ?? 0);
             if (!array_key_exists($stateId, $states)) {
                 $states[$stateId] = $stateId > 0
-                    ? (string) Dropdown::getDropdownName('glpi_projecttaskstates', $stateId)
-                    : 'Senza stato';
-                if ($states[$stateId] === '') {
-                    $states[$stateId] = 'Stato #' . $stateId;
-                }
+                    ? (string) Dropdown::getDropdownName('glpi_projectstates', $stateId)
+                    : '';
             }
             $result['tasks'][] = [
                 'id' => $id,
                 'name' => (string) ($fields['name'] ?? ''),
                 'project_id' => $projectId,
-                'project' => $projects[$projectId],
+                'project' => $projects[$projectId]['name'],
+                'project_readable' => $projects[$projectId]['readable'],
                 'state_id' => $stateId,
                 'state' => $states[$stateId],
                 'percent_done' => max(0, min(100, (int) ($fields['percent_done'] ?? 0))),
                 'due' => (string) ($fields['plan_end_date'] ?? ''),
+                'real_end' => (string) ($fields['real_end_date'] ?? ''),
                 'description' => self::description((string) ($fields['content'] ?? '')),
             ];
         }
+        return $result;
+    }
+
+    /** Bounded choices for the native creation form; never create a project here. */
+    public static function creationProjects(): array
+    {
+        global $DB;
+        $result = ['projects' => [], 'truncated' => false];
+        if (!ProjectTask::canCreate() || !Project::canView()) {
+            return $result;
+        }
+        $rows = $DB->request([
+            'SELECT' => ['glpi_projects.*'],
+            'FROM' => 'glpi_projects',
+            'WHERE' => ['glpi_projects.is_deleted' => 0, 'glpi_projects.is_template' => 0]
+                + getEntitiesRestrictCriteria('glpi_projects', '', '', 'auto'),
+            'ORDER' => ['glpi_projects.id' => 'DESC'],
+            'LIMIT' => self::MAX_CANDIDATES + 1,
+        ]);
+        $scanned = 0;
+        foreach ($rows as $row) {
+            if ($scanned++ >= self::MAX_CANDIDATES) {
+                $result['truncated'] = true;
+                break;
+            }
+            $project = new Project();
+            $project->getFromResultSet($row);
+            $project->post_getFromDB();
+            $id = (int) ($row['id'] ?? 0);
+            $input = ['projects_id' => $id];
+            $task = new ProjectTask();
+            if ($id > 0 && $project->can($id, READ) && $project->can($id, UPDATE)
+                && $task->can(-1, CREATE, $input)) {
+                $result['projects'][$id] = (string) ($row['name'] ?? '');
+            }
+        }
+        asort($result['projects'], SORT_NATURAL | SORT_FLAG_CASE);
         return $result;
     }
 
@@ -116,9 +170,20 @@ final class TaskBoard
         if (($task['percent_done'] ?? 0) >= 100) {
             return false;
         }
-        $due = (string) ($task['due'] ?? '');
-        $timestamp = ($due !== '' && $due !== '0000-00-00 00:00:00') ? strtotime($due) : false;
-        return $timestamp !== false && $timestamp < time();
+        $timestamp = self::dateTimestamp((string) ($task['due'] ?? ''));
+        return $timestamp !== null && $timestamp < time();
+    }
+
+    public static function dateTimestamp(string $date): ?int
+    {
+        if (!preg_match('/^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}(?: [0-9]{2}:[0-9]{2}:[0-9]{2})?$/D', $date)) {
+            return null;
+        }
+        $format = strlen($date) === 10 ? '!Y-m-d' : '!Y-m-d H:i:s';
+        $parsed = \DateTimeImmutable::createFromFormat($format, $date);
+        $errors = \DateTimeImmutable::getLastErrors();
+        return $parsed !== false && ($errors === false || ($errors['warning_count'] === 0 && $errors['error_count'] === 0))
+            ? $parsed->getTimestamp() : null;
     }
 
     public static function description(string $richText): string

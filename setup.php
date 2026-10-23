@@ -32,7 +32,9 @@ function plugin_init_mdoverhaul(): void
     $styles = [];
     $scripts = [];
     if ($settings['task_workspace']) {
-        $PLUGIN_HOOKS[Hooks::MENU_TOADD]['mdoverhaul'] = ['helpdesk' => \GlpiPlugin\Mdoverhaul\TaskMenu::class];
+        if (\GlpiPlugin\Mdoverhaul\TaskMenu::canView()) {
+            $PLUGIN_HOOKS[Hooks::MENU_TOADD]['mdoverhaul'] = ['helpdesk' => \GlpiPlugin\Mdoverhaul\TaskMenu::class];
+        }
         $styles[] = 'css/task-workspace.css';
     }
     if ($settings['kanban_restyling']) {

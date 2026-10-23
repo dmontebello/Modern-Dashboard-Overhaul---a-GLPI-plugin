@@ -25,7 +25,10 @@ namespace {
         public static function setConfigurationValues(string $scope, array $values): void { self::$values[$scope] = array_replace(self::$values[$scope] ?? [], $values); }
     }
     class CommonGLPI {}
-    final class ProjectTask { public static function canView(): bool { return true; } }
+    final class ProjectTask {
+        public static bool $visible = true;
+        public static function canView(): bool { return self::$visible; }
+    }
     final class Plugin {
         public static bool $legacyActive = false;
         public static function isPluginActive(string $name): bool { return $name === 'arensecurity' && self::$legacyActive; }
@@ -85,6 +88,7 @@ namespace {
     check(!plugin_mdoverhaul_check_config(),'dual-active legacy blocked');
     Plugin::$legacyActive=false;
     check(array_keys(Settings::defaults())===['dashboard_restyling','rss_widgets','compact_empty_filters','dashboard_tabs','chart_text','task_workspace','kanban_restyling'],'exactly seven settings');
+    check(!Settings::defaults()['task_workspace'] && !Settings::defaults()['kanban_restyling'], 'Tasks and Kanban defaults remain OFF');
     $start=Config::$reads;
     Settings::get();Settings::get();Settings::get();
     check(Config::$reads-$start===1,'settings fetched only once per request');
@@ -116,6 +120,25 @@ namespace {
     $GLOBALS['PLUGIN_HOOKS']=[];
     plugin_init_mdoverhaul();
     check(in_array('css/task-kanban.css', $GLOBALS['PLUGIN_HOOKS']['add_css']['mdoverhaul'], true), 'native Kanban CSS toggled on');
+    foreach (['0', '1'] as $workspace) {
+        foreach (['0', '1'] as $skin) {
+            foreach ([true, false] as $authorized) {
+                $inputs['task_workspace'] = $workspace;
+                $inputs['kanban_restyling'] = $skin;
+                ProjectTask::$visible = $authorized;
+                Settings::save($inputs);
+                $GLOBALS['PLUGIN_HOOKS'] = [];
+                plugin_init_mdoverhaul();
+                $hooks = $GLOBALS['PLUGIN_HOOKS'];
+                $css = $hooks['add_css']['mdoverhaul'];
+                check(isset($hooks['menu_toadd']['mdoverhaul']) === ($workspace === '1' && $authorized), 'menu flag/rights matrix');
+                check(in_array('css/task-workspace.css', $css, true) === ($workspace === '1')
+                    && in_array('css/task-kanban.css', $css, true) === ($skin === '1'), 'Tasks and native skin are independent');
+                check(isset($hooks['dashboard_types']['mdoverhaul']) && in_array('js/dashboard-overhaul.js', $hooks['add_javascript']['mdoverhaul'], true), 'Dashboard/RSS preserved in switch matrix');
+            }
+        }
+    }
+    ProjectTask::$visible = true;
     check(FeedFormatter::safeLink('https://example.org/advisory?a=1'),'HTTPS URLs allowed');
     check(FeedFormatter::safeLink('http://example.org/path'),'HTTP URLs allowed');
     foreach (['javascript:alert(1)','data:text/html,abc','http://user:pass@example.org',"https://example.org/ok\nno", 'file:///etc/passwd'] as $bad) {
