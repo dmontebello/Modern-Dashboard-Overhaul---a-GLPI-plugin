@@ -24,3 +24,7 @@ Rimane la directory `mdoverhaul`, GLPI 11.0.x. Le impostazioni 0.6.0 in `glpi_co
 **Importante:** le CVE PHP non si correggono aggiornando questo plugin. Verifica immediatamente la versione runtime del container con `tools/verifica-runtime-php.sh` e applica gli aggiornamenti della distribuzione/immagine GLPI secondo la documentazione vendor.
 
 Vedi [CHANGELOG](../CHANGELOG.md), [QA](../QA.md) e [UPDATE](../UPDATE.md).
+
+## 0.8.0 (branch di sviluppo)
+
+Proposta integrazione Tasks Workspace nel plugin unico `mdoverhaul`: menu Assistance → Tasks, elenco ProjectTask nativo, board read-only e Skin Kanban nativo indipendente dai moduli dashboard/RSS. Opzioni disattivate per default. Nessuna migrazione task o modifica ai ticket. Test su GLPI reale ancora necessari prima dell'installazione.

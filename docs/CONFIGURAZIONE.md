@@ -58,3 +58,7 @@ I feed **si creano e si gestiscono in GLPI**, non nella pagina di configurazione
 ## Interventi che richiedono invece riavvio
 
 La semplice **configurazione GUI** non richiede restart. Dopo la **sostituzione fisica dei file PHP/CSS/JS** della release, seguire [INSTALLAZIONE](INSTALLAZIONE.md) o [UPDATE](../UPDATE.md), compreso riavvio del container applicativo se necessario per OPcache.
+
+## 0.8.0 — Configurazione Tasks Workspace
+
+Due interruttori indipendenti, spenti per default: `task_workspace` per aggiungere Assistance → Tasks (elenco nativo GLPI / Kanban read-only), `kanban_restyling` per il CSS del Kanban Vue nativo. Entrambi sono salvati nel contesto `plugin:mdoverhaul` in `glpi_configs`. Disabilitare Tasks rimuove la voce di menu e disabilita il controller; non elimina alcuna ProjectTask. Dopo il cambio, rigenerare la sessione/menu se necessario. Il modulo non altera ticket o request.

@@ -44,3 +44,7 @@ Type:  arensecurity_rss       [default 10]
 - CSS/JS dipendono da classi e markup nativi **di GLPI 11.0.9**. Aggiornamenti GLPI possono richiedere revisione.
 - L'adattamento di ECharts è *best effort*, disattivabile dalla GUI.
 - Il modulo RSS usa `RSSFeed::getRSSFeed()` e segue il parser/cache/visibilità GLPI. Non interroga API CVSS e non crea task.
+
+## 0.8.0 — ProjectTask in Assistance
+
+Registrazione condizionale `Hooks::MENU_TOADD` (`helpdesk` → `TaskMenu`); pagina `/plugins/mdoverhaul/front/tasks.php`, sempre protetta da `ProjectTask::canView()` e flag `task_workspace`. L'elenco chiama `Search::show(ProjectTask::class)` e sfrutta ricerca/autorizzazioni native GLPI. La board alternativa usa `TaskBoard::load()` e `ProjectTask::canViewItem()` per ogni record e limita i candidati a 1000; nessuna scrittura. Il CSS `task-kanban.css` si limita a `#kanban-app`, senza sostituire Vue o gli handler drag/drop. Verifiche di integrazione live ancora pendenti.
