@@ -65,6 +65,16 @@ $fields = [
         $i18n('Adatta contrasto e dimensioni dei testi dei grafici supportati, senza cambiare dati e serie.', 'Adapts supported chart labels without changing series or values.'),
         true,
     ],
+    'task_workspace' => [
+        $i18n('Tasks Workspace', 'Tasks Workspace'),
+        $i18n('Abilita Assistance → Tasks: ricerca nativa GLPI e Kanban di ProjectTask in sola lettura. Non crea ticket.', 'Enable Assistance → Tasks: native GLPI search and a read-only ProjectTask Kanban. No tickets are created.'),
+        false,
+    ],
+    'kanban_restyling' => [
+        $i18n('Kanban restyling', 'Kanban restyling'),
+        $i18n('Migliora le colonne e le card del Kanban nativo GLPI senza cambiare trascinamento e dati.', 'Improves native GLPI Kanban columns and cards without changing drag-and-drop or data.'),
+        false,
+    ],
     'rss_widgets' => [
         $i18n('Widget RSS', 'RSS widgets'),
         $i18n('Crea widget per i feed RSS GLPI attivi e visibili. Disattivandolo, i widget RSS salvati potrebbero non essere visualizzati; i dati non vengono eliminati.', 'Shows widgets for available GLPI RSS feeds. Disabling may hide existing RSS cards but does not delete any data.'),
@@ -76,7 +86,7 @@ echo '<div class="mdo-settings container-xl">';
 echo '<div class="card mdo-settings-card"><div class="card-body">';
 echo '<div class="d-flex align-items-center gap-3 mb-3"><i class="ti ti-layout-dashboard fs-1 text-primary" aria-hidden="true"></i><div>';
 echo '<h2 class="m-0">Modern Dashboard Overhaul</h2>';
-echo '<p class="text-secondary mb-0">' . $escape($i18n('Versione 0.7.0 · due moduli indipendenti', 'Version 0.7.0 · two independent modules')) . '</p>';
+echo '<p class="text-secondary mb-0">' . $escape($i18n('Versione 0.8.0 · moduli indipendenti', 'Version 0.8.0 · independent modules')) . '</p>';
 echo '</div></div>';
 echo '<p class="mdo-settings-intro">' . $escape($i18n(
     'Le opzioni sono salvate nella configurazione nativa di GLPI. Nessuna nuova tabella e nessuna modifica ai widget o alle dashboard esistenti.',

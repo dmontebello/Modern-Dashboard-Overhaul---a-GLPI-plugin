@@ -24,11 +24,15 @@ final class Settings
         'compact_empty_filters' => 'compact_empty_filters',
         'dashboard_tabs' => 'dashboard_tabs',
         'chart_text' => 'chart_text',
+        'task_workspace' => 'task_workspace',
+        'kanban_restyling' => 'kanban_restyling',
     ];
 
     public static function defaults(): array
     {
         $defaults = array_fill_keys(array_keys(self::KEYS), true);
+        $defaults['task_workspace'] = false;
+        $defaults['kanban_restyling'] = false;
         $path = __DIR__ . '/../config/ui.php';
         $old = is_file($path) ? require $path : [];
         if (!is_array($old)) {
