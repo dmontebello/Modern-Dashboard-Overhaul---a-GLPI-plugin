@@ -32,3 +32,7 @@
 8. Ripristino versione 0.6 dalla copia, su sistema di prova. Confermare backup di database/volumi.
 
 I criteri generali sono in [TEST_MATRIX](docs/TEST_MATRIX.md). **Non dichiarare stabile 1.0 senza questi test**.
+
+## 0.8.0 — Verifiche preliminari
+
+Modificati i test PHP isolati per sette impostazioni e il menu condizionale. Da eseguire su GLPI 11 reale: abilitazione/disabilitazione opzioni, cache sessione menu, lista nativa ProjectTask, restrizioni per entità e team, board di sola lettura, Kanban Vue drag/drop, dark/light, mobile. Nessun test end-to-end sulla tua installazione è stato ancora eseguito.

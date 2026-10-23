@@ -1,6 +1,6 @@
 # Modern Dashboard Overhaul
 
-**Versione:** `0.7.0` (pilot interno) · **Autore:** Davide Montebello · **Licenza:** MIT  
+**Versione:** `0.8.0` (pilot interno) · **Autore:** Davide Montebello · **Licenza:** MIT  
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
 Un plugin GLPI con **due moduli indipendenti**: migliora la leggibilità delle dashboard native e aggiunge widget che mostrano i feed RSS già gestiti da GLPI. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
@@ -62,3 +62,8 @@ bash /opt/glpi/plugins/mdoverhaul/tools/verifica-tutto.sh
 - In caso di problemi, disabilitare il modulo Restyling o il plugin e usare il backup del codice; vedere [Rollback](docs/INSTALLAZIONE.md#rollback).
 
 **Regola per chi mantiene il progetto:** ogni nuova versione aggiorna **README, CHANGELOG, RELEASE_NOTES, QA, UPDATE e documentazione tecnica** nello stesso ZIP, quindi rigenera i checksum. La procedura è descritta in [Release process](docs/RELEASE_PROCESS.md).
+
+
+## 0.8.0 (branch feature/tasks-workspace-settings)
+
+Due nuove opzioni **disabilitate per impostazione predefinita** nella Configura del plugin `mdoverhaul`: `task_workspace` abilita **Assistance → Tasks** con l'elenco di ricerca nativo `ProjectTask` e una board alternativa in sola lettura; `kanban_restyling` migliora l'aspetto del Kanban Vue nativo senza modificarne i dati o il drag & drop. Non viene creato alcun ticket o database. Le task restano native GLPI e devono appartenere a un progetto. Il Kanban alternativo limita la scansione a 1000 record recenti; l'elenco nativo non ha questo limite. Restyling mini-dashboard Ticket previsto separatamente, non incluso in questo commit. Codice pilota da collaudare su GLPI live.

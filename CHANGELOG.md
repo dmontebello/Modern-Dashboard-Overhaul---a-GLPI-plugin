@@ -2,6 +2,13 @@
 
 Le versioni sono cumulative: i cambiamenti più recenti sono riportati per primi. **Un rebuild documentale della stessa versione non implica una modifica del software in esecuzione.**
 
+## 0.8.0 — Tasks Workspace configurabile (2026-10-23)
+
+- Aggiunte le impostazioni indipendenti e opt-in `task_workspace` e `kanban_restyling` nel plugin principale.
+- Nuova pagina Assistance → Tasks per le ProjectTask native: lista GLPI e Kanban read-only, permessi per elemento.
+- CSS confinato al Kanban nativo; nessuna modifica core, dati o TicketTask.
+- Stato: pilota su branch, test integrazione GLPI live da eseguire.
+
 ## 0.7.0 — Robustezza, sicurezza e prestazioni (2026-10-22)
 
 ### Prestazioni

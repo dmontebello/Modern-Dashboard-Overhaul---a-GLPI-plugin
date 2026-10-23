@@ -12,4 +12,6 @@ return [
     'compact_empty_filters' => true,
     'dashboard_tabs' => true,
     'chart_text' => true,
+    'task_workspace' => false,
+    'kanban_restyling' => false,
 ];

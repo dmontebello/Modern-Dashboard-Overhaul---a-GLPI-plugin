@@ -8,6 +8,7 @@ namespace Glpi\Plugin {
         public const ADD_JAVASCRIPT = 'add_javascript';
         public const DASHBOARD_TYPES = 'dashboard_types';
         public const DASHBOARD_CARDS = 'dashboard_cards';
+        public const MENU_TOADD = 'menu_toadd';
     }
 }
 namespace {
@@ -23,6 +24,8 @@ namespace {
         public static function getConfigurationValues(string $scope): array { self::$reads++; return self::$values[$scope] ?? []; }
         public static function setConfigurationValues(string $scope, array $values): void { self::$values[$scope] = array_replace(self::$values[$scope] ?? [], $values); }
     }
+    class CommonGLPI {}
+    final class ProjectTask { public static function canView(): bool { return true; } }
     final class Plugin {
         public static bool $legacyActive = false;
         public static function isPluginActive(string $name): bool { return $name === 'arensecurity' && self::$legacyActive; }
@@ -75,13 +78,13 @@ namespace {
     function check(bool $valid, string $message): void { global $tests; $tests++; if (!$valid)throw new \RuntimeException('FAILED test '.$tests.': '.$message);echo "[OK] $tests $message\n"; }
     function invalid(callable $action, string $message): void {try {$action();} catch (\InvalidArgumentException){check(true,$message);return;}check(false,$message);}
 
-    check(PLUGIN_MDOVERHAUL_VERSION==='0.7.0','semantic version is 0.7.0');
+    check(PLUGIN_MDOVERHAUL_VERSION==='0.8.0','semantic version is 0.7.0');
     check(plugin_mdoverhaul_check_prerequisites(),'GLPI 11.0.9 requirements');
     check(plugin_mdoverhaul_check_config(),'active with no legacy plugin');
     Plugin::$legacyActive=true;
     check(!plugin_mdoverhaul_check_config(),'dual-active legacy blocked');
     Plugin::$legacyActive=false;
-    check(array_keys(Settings::defaults())===['dashboard_restyling','rss_widgets','compact_empty_filters','dashboard_tabs','chart_text'],'exactly five settings');
+    check(array_keys(Settings::defaults())===['dashboard_restyling','rss_widgets','compact_empty_filters','dashboard_tabs','chart_text','task_workspace','kanban_restyling'],'exactly seven settings');
     $start=Config::$reads;
     Settings::get();Settings::get();Settings::get();
     check(Config::$reads-$start===1,'settings fetched only once per request');
@@ -98,6 +101,12 @@ namespace {
     plugin_init_mdoverhaul();
     check(isset($GLOBALS['PLUGIN_HOOKS']['dashboard_types']['mdoverhaul']),'RSS widget type registration');
     check(isset($GLOBALS['PLUGIN_HOOKS']['add_javascript']['mdoverhaul']),'restyling JS loaded');
+    check(!isset($GLOBALS['PLUGIN_HOOKS']['menu_toadd']['mdoverhaul']),'Tasks off by default');
+    $inputs['task_workspace']='1';
+    Settings::save($inputs);
+    $GLOBALS['PLUGIN_HOOKS']=[];
+    plugin_init_mdoverhaul();
+    check(isset($GLOBALS['PLUGIN_HOOKS']['menu_toadd']['mdoverhaul']['helpdesk']),'Tasks menu enabled by setting');
     check(FeedFormatter::safeLink('https://example.org/advisory?a=1'),'HTTPS URLs allowed');
     check(FeedFormatter::safeLink('http://example.org/path'),'HTTP URLs allowed');
     foreach (['javascript:alert(1)','data:text/html,abc','http://user:pass@example.org',"https://example.org/ok\nno", 'file:///etc/passwd'] as $bad) {

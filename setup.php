@@ -7,8 +7,10 @@ use GlpiPlugin\Mdoverhaul\Settings;
 require_once __DIR__ . '/src/Settings.php';
 require_once __DIR__ . '/src/FeedFormatter.php';
 require_once __DIR__ . '/src/Dashboard.php';
+require_once __DIR__ . '/src/TaskMenu.php';
+require_once __DIR__ . '/src/TaskBoard.php';
 
-define('PLUGIN_MDOVERHAUL_VERSION', '0.7.0');
+define('PLUGIN_MDOVERHAUL_VERSION', '0.8.0');
 
 function plugin_init_mdoverhaul(): void
 {
@@ -28,6 +30,14 @@ function plugin_init_mdoverhaul(): void
     $restyle = $settings['dashboard_restyling'];
     $rss = $settings['rss_widgets'];
     $styles = [];
+    $scripts = [];
+    if ($settings['task_workspace']) {
+        $PLUGIN_HOOKS[Hooks::MENU_TOADD]['mdoverhaul'] = ['helpdesk' => \GlpiPlugin\Mdoverhaul\TaskMenu::class];
+        $styles[] = 'css/task-workspace.css';
+    }
+    if ($settings['kanban_restyling']) {
+        $styles[] = 'css/task-kanban.css';
+    }
 
     if ($rss) {
         $PLUGIN_HOOKS[Hooks::DASHBOARD_TYPES]['mdoverhaul'] = [Dashboard::class, 'getTypes'];
@@ -49,9 +59,12 @@ function plugin_init_mdoverhaul(): void
         }
         // JS is needed for native-theme/counter/tab/chart integration only.
         // RSS-only mode does not alter native dashboard behavior.
-        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['mdoverhaul'] = ['js/dashboard-overhaul.js'];
+        $scripts[] = 'js/dashboard-overhaul.js';
     }
 
+    if ($scripts !== []) {
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['mdoverhaul'] = $scripts;
+    }
     if ($styles !== []) {
         $PLUGIN_HOOKS[Hooks::ADD_CSS]['mdoverhaul'] = array_merge(
             $PLUGIN_HOOKS[Hooks::ADD_CSS]['mdoverhaul'],
