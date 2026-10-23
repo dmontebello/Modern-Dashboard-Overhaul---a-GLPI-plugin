@@ -1,4 +1,4 @@
-# Sicurezza e dati — Modern Dashboard Overhaul 0.7.0
+# Sicurezza e dati — Modern Dashboard Overhaul 0.8.0
 
 ## Modello di fiducia
 
@@ -12,7 +12,7 @@
 
 ## Controlli presenti nella 0.7
 
-- Token CSRF incluso nel form e protezione della richiesta demandata al router GLPI 11; `Settings::save` accetta soltanto i cinque flag `0` o `1`, rifiutando input incompleto o non valido.
+- Token CSRF incluso nel form e protezione della richiesta demandata al router GLPI 11; `Settings::save` accetta soltanto i sette flag `0` o `1`, rifiutando input incompleto o non valido.
 - `Session::checkRight('config', UPDATE)` per la pagina amministrativa; selezione RSS soggetta a diritti e visibilità GLPI.
 - Titoli e attributi RSS passano attraverso escaping HTML; link valutati dal formatter e aperti con `rel="noopener noreferrer"`.
 - Nessuna tabella propria, telemetria, archivio permanente delle CVE, password, processo in background o integrazione ad API di scoring.
@@ -37,3 +37,8 @@ Il progetto è in **pilot interno**; non è ancora disponibile un canale pubblic
 ## CVE critiche del runtime PHP (21 ottobre 2026)
 
 Le vulnerabilità **CVE-2026-109618 e CVE-2026-109619** (CVSS v4 9.2) interessano il runtime PHP, possono consentire RCE non autenticata e non sono risolvibili con un aggiornamento di questo plugin. Il comando `tools/verifica-runtime-php.sh` indica il confronto con le versioni upstream corrette e segnala quando serve verificare backport del distributore. Per dettagli, impatto e patch vedere [SECURITY_PHP_2026.md](SECURITY_PHP_2026.md). L'aggiornamento del container web e il riavvio dei worker vanno gestiti separatamente con backup GLPI e immagini aggiornate.
+
+## 0.8.0 — Tasks Workspace
+
+`TaskMenu` controlla `ProjectTask::canView()`; `front/tasks.php` verifica l'accesso e `TaskBoard` usa `ProjectTask::canViewItem()` per ogni record, con soli metodi di lettura. Titoli e descrizioni vengono renderizzati con escaping HTML; i link puntano alle form GLPI. Il CSS Kanban non sovrascrive i comportamenti Vue. Nessun token esterno, nessuna tabella o servizio nuovo. Le impostazioni OFF non cancellano task.
+

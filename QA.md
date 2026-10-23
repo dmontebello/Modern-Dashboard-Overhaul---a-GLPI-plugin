@@ -1,4 +1,4 @@
-# QA — Modern Dashboard Overhaul 0.7.0 (Pilot)
+# QA — Modern Dashboard Overhaul 0.8.0 (Pilot)
 
 **Ambiente:** codice della 0.6.0 Documented Pilot verificato con SHA-512; modifiche 0.7.0 analizzate ed eseguite offline. **Non è un test end-to-end della GLPI di produzione.**
 
@@ -22,7 +22,7 @@
 
 ## Collaudo necessario sulla VM prima di accettare la 0.7
 
-1. GLPI 11.0.9: admin → Configura, modifica e salva le cinque opzioni; utente senza `config:UPDATE` deve essere respinto.
+1. GLPI 11.0.9: admin → Configura, modifica e salva le sette opzioni; utente senza `config:UPDATE` deve essere respinto.
 2. Verificare i feed RSS privati/pubblici con profili, entità e gruppi differenti (nessuna fuga dati).
 3. Dashboard in entrambe le modalità, widget da piccoli a grandi, browser desktop/mobile reali, zoom 125/150%.
 4. Creare, rinominare, clonare ed eliminare dashboard con tab e `+`; entrare/uscire da modifica, spostare widget GridStack.
@@ -36,3 +36,8 @@ I criteri generali sono in [TEST_MATRIX](docs/TEST_MATRIX.md). **Non dichiarare 
 ## 0.8.0 — Verifiche preliminari
 
 Modificati i test PHP isolati per sette impostazioni e il menu condizionale. Da eseguire su GLPI 11 reale: abilitazione/disabilitazione opzioni, cache sessione menu, lista nativa ProjectTask, restrizioni per entità e team, board di sola lettura, Kanban Vue drag/drop, dark/light, mobile. Nessun test end-to-end sulla tua installazione è stato ancora eseguito.
+
+## 0.8.0 — Pacchetto unico
+
+MDO 0.8.0 contiene dashboard/RSS precedenti e task/kanban nella stessa directory installabile. Verifiche richieste: sintassi PHP/JS, test unit isolati, SHA512SUMS di sorgenti e ZIP, corretta radice `mdoverhaul/`, assenza di patch/vecchi ZIP annidati. **Il collaudo sul GLPI operativo è ancora da effettuare**; i risultati storici 0.7 non sono prova end-to-end della 0.8.
+

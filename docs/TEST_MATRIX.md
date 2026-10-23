@@ -42,3 +42,16 @@
 ## Registro esiti per versione
 
 Scrivere in [QA.md](../QA.md) data/ambiente/risultato per ogni test effettuato. **Non dichiarare PASS se manca uno screenshot, un output o un test realmente eseguito.** I test non eseguiti sono `NON TESTATO`, non `OK`.
+
+## 0.8.0 — Matrice aggiuntiva
+
+| Area | Test | Atteso |
+| --- | --- | --- |
+| ZIP unico | Radice e SHA512 | `mdoverhaul/` completa, versione 0.8.0, nessuna patch |
+| Impostazioni | Tasks Workspace ON/OFF | Mostra/nasconde Assistance → Tasks |
+| Impostazioni | Kanban Restyling ON/OFF | Cambia CSS Kanban indipendentemente |
+| Sicurezza | Utenti/progetti con ACL differenti | Solo `ProjectTask` permesse per utente |
+| Dashboard Ticket | Sette contatori e finestra stretta | Nessun overflow oltre il riquadro |
+| RSS | Dashboard esistenti con feed salvati | Stessi ID, nessuna perdita di schede |
+| Release | Update/rollback su GLPI 11.x | Nessuna disinstallazione o modifica core |
+

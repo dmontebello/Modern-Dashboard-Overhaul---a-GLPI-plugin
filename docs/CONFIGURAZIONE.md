@@ -1,10 +1,10 @@
-# Configurazione — Modern Dashboard Overhaul 0.7.0
+# Configurazione — Modern Dashboard Overhaul 0.8.0
 
 ## Dove si trova
 
 **GLPI → Configurazione → Plugin → Modern Dashboard Overhaul → Configura** (chiave inglese). Richiede `config:UPDATE`; un profilo senza questo diritto non deve poter aprire o salvare la pagina.
 
-## Le cinque opzioni
+## Le sette opzioni
 
 | Opzione in GUI | Chiave interna | Predefinito | Effetto |
 | --- | --- | --- | --- |
