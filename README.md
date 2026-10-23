@@ -5,7 +5,7 @@
 
 Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
 
-> **Stato:** 0.8.0 Pilot sul branch `feature/tasks-workspace-settings`. Lo ZIP completo è pubblicato nel branch GitHub; non è ancora una release stabile né è sul Marketplace. Richiede collaudo su GLPI reale.
+> **Stato:** 0.8.0 Pilot distribuita dal branch `Main`; lo sviluppo continua su `Dev`. Lo ZIP completo è pubblicato su GitHub, ma richiede collaudo su GLPI reale e non è ancora una release stabile.
 
 ## Cosa fa
 
@@ -23,9 +23,9 @@ Il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` contiene **una cartella prin
 ```bash
 cd /opt/glpi/plugins
 curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip \
-  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/feature/tasks-workspace-settings/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Main/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
 curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512 \
-  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/feature/tasks-workspace-settings/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512"
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Main/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512"
 sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
 unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
 ```
@@ -80,7 +80,7 @@ bash /opt/glpi/plugins/mdoverhaul/tools/verifica-tutto.sh
 **Regola per chi mantiene il progetto:** ogni nuova versione aggiorna **README, CHANGELOG, RELEASE_NOTES, QA, UPDATE e documentazione tecnica** nello stesso ZIP, quindi rigenera i checksum. La procedura è descritta in [Release process](docs/RELEASE_PROCESS.md).
 
 
-## 0.8.0 (branch feature/tasks-workspace-settings)
+## 0.8.0 — distribuzione Main / sviluppo Dev
 
 Due nuove opzioni **disabilitate per impostazione predefinita** nella Configura del plugin `mdoverhaul`: `task_workspace` abilita **Assistance → Tasks** con l'elenco di ricerca nativo `ProjectTask` e una board alternativa in sola lettura; `kanban_restyling` migliora l'aspetto del Kanban Vue nativo senza modificarne i dati o il drag & drop. Non viene creato alcun ticket o database. Le task restano native GLPI e devono appartenere a un progetto. Il Kanban alternativo limita la scansione a 1000 record recenti; l'elenco nativo non ha questo limite. Restyling mini-dashboard Ticket previsto separatamente, non incluso in questo commit. Codice pilota da collaudare su GLPI live.
 

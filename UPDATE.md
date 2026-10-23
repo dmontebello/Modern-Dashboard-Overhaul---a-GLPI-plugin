@@ -7,9 +7,9 @@
 ```bash
 cd /opt/glpi/plugins
 curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip \
-  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/feature/tasks-workspace-settings/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Main/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
 curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512 \
-  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/feature/tasks-workspace-settings/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512"
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Main/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512"
 sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
 unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
 ```

@@ -20,6 +20,6 @@ curl -fL -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip \
  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Main/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
 ```
 
-Il vecchio branch `feature/tasks-workspace-settings` era già stato integrato e si può eliminare senza perdere il codice. Il vecchio `main` minuscolo va eliminato **solo dopo** aver impostato `Main` come branch predefinito. Prima di cancellare `feature/tasks-workspace-settings`, aggiornare nel README/UPDATE i link raw ancora diretti al vecchio branch: i raw URL non usufruiscono dei redirect di rinomina GitHub.
+Il vecchio branch `feature/tasks-workspace-settings` era già stato integrato e si può eliminare senza perdere il codice. Il vecchio `main` minuscolo va eliminato **solo dopo** aver impostato `Main` come branch predefinito. I link raw nei documenti e nel pacchetto MDO 0.8.0 puntano già al branch `Main`. I branch storici possono essere eliminati dopo avere impostato `Main` come predefinito.
 
 GitHub Actions convalida la ZIP su push a `Dev` e `Main` e sulle PR destinate a `Main`, ma **non esegue deployment automatici in produzione**.

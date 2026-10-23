@@ -118,5 +118,5 @@ sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
 unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
 ```
 
-Lo script usa una copia temporanea con radice `mdoverhaul/`, esclude il codice GitHub non distribuibile e genera ZIP e SHA512. Nessun kit di patch; l'update dal plugin 0.6/0.7 è diretto. I file sono pubblicati sul branch di sviluppo, non su `main`.
+Lo script usa una copia temporanea con radice `mdoverhaul/`, esclude il codice GitHub non distribuibile e genera ZIP e SHA512. Nessun kit di patch; l'update dal plugin 0.6/0.7 è diretto. La ZIP distribuita e il checksum vengono pubblicati su `Main` dopo la validazione del codice sviluppato su `Dev`.
 

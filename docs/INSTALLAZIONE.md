@@ -99,5 +99,5 @@ Se un file è montato ma non leggibile, verificare **percorso e permessi** prima
 
 ## 0.8.0 — Archivi completi
 
-Per 0.8.0 usa soltanto lo ZIP pubblicato nel branch `feature/tasks-workspace-settings`, non "Download ZIP" dei sorgenti della repository. La ZIP contiene `mdoverhaul/` completa e non richiede di installare prima la 0.7.0. Scarica anche `.zip.sha512`, verifica il checksum e fai il test `unzip -t`. L'aggiornamento da 0.6/0.7 è documentato in [UPDATE](../UPDATE.md). Nessuna disinstallazione, nessuna nuova tabella.
+Per 0.8.0 usa soltanto lo ZIP pubblicato nel branch `Main`, non "Download ZIP" dei sorgenti della repository. La ZIP contiene `mdoverhaul/` completa e non richiede di installare prima la 0.7.0. Scarica anche `.zip.sha512`, verifica il checksum e fai il test `unzip -t`. L'aggiornamento da 0.6/0.7 è documentato in [UPDATE](../UPDATE.md). Nessuna disinstallazione, nessuna nuova tabella.
 

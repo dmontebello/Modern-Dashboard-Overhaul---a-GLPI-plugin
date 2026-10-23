@@ -72,5 +72,5 @@ unzip -t Modern_Dashboard_Overhaul_VERSIONE_Pilot.zip
 
 ## 0.8.0 — Distribuzione GitHub completa
 
-Sul branch di sviluppo il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` e il sidecar `.zip.sha512` sono artefatti della release, non archivi automatici dei sorgenti. Genera il pacchetto dalla checkout con `python3 -B tools/maintainer/package_from_repo.py`, che esclude `.git/`, `.github/` e gli ZIP vecchi, sincronizza `SHA512SUMS` e crea la struttura `mdoverhaul/`. Pubblica sorgenti, checksum e ZIP insieme. Una verifica GitHub Actions ricostruisce l'archivio, ma l'installazione reale necessita comunque un collaudo separato.
+Sul branch di pubblicazione `Main` il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` e il sidecar `.zip.sha512` sono artefatti della release, non archivi automatici dei sorgenti. Genera il pacchetto dalla checkout con `python3 -B tools/maintainer/package_from_repo.py`, che esclude `.git/`, `.github/` e gli ZIP vecchi, sincronizza `SHA512SUMS` e crea la struttura `mdoverhaul/`. Pubblica sorgenti, checksum e ZIP insieme. Una verifica GitHub Actions ricostruisce l'archivio, ma l'installazione reale necessita comunque un collaudo separato.
 
