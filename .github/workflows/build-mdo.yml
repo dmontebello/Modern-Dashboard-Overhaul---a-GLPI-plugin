@@ -2,7 +2,11 @@ name: Build and validate MDO plugin ZIP
 on:
   push:
     branches:
-      - feature/tasks-workspace-settings
+      - Dev
+      - Main
+  pull_request:
+    branches:
+      - Main
   workflow_dispatch:
 permissions:
   contents: read
