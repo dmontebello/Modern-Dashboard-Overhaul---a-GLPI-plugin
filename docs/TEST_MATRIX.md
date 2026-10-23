@@ -55,3 +55,18 @@ Scrivere in [QA.md](../QA.md) data/ambiente/risultato per ogni test effettuato. 
 | RSS | Dashboard esistenti con feed salvati | Stessi ID, nessuna perdita di schede |
 | Release | Update/rollback su GLPI 11.x | Nessuna disinstallazione o modifica core |
 
+## Tasks P0/P1 — sviluppo non pubblicato
+
+| Area | Test automatizzato offline | Da verificare su staging GLPI 11.0.9 |
+| --- | --- | --- |
+| Schema e form | `tests/tasks_php.php`: ProjectState, progetto obbligatorio, URL root | Stati veri, nuova task e modifica nel form nativo |
+| ACL | Due attori/entità, team, hook negazione, progetto nascosto, accesso diretto | Profili reali, gruppi, entità ricorsive e nuove sessioni |
+| Moduli | `tests/unit_php.php`: matrice 2×2 con/senza permessi, RSS/Dashboard | Persistenza impostazioni e invalidazione menu dopo logout/login |
+| Ricerca | Target fisso, criteri e paginazione delegati al core | AJAX, ordinamento, colonne, export e ricerche salvate reali |
+| UX | `tests/tasks_ui_playwright.py`: 1440/1024/768/390, 0/100 task, light/dark | Temi GLPI reali, browser mobile e zoom |
+| Calendario | Oggi/settimana, date mancanti, fine effettiva, cambio ora | Timezone DB/PHP/sessione dell'installazione |
+| Kanban Vue | Geometria e scope CSS su DOM rappresentativo | Trascinamento, scrittura autorizzata e persistenza del Kanban nativo |
+| Pacchetto | Build unica, manifest, checksum e integrità ZIP | Installazione/rollback di prova dopo approvazione |
+
+Risultati effettivi e limiti in [rapporto Tasks](specs/TASKS_IMPLEMENTATION.md).
+

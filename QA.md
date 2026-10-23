@@ -41,3 +41,32 @@ Modificati i test PHP isolati per sette impostazioni e il menu condizionale. Da 
 
 MDO 0.8.0 contiene dashboard/RSS precedenti e task/kanban nella stessa directory installabile. Verifiche richieste: sintassi PHP/JS, test unit isolati, SHA512SUMS di sorgenti e ZIP, corretta radice `mdoverhaul/`, assenza di patch/vecchi ZIP annidati. **Il collaudo sul GLPI operativo è ancora da effettuare**; i risultati storici 0.7 non sono prova end-to-end della 0.8.
 
+## Tasks P0/P1 — verifica locale del 2026-10-24, non pubblicata
+
+Baseline `Dev`: `dd275eb`. Runtime PHP 8.4.27, Git 2.52.0, Node e Chromium
+locali, Playwright 1.62.0. Nessuna istanza GLPI o database applicativo collegato.
+
+| Verifica eseguita | Esito e limite |
+| --- | --- |
+| `php tests/unit_php.php` | PASS, 67 controlli moduli/RSS e matrice flag/diritti |
+| `php tests/tasks_php.php` | PASS, 59 controlli Tasks; doubles GLPI isolati |
+| `bash tools/verifica-sintassi.sh --local` | PASS, 15 PHP / 6 Bash / 2 JS |
+| Python modificati e YAML Actions | Parsing sintattico locale |
+| `python3 tests/ui_playwright.py` | PASS, 80 controlli della dashboard su DOM simulato |
+| `python3 tests/tasks_ui_playwright.py` | PASS, 167 controlli del controller reale con doubles e CSS GLPI rappresentativo |
+| Responsive Tasks | 1440/1024/768/390 px, light/dark, 0/100 task, titoli lunghi, keyboard e form GET |
+| Skin Kanban | Scope/geometria e attributi nativi su fixture; Vue/DnD reale NON TESTATO |
+| Build locale `package_from_repo.py --output …` | Unico ZIP completo `mdoverhaul/`, versione 0.8.0; checksum/integrità verificati per la consegna |
+| GitHub Actions remota | NON ESEGUITA per questi commit locali; workflow aggiornata |
+
+Gli screenshot locali desktop/mobile del controller sono stati ispezionati.
+Il primo avvio Chromium nella sandbox è stato impedito dai socket; lo stesso
+test è stato poi eseguito con successo nel contesto di esecuzione autorizzato.
+Anche il fetch iniziale richiedeva quel contesto; il vero HEAD Dev è stato letto.
+
+Il pacchetto è un artefatto locale di revisione: non sostituisce lo ZIP 0.8.0
+pubblicato. Nessun push, merge, release o deployment. I collaudi GLPI reali e le
+decisioni strutturali restano elencati nel
+[rapporto Tasks](docs/specs/TASKS_IMPLEMENTATION.md) e nelle
+[decisioni aperte](docs/specs/TASKS_OPEN_DECISIONS.md).
+

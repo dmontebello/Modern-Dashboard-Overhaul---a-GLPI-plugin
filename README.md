@@ -82,7 +82,7 @@ bash /opt/glpi/plugins/mdoverhaul/tools/verifica-tutto.sh
 
 ## 0.8.0 — distribuzione Main / sviluppo Dev
 
-Due nuove opzioni **disabilitate per impostazione predefinita** nella Configura del plugin `mdoverhaul`: `task_workspace` abilita **Assistance → Tasks** con l'elenco di ricerca nativo `ProjectTask` e una board alternativa in sola lettura; `kanban_restyling` migliora l'aspetto del Kanban Vue nativo senza modificarne i dati o il drag & drop. Non viene creato alcun ticket o database. Le task restano native GLPI e devono appartenere a un progetto. Il Kanban alternativo limita la scansione a 1000 record recenti; l'elenco nativo non ha questo limite. Restyling mini-dashboard Ticket previsto separatamente, non incluso in questo commit. Codice pilota da collaudare su GLPI live.
+Due opzioni **disabilitate per impostazione predefinita** nella Configura del plugin `mdoverhaul`: `task_workspace` abilita **Assistance → Tasks** con la ricerca nativa `ProjectTask` e una board in sola lettura; `kanban_restyling` migliora l'aspetto del Kanban Vue nativo mantenendone dati e drag & drop. Le task restano native GLPI e devono appartenere a un progetto. Il workspace offre selezione progetto prima della creazione, filtri combinabili, ordinamento e collegamenti ai form nativi. La board verifica al massimo 1000 candidati recenti nelle entità attive prima dei permessi individuali: conteggi e filtri sono dichiarati parziali se troncati; la ricerca nativa non ha questo limite. Dettagli in [configurazione](docs/CONFIGURAZIONE.md) e [rapporto P0/P1](docs/specs/TASKS_IMPLEMENTATION.md). Il codice su Dev richiede ancora collaudo su GLPI live prima della pubblicazione.
 
 ## 0.8.0 — moduli addizionali
 

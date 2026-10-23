@@ -2,6 +2,19 @@
 
 Le versioni sono cumulative: i cambiamenti più recenti sono riportati per primi. **Un rebuild documentale della stessa versione non implica una modifica del software in esecuzione.**
 
+## Sviluppo P0/P1 — non pubblicato (2026-10-24)
+
+- Corretto il modello degli stati GLPI 11 (`projectstates_id` / `glpi_projectstates`),
+  il target della ricerca nativa e gli URL per installazioni in sottocartella.
+- Rafforzate ACL su task/team/progetti, creazione con progetto esplicito e
+  isolamento delle entità. Menu limitato agli utenti autorizzati.
+- Filtri scadenza/completamento combinabili, ordinamento, date native distinte,
+  stati vuoti/errore, navigazione da tastiera e layout responsive light/dark.
+- Stato GLPI come raggruppamento iniziale; percentuali senza falsa equivalenza
+  con uno Stage manuale. Collegamento al Kanban nativo del progetto.
+- Test isolati PHP/UI ampliati e CI aggiornata; nessun bump della versione 0.8.0,
+  modifica al core, nuova persistenza, release o deploy.
+
 ## 0.8.0 — Tasks Workspace configurabile (2026-10-23)
 
 - Aggiunte le impostazioni indipendenti e opt-in `task_workspace` e `kanban_restyling` nel plugin principale.

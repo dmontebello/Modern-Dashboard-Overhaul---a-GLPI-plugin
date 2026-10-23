@@ -138,10 +138,27 @@ final class TaskBoard
         return $result;
     }
 
-    public static function filter(array $tasks, string $query, string $filter, int $stateId, int $projectId): array
+    /** A known project is checked directly, even if absent from the bounded chooser. */
+    public static function canCreateInProject(int $projectId): bool
+    {
+        if ($projectId < 1 || !ProjectTask::canCreate()) {
+            return false;
+        }
+        $project = new Project();
+        $task = new ProjectTask();
+        $input = ['projects_id' => $projectId];
+        return $project->getFromDB($projectId)
+            && empty($project->fields['is_deleted']) && empty($project->fields['is_template'])
+            && $project->can($projectId, READ) && $project->can($projectId, UPDATE)
+            && $task->can(-1, CREATE, $input);
+    }
+
+    public static function filter(array $tasks, string $query, string $filter, int $stateId, int $projectId, string $dueFilter = 'all'): array
     {
         $query = trim($query);
-        return array_values(array_filter($tasks, static function (array $task) use ($query, $filter, $stateId, $projectId): bool {
+        // Use the same request clock and PHP timezone as GLPI's native dates.
+        $today = (new \DateTimeImmutable(Session::getCurrentTime() ?? 'now'))->setTime(0, 0);
+        return array_values(array_filter($tasks, static function (array $task) use ($query, $filter, $stateId, $projectId, $dueFilter, $today): bool {
             if ($stateId >= 0 && $task['state_id'] !== $stateId) {
                 return false;
             }
@@ -157,6 +174,13 @@ final class TaskBoard
             if ($filter === 'overdue' && !self::isOverdue($task)) {
                 return false;
             }
+            $due = self::dateTimestamp((string) ($task['due'] ?? ''));
+            if (($dueFilter === 'overdue' && !self::isOverdue($task))
+                || ($dueFilter === 'none' && $due !== null)
+                || ($dueFilter === 'today' && ($due === null || $due < $today->getTimestamp() || $due >= $today->modify('+1 day')->getTimestamp()))
+                || ($dueFilter === 'week' && ($due === null || $due < $today->getTimestamp() || $due >= $today->modify('+7 days')->getTimestamp()))) {
+                return false;
+            }
             if ($query === '') {
                 return true;
             }
@@ -165,13 +189,28 @@ final class TaskBoard
         }));
     }
 
+    /** Sort only the authorised in-memory sample; missing deadlines come last. */
+    public static function sort(array $tasks, string $sort): array
+    {
+        usort($tasks, static function (array $a, array $b) use ($sort): int {
+            $order = match ($sort) {
+                'name', 'project', 'state' => strnatcasecmp((string) $a[$sort], (string) $b[$sort]),
+                'progress' => $a['percent_done'] <=> $b['percent_done'],
+                default => (self::dateTimestamp($a['due']) ?? PHP_INT_MAX) <=> (self::dateTimestamp($b['due']) ?? PHP_INT_MAX),
+            };
+            return $order ?: (strnatcasecmp($a['name'], $b['name']) ?: ($a['id'] <=> $b['id']));
+        });
+        return $tasks;
+    }
+
     public static function isOverdue(array $task): bool
     {
         if (($task['percent_done'] ?? 0) >= 100) {
             return false;
         }
         $timestamp = self::dateTimestamp((string) ($task['due'] ?? ''));
-        return $timestamp !== null && $timestamp < time();
+        $now = self::dateTimestamp((string) Session::getCurrentTime()) ?? time();
+        return $timestamp !== null && $timestamp < $now;
     }
 
     public static function dateTimestamp(string $date): ?int

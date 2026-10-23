@@ -5,7 +5,9 @@ Usage: python tests/ui_playwright.py [--screenshots <folder>]
 """
 import argparse
 import json
+import os
 import re
+import shutil
 import sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -26,7 +28,8 @@ def run():
     fixture = Path(__file__).with_name('ui_fixture.html').resolve()
     if args.screenshots: args.screenshots.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as engine:
-        browser = engine.chromium.launch(headless=True, executable_path='/usr/bin/chromium', args=['--no-sandbox', '--disable-gpu'])
+        executable = os.environ.get('MDO_CHROMIUM_EXECUTABLE') or shutil.which('chromium') or shutil.which('chromium-browser')
+        browser = engine.chromium.launch(headless=True, executable_path=executable, args=['--no-sandbox', '--disable-gpu'])
         for viewport in [(1440, 1050), (1024, 900), (780, 900), (390, 880)]:
             w, h = viewport
             page = browser.new_page(viewport={'width': w, 'height': h}, device_scale_factor=1)

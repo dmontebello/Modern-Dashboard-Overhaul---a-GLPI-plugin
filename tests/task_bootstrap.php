@@ -23,7 +23,9 @@ final class Session
     public static bool $create = true;
     public static bool $central = true;
     public static string $language = 'it_IT';
+    public static ?string $now = null;
     public static function getLanguage(): string { return self::$language; }
+    public static function getCurrentTime(): ?string { return self::$now; }
     public static function checkCentralAccess(): void { if (!self::$central) { throw new RuntimeException('central denied'); } }
     public static function checkRight(string $key, int $right): void { throw new RuntimeException('read denied'); }
     public static function haveAccessToEntity(int $id, bool $recursive = false): bool { return in_array($id, self::$entities, true); }
@@ -156,6 +158,7 @@ function taskFixture(): void
     Session::$entities = [1];
     Session::$projectRead = Session::$projectAll = Session::$taskRead = Session::$create = Session::$central = true;
     Session::$language = 'it_IT';
+    Session::$now = null;
     Plugin::$active = true;
     Html::$redirect = null;
     Search::$calls = [];

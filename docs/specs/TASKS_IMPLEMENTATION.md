@@ -71,3 +71,62 @@ Non è collegata un'istanza GLPI/database di staging. Restano obbligatori il
 collaudo reale della ricerca AJAX/paginazione/export, menu e impostazioni dopo
 nuovo login, creazione/modifica, entità ricorsive e gruppi, timezone, tema e DnD
 nativo. Nessuna pubblicazione, deploy, migrazione, bump o modifica al core.
+
+Dal sorgente GLPI emerge anche un caso da verificare specificamente su staging:
+`ProjectTask::canViewItem()` ammette il creatore oltre ai membri del team, mentre
+`SQLProvider::getDefaultWhereCriteria(ProjectTask::class)` per chi ha soltanto
+READMY sulle task costruisce un criterio sul team. Verificare quindi un creatore
+non presente nel team e i profili con diritti progetto combinati. La board usa
+il diritto nativo dell'elemento; la lista usa l'ACL della ricerca del core.
+Non si certifica una parità completa tra le due viste senza collaudo, oltre al
+limite dichiarato del campione. Nessuna riscrittura o monkey patch delle ACL SQL.
+
+## P1 e mappatura dei requisiti
+
+| Requisito | Implementazione | Prova offline |
+| --- | --- | --- |
+| P0.1 schema/ricerca/form | `TaskBoard`, `front/tasks.php` | `tasks_php.php`: schema, target, progetto obbligatorio |
+| P0.2 flag/menu indipendenti | `TaskMenu`, `setup.php`, `Settings` nativo invariato | `unit_php.php`: 2×2 con/senza diritti, Dashboard/RSS invariati |
+| P0.3 ACL/robustezza | `TaskBoard`, controller | `tasks_php.php`: entità/attori/team, hook, input ostili, limite, errori |
+| P1.1 lista/board | Controller e CSS workspace | `tasks_ui_playwright.py`: output PHP reale, GET filtri, reset, link, keyboard e responsive |
+| P1.2 semantica | Stato GLPI predefinito, gruppi opzionali 0%/1–99%/100%, date distinte | `tasks_php.php` e UI: nessuno Stage manuale inventato |
+| P1.3 gestione nativa | Dropdown, ACL CREATE/UPDATE/READ, form ProjectTask | `tasks_php.php`: lettore, selezione ostile e progetto fuori dal campione |
+| P1.4 Kanban | Skin nativa invariata; link al tab nativo `Project$3` | UI: scope e geometria DOM; DnD Vue reale NON TESTATO |
+
+La board usa filtri combinabili per testo/progetto/stato/completamento/scadenza
+(tutte, scadute, oggi, prossimi sette giorni, assente), ordinamento per scadenza,
+titolo, progetto, stato o avanzamento. Usa l'orologio di richiesta nativo
+`Session::getCurrentTime()` e il fuso del runtime GLPI; le date visualizzate
+passano da `Html::convDateTime()`. Verificati offline anche i confini di calendario
+durante il cambio dell'ora legale di Europe/Rome, senza imporre quel fuso al plugin.
+
+Il pannello filtri è un `details/summary` HTML nativo, richiudibile da tastiera e
+aperto se ci sono filtri attivi. I filtri GLPI e quelli della board sono separati,
+come dichiarato in pagina; i link conservano le preferenze della board, senza
+tradurre criteri nativi o modificare la sessione di ricerca GLPI nel plugin.
+I conteggi rapidi rispettano testo/progetto/stato/scadenza selezionati.
+
+La creazione con un progetto noto lo verifica direttamente anche quando non
+rientra nel campione del selettore. Le card mostrano stato, percentuale, scadenza
+prevista, badge scaduta solo se incompleta e fine effettiva solo se presente.
+Nessuna mutazione al cambio vista; modifiche, allegati/notepad e gestione tempo
+restano nei form del core. Niente nuovo JS applicativo o endpoint di scrittura.
+
+## Esiti complessivi offline
+
+- PHP 8.4.27: **67** controlli moduli/RSS e **59** controlli Tasks superati.
+- Sintassi: **15 PHP, 6 Bash, 2 JavaScript** superati, più compilazione sintattica
+  dei Python modificati e controllo YAML della workflow.
+- UI dashboard: **80** controlli Chromium superati.
+- UI Tasks: **167** controlli Chromium superati, output del controller reale con
+  doubles GLPI, a **1440/1024/768/390 px**, light/dark e **0/100 task**; titoli
+  lunghi, nessun overflow della pagina, tastiera, filtri GET, reset e navigazione.
+  Screenshot desktop/mobile ispezionati. CSS di contesto GLPI simulato: questo
+  non certifica la resa di ogni tema reale o di Vue.
+- Build locale del plugin completo e verifica ZIP/SHA512 previste dal processo;
+  esito registrato in [QA](../../QA.md).
+
+La workflow Actions ora esegue anche i test Tasks e UI, oltre alla build unica.
+Non è stata eseguita una nuova Actions remota: i cambiamenti restano locali.
+Le decisioni strutturali sono in [TASKS_OPEN_DECISIONS](TASKS_OPEN_DECISIONS.md).
+La proposta di PR è in [TASKS_PR_PROPOSAL](TASKS_PR_PROPOSAL.md).
