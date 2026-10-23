@@ -1,4 +1,4 @@
-# Integrazione con GLPI 11 — Modern Dashboard Overhaul 0.7.0
+# Integrazione con GLPI 11 — Modern Dashboard Overhaul 0.8.0
 
 Queste note identificano **i punti d'integrazione del codice attuale**; non garantiscono compatibilità con futuri aggiornamenti GLPI. Fonte di verifica: implementazioni GLPI 11.0.9 e file distribuiti nel plugin.
 
@@ -37,7 +37,7 @@ Type:  arensecurity_rss       [default 10]
 
 ## Configurazione
 
-`front/config.php` richiede `Session::checkRight('config', UPDATE)`, include `_glpi_csrf_token` ed effettua il salvataggio tramite `Settings::save()` con allowlist rigorosa. Gli handler GLPI e il middleware ufficiale gestiscono la sessione e il CSRF. `Config::getConfigurationValues('plugin:mdoverhaul')` legge i cinque valori nella tabella nativa. Verificare i permessi sul GLPI reale durante il collaudo.
+`front/config.php` richiede `Session::checkRight('config', UPDATE)`, include `_glpi_csrf_token` ed effettua il salvataggio tramite `Settings::save()` con allowlist rigorosa. Gli handler GLPI e il middleware ufficiale gestiscono la sessione e il CSRF. `Config::getConfigurationValues('plugin:mdoverhaul')` legge i sette valori nella tabella nativa. Verificare i permessi sul GLPI reale durante il collaudo.
 
 ## Limiti
 

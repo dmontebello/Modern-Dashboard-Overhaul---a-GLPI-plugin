@@ -1,91 +1,50 @@
-# Aggiornare Modern Dashboard Overhaul a 0.7.0
+# Aggiornare Modern Dashboard Overhaul a 0.8.0 Pilot
 
-Questa guida descrive l'upgrade **0.6.0 → 0.7.0**. **Nessuna migrazione database:** restano le cinque impostazioni in `glpi_configs`, le dashboard e i widget RSS salvati. Non disinstallare la 0.6 per aggiornare. Verificare prima la patch PHP relativa alle CVE critiche del 21/10/2026: aggiornare il plugin non corregge il runtime.
+**Un solo archivio installabile:** `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip`. Contiene Dashboard, RSS, Tasks Workspace, Kanban e Settings nella directory `mdoverhaul/`. Non è un kit patch né uno ZIP automatico dei sorgenti GitHub; non serve installare prima la 0.7.0. Compatibilità dichiarata GLPI 11.0.x, test GLPI live ancora necessario.
 
-## Prima: identificare i percorsi
-
-Esempio di distribuzione Docker già montata:
-
-```text
-Host:      /opt/glpi/plugins/mdoverhaul/
-Container: /var/www/glpi/plugins/mdoverhaul/
-Mount:     ./plugins/mdoverhaul:/var/www/glpi/plugins/mdoverhaul:ro
-```
-
-Verificare i propri percorsi prima di eseguire comandi. **Non cambiare il Compose** se il bind mount esiste già. Il pacchetto include sempre la directory `mdoverhaul/`; estrarre nella **cartella padre**.
-
-## Passaggi di aggiornamento dalla 0.6
-
-1. Verifica backup completo **database + volumi GLPI**, non solo il codice. Da **Configurazione → Plugin** disabilita `mdoverhaul`; **non disinstallare**.
-2. Scarica ZIP e checksum dallo stesso canale attendibile. Verifica ZIP prima di estrarre/eseguire script:
-
-   ```bash
-   cd /opt/glpi/plugins
-   # Prima copia qui i due file: *.zip e *.zip.sha512
-   sha512sum -c Modern_Dashboard_Overhaul_0.7.0_Pilot.zip.sha512
-   unzip -t Modern_Dashboard_Overhaul_0.7.0_Pilot.zip
-   ```
-
-3. Salva il codice corrente e annota il percorso prodotto:
-
-   ```bash
-   bash /opt/glpi/plugins/mdoverhaul/tools/backup-plugin.sh
-   ```
-
-4. Estrai il nuovo pacchetto **in staging** e controllalo:
-
-   ```bash
-   STAGE=$(mktemp -d /root/mdo-release.XXXXXXXX)
-   unzip -q /opt/glpi/plugins/Modern_Dashboard_Overhaul_0.7.0_Pilot.zip -d "$STAGE"
-   (cd "$STAGE/mdoverhaul" && sha512sum -c SHA512SUMS)
-   ```
-
-5. Solo dopo esito **OK per tutti i file**, aggiorna la cartella già montata:
-
-   ```bash
-   cp -a "$STAGE/mdoverhaul/." /opt/glpi/plugins/mdoverhaul/
-   chown -R root:root /opt/glpi/plugins/mdoverhaul
-   find /opt/glpi/plugins/mdoverhaul -type d -exec chmod 755 {} \;
-   find /opt/glpi/plugins/mdoverhaul -type f -exec chmod 644 {} \;
-   bash /opt/glpi/plugins/mdoverhaul/tools/verifica-tutto.sh
-   ```
-
-   **Non usare `chmod 777`.** Se sono presenti ACL particolari, adeguare in modo mirato. `cp` aggiorna i file, ma **non rimuove i residui**: lo script SHA-512 segnala file extra. Un file locale `config/ui.local.php` è l'unica eccezione prevista; non deve essere distribuito dentro gli ZIP.
-
-6. Se lo script non riporta errori rossi, riavvia **solo GLPI** per aggiornare PHP/OPcache (breve indisponibilità):
-
-   ```bash
-   cd /opt/glpi
-   docker compose restart glpi
-   docker compose ps
-   ```
-
-   Da GLPI → Configurazione → Plugin → **Aggiorna** se richiesto, quindi **Abilita**. Verifica **0.7.0**, apri **Configura**, controlla cinque flag e salva.
-
-7. `Ctrl+F5` sulla dashboard. Verifica widget nativi, due temi, tab e `+` originale, feed RSS, due moduli indipendenti. Per il collaudo seguire [TEST_MATRIX](docs/TEST_MATRIX.md).
-
-### Verifica separata della sicurezza PHP
-
-Il pacchetto comprende anche un controllo di sola lettura (non richiesto da `verifica-tutto.sh`):
+## 1. Scarica e verifica
 
 ```bash
-bash /opt/glpi/plugins/mdoverhaul/tools/verifica-runtime-php.sh
+cd /opt/glpi/plugins
+curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip \
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/feature/tasks-workspace-settings/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
+curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512 \
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/feature/tasks-workspace-settings/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512"
+sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
+unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
 ```
 
-Confronta la versione PHP CLI con le versioni correttive pubblicate il **21/10/2026**. **ATTENZIONE:** la versione PHP CLI può differire dal runtime web e i pacchetti Debian/Ubuntu possono contenere backport senza cambiare il numero upstream. Un avviso non sostituisce la verifica del bollettino del distributore, e un OK non certifica Apache/PHP-FPM.
+## 2. Prepara staging
 
-## Con quali verifiche procedere?
+```bash
+STAGE="$(mktemp -d /tmp/mdo080.XXXXXX)"
+unzip -q /opt/glpi/plugins/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip -d "$STAGE"
+test -f "$STAGE/mdoverhaul/setup.php"
+grep -F "PLUGIN_MDOVERHAUL_VERSION', '0.8.0'" "$STAGE/mdoverhaul/setup.php"
+(cd "$STAGE/mdoverhaul" && sha512sum -c SHA512SUMS)
+```
 
-| Risultato | Decisione |
-| --- | --- |
-| `[OK]` verde | Controllo specifico superato |
-| `[ERRORE]` rosso | **STOP**: non riattivare |
-| `[AVVISO]` giallo per Node assente (exit 2) | Controllo JS incompleto: eseguirlo altrove prima di qualificare il collaudo |
+## 3. Backup e aggiornamento senza disinstallazione
 
-Gli script non modificano database, plugin o Docker Compose. La verifica SHA-512 serve a confrontare i file ricevuti; non è una firma digitale.
+Esegui **prima** backup ripristinabili di database, volumi e cartella plugin GLPI. Assicurati che `/opt/glpi/plugins/` sia effettivamente la directory host del tuo GLPI/Docker; la cartella potrebbe differire.
 
-## Rollback
+```bash
+cd /opt/glpi/plugins
+test -d mdoverhaul
+cp -a mdoverhaul "mdoverhaul.backup-$(date +%Y%m%d-%H%M%S)"
+cp -a "$STAGE/mdoverhaul/." ./mdoverhaul/
+(cd mdoverhaul && sha512sum -c SHA512SUMS)
+```
 
-Disabilita la 0.7 dalla WebGUI. Ripristina dal backup verificato il **codice della 0.6** nella directory `mdoverhaul`, seguendo [la procedura di rollback](docs/INSTALLAZIONE.md#rollback). Se sostituisci la cartella montata, **ricrea il container GLPI**. La 0.6 legge le stesse opzioni `glpi_configs`: nessuna conversione necessaria.
+Non cancellare `config/ui.local.php` se presente (file locale non distribuito), non disinstallare MDO e non cambiare i bind mount. Se necessario riavvia il solo servizio GLPI con la procedura prevista dal tuo Compose. In **Configurazione → Plugin → Modern Dashboard Overhaul**, aggiorna se richiesto; in **Configura** abilita Tasks Workspace e/o Kanban Restyling (OFF per default). Dopo il cambio menu può essere necessario rifare l'accesso.
 
-**Non rimuovere i feed, i widget RSS, le dashboard o i record MySQL per fare rollback.** In caso di problemi GLPI, conserva i log e usa il backup completo se necessario.
+## 4. Verifiche e rollback
+
+Prova dashboard, widget RSS già salvati, pagina Ticket con sette contatori, Tasks, diritti e Kanban. Se la nuova versione causa problemi, ripristina la precedente cartella `mdoverhaul` dal backup e riavvia solo il runtime GLPI se necessario. Mantieni il backup DB. Non usare "Disinstalla" per il rollback.
+
+## 5. Limiti
+
+- Nessuna task da Notion importata automaticamente e nessun ticket creato.
+- Tasks Workspace è basato sulle `ProjectTask` native, obbligatoriamente associate a un Project GLPI. La board alternativa è in sola lettura, con 1000 candidati recenti massimi; l'elenco nativo non ha questa limitazione.
+- Il CSS/JS della mini-dashboard Ticket è da collaudare sulla tua installazione specifica.
+- Aggiornare il plugin non aggiorna PHP e non corregge vulnerabilità del runtime.

@@ -1,4 +1,4 @@
-# Installazione e ripristino — Modern Dashboard Overhaul 0.7.0
+# Installazione e ripristino — Modern Dashboard Overhaul 0.8.0
 
 Questa procedura è generica per GLPI 11.0.x; per un ambiente particolare verificare sempre i percorsi prima di copiare comandi. **Non fare prove direttamente in produzione senza un backup recuperabile di DB e volumi GLPI.**
 
@@ -13,8 +13,8 @@ Questa procedura è generica per GLPI 11.0.x; per un ambiente particolare verifi
 
 1. Salva il database/GLPI e verifica che il file ZIP provenga da una fonte attendibile. Controlla il checksum esterno `.zip.sha512`:
    ```bash
-   sha512sum -c Modern_Dashboard_Overhaul_0.7.0_Pilot.zip.sha512
-   unzip -t Modern_Dashboard_Overhaul_0.7.0_Pilot.zip
+   sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
+   unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
    ```
 2. Estrai **nella cartella padre dei plugin GLPI**: lo ZIP contiene già `mdoverhaul/`. Il percorso effettivo va verificato nel tuo deployment (es. `.../glpi/plugins/mdoverhaul/`). Non creare `mdoverhaul/mdoverhaul/`.
 3. Controlla `setup.php`, `hook.php`, `front/config.php` e i permessi leggibili dal processo PHP/Apache.
@@ -96,3 +96,8 @@ bash /opt/glpi/plugins/mdoverhaul/tools/verifica-tutto.sh
 ```
 
 Se un file è montato ma non leggibile, verificare **percorso e permessi** prima di riavviare o cambiare tutti i permessi di `/opt/glpi`.
+
+## 0.8.0 — Archivi completi
+
+Per 0.8.0 usa soltanto lo ZIP pubblicato nel branch `feature/tasks-workspace-settings`, non "Download ZIP" dei sorgenti della repository. La ZIP contiene `mdoverhaul/` completa e non richiede di installare prima la 0.7.0. Scarica anche `.zip.sha512`, verifica il checksum e fai il test `unzip -t`. L'aggiornamento da 0.6/0.7 è documentato in [UPDATE](../UPDATE.md). Nessuna disinstallazione, nessuna nuova tabella.
+

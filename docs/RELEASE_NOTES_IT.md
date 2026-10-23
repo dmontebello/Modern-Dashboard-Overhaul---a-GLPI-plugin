@@ -1,4 +1,4 @@
-# Note di versione — Modern Dashboard Overhaul 0.7.0
+# Note di versione — Modern Dashboard Overhaul 0.8.0
 
 **Stato:** Pilot interno verso la 1.0.0 · **Autore:** Davide Montebello · **ID:** `mdoverhaul`.
 
@@ -28,3 +28,5 @@ Vedi [CHANGELOG](../CHANGELOG.md), [QA](../QA.md) e [UPDATE](../UPDATE.md).
 ## 0.8.0 (branch di sviluppo)
 
 Proposta integrazione Tasks Workspace nel plugin unico `mdoverhaul`: menu Assistance → Tasks, elenco ProjectTask nativo, board read-only e Skin Kanban nativo indipendente dai moduli dashboard/RSS. Opzioni disattivate per default. Nessuna migrazione task o modifica ai ticket. Test su GLPI reale ancora necessari prima dell'installazione.
+
+**Distribuzione 0.8.0:** unico ZIP installabile con i moduli Dashboard, RSS, Tasks e Kanban e sette opzioni Configura. Include correzione sperimentale mini-dashboard Ticket; da confermare su GLPI reale. Scaricare ZIP + `.zip.sha512` dal branch GitHub, non dall'archivio sorgenti automatico.

@@ -3,9 +3,9 @@
 **Versione:** `0.8.0` (pilot interno) · **Autore:** Davide Montebello · **Licenza:** MIT  
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
-Un plugin GLPI con **due moduli indipendenti**: migliora la leggibilità delle dashboard native e aggiunge widget che mostrano i feed RSS già gestiti da GLPI. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
+Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
 
-> **Stato:** 0.7.0 in collaudo verso la 1.0.0. Non è ancora una release stabile, né è pubblicato su GitHub/Marketplace. Il funzionamento reale va verificato sull'installazione di destinazione.
+> **Stato:** 0.8.0 Pilot sul branch `feature/tasks-workspace-settings`. Lo ZIP completo è pubblicato nel branch GitHub; non è ancora una release stabile né è sul Marketplace. Richiede collaudo su GLPI reale.
 
 ## Cosa fa
 
@@ -14,14 +14,30 @@ Un plugin GLPI con **due moduli indipendenti**: migliora la leggibilità delle d
 | **Dashboard Restyling** | Contatori più leggibili anche in schede piccole, tema chiaro/scuro comandato dal toggle nativo, grafici con testi migliorati, eliminazione dello spazio dei filtri vuoti e tab orizzontali delle dashboard. Mantiene il pulsante `+` originale e i permessi GLPI. **Non crea nuovi widget nativi.** |
 | **Widget RSS** | Un widget per ogni feed GLPI attivo e visibile all'utente, con preset **5/10/15/20** articoli (10 predefiniti), data/ora se fornite dalla fonte, titoli e link sicuri. Non richiede un feed di sicurezza: funziona anche con RSS generici. |
 
-Il plugin non introduce tabelle proprie, job cron, telemetria, password, download di font o scanner. Usa il parser/cache RSS di GLPI e salva le cinque opzioni amministrative nella configurazione nativa `glpi_configs`.
+Il plugin non introduce tabelle proprie, job cron, telemetria, password, download di font o scanner. Usa il parser/cache RSS di GLPI e salva le sette opzioni amministrative nella configurazione nativa `glpi_configs`.
+
+### 0.8.0 — scarica un unico ZIP completo (non il sorgente GitHub)
+
+Il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` contiene **una cartella principale `mdoverhaul/`** con tutti i moduli (Dashboard, RSS, Tasks, Kanban) e Settings, e non richiede l'installazione intermedia 0.7.
+
+```bash
+cd /opt/glpi/plugins
+curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip \
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/feature/tasks-workspace-settings/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
+curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512 \
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/feature/tasks-workspace-settings/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512"
+sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
+unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
+```
+
+Per aggiornare l'istanza attiva con backup e rollback, vedi [UPDATE](UPDATE.md). Per rigenerare la release dalla checkout GitHub: `python3 -B tools/maintainer/package_from_repo.py`.
 
 ## Avvio rapido
 
 1. **Installazione nuova:** estrarre lo ZIP con directory principale `mdoverhaul/` nella cartella plugin GLPI. Per Docker occorre un bind mount leggibile dal container. Vedi [Installazione](docs/INSTALLAZIONE.md).
 2. **Aggiornamento:** salvare codice e backup GLPI, controllare SHA-512, estrarre in una directory temporanea e sostituire i file del plugin. Non disinstallare per aggiornare. Vedi [UPDATE](UPDATE.md).
 3. In GLPI aprire **Configurazione → Plugin → Modern Dashboard Overhaul → Installa/Abilita**.
-4. Da **Configura** (chiave inglese) gestire i due moduli e le sotto-opzioni. Vedi [Configurazione](docs/CONFIGURAZIONE.md).
+4. Da **Configura** (chiave inglese) gestire i moduli e le sotto-opzioni. Vedi [Configurazione](docs/CONFIGURAZIONE.md).
 5. Verificare dashboard, switch chiaro/scuro e widget RSS. Seguire la [matrice test](docs/TEST_MATRIX.md).
 
 **Verifica locale (sul server Docker, dopo l'estrazione):**
@@ -67,3 +83,11 @@ bash /opt/glpi/plugins/mdoverhaul/tools/verifica-tutto.sh
 ## 0.8.0 (branch feature/tasks-workspace-settings)
 
 Due nuove opzioni **disabilitate per impostazione predefinita** nella Configura del plugin `mdoverhaul`: `task_workspace` abilita **Assistance → Tasks** con l'elenco di ricerca nativo `ProjectTask` e una board alternativa in sola lettura; `kanban_restyling` migliora l'aspetto del Kanban Vue nativo senza modificarne i dati o il drag & drop. Non viene creato alcun ticket o database. Le task restano native GLPI e devono appartenere a un progetto. Il Kanban alternativo limita la scansione a 1000 record recenti; l'elenco nativo non ha questo limite. Restyling mini-dashboard Ticket previsto separatamente, non incluso in questo commit. Codice pilota da collaudare su GLPI live.
+
+## 0.8.0 — moduli addizionali
+
+- **Tasks Workspace:** abilita/disabilita `Assistance → Tasks` in Configura; elenco nativo `ProjectTask` e Kanban alternativo in sola lettura.
+- **Kanban Restyling:** migliora le board Vue native GLPI senza cambiarne la logica.
+- **Mini Ticket:** quando Dashboard Restyling è attivo, CSS/JS dedicato evita che le KPI sforino il riquadro. Da verificare su GLPI reale.
+- Tutte le sette opzioni restano nel plugin padre `mdoverhaul`, senza plugin aggiuntivi, ticket o DB autonomo.
+

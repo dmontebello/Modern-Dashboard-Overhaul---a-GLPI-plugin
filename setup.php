@@ -17,7 +17,7 @@ function plugin_init_mdoverhaul(): void
     global $PLUGIN_HOOKS;
 
     $PLUGIN_HOOKS['csrf_compliant']['mdoverhaul'] = true;
-    // The settings page must remain available even when both modules are off.
+    // The settings page remains available even when all optional modules are off.
     $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['mdoverhaul'] = 'front/config.php';
     $PLUGIN_HOOKS[Hooks::ADD_CSS]['mdoverhaul'] = ['css/settings.css'];
 
@@ -48,6 +48,8 @@ function plugin_init_mdoverhaul(): void
     if ($restyle) {
         $styles[] = 'css/dashboard-theme.css';
         $styles[] = 'css/dashboard-overhaul.css';
+        $styles[] = 'css/ticket-mini-dashboard.css';
+        $scripts[] = 'js/ticket-mini-dashboard.js';
         if ($settings['compact_empty_filters']) {
             $styles[] = 'css/compact-filters.css';
         }
@@ -80,7 +82,7 @@ function plugin_version_mdoverhaul(): array
         'version' => PLUGIN_MDOVERHAUL_VERSION,
         'author' => 'Davide Montebello',
         'license' => 'MIT',
-        'homepage' => '', // Internal development: not on GitHub or Marketplace.
+        'homepage' => 'https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin',
         'requirements' => ['glpi' => ['min' => '11.0.0', 'max' => '11.1.0']],
     ];
 }

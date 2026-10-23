@@ -78,7 +78,7 @@ namespace {
     function check(bool $valid, string $message): void { global $tests; $tests++; if (!$valid)throw new \RuntimeException('FAILED test '.$tests.': '.$message);echo "[OK] $tests $message\n"; }
     function invalid(callable $action, string $message): void {try {$action();} catch (\InvalidArgumentException){check(true,$message);return;}check(false,$message);}
 
-    check(PLUGIN_MDOVERHAUL_VERSION==='0.8.0','semantic version is 0.7.0');
+    check(PLUGIN_MDOVERHAUL_VERSION==='0.8.0','semantic version is 0.8.0');
     check(plugin_mdoverhaul_check_prerequisites(),'GLPI 11.0.9 requirements');
     check(plugin_mdoverhaul_check_config(),'active with no legacy plugin');
     Plugin::$legacyActive=true;
@@ -107,6 +107,12 @@ namespace {
     $GLOBALS['PLUGIN_HOOKS']=[];
     plugin_init_mdoverhaul();
     check(isset($GLOBALS['PLUGIN_HOOKS']['menu_toadd']['mdoverhaul']['helpdesk']),'Tasks menu enabled by setting');
+    check(in_array('css/ticket-mini-dashboard.css', $GLOBALS['PLUGIN_HOOKS']['add_css']['mdoverhaul'], true), 'mini-ticket CSS loaded');
+    $inputs['kanban_restyling']='1';
+    Settings::save($inputs);
+    $GLOBALS['PLUGIN_HOOKS']=[];
+    plugin_init_mdoverhaul();
+    check(in_array('css/task-kanban.css', $GLOBALS['PLUGIN_HOOKS']['add_css']['mdoverhaul'], true), 'native Kanban CSS toggled on');
     check(FeedFormatter::safeLink('https://example.org/advisory?a=1'),'HTTPS URLs allowed');
     check(FeedFormatter::safeLink('http://example.org/path'),'HTTP URLs allowed');
     foreach (['javascript:alert(1)','data:text/html,abc','http://user:pass@example.org',"https://example.org/ok\nno", 'file:///etc/passwd'] as $bad) {

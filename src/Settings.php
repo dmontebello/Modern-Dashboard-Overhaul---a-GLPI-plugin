@@ -53,7 +53,7 @@ final class Settings
         return $defaults;
     }
 
-    /** @return array<string, bool> Only the five supported switches. */
+    /** @return array<string, bool> The seven supported switches. */
     public static function get(): array
     {
         if (self::$cached !== null) {

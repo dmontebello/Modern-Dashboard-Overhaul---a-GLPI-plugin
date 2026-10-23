@@ -1,4 +1,4 @@
-# Controlli e backup - Modern Dashboard Overhaul 0.7.0 - VM Linux
+# Controlli e backup - Modern Dashboard Overhaul 0.8.0 - VM Linux
 
 Questi script NON installano il plugin, NON modificano Docker Compose, NON fermano servizi
 ed NON modificano il database. L'unico script che crea un archivio e backup-plugin.sh.
@@ -109,3 +109,14 @@ Controllo **read-only** distinto da `verifica-tutto.sh`, perché una distribuzio
 - `python tests/benchmark_ui.py --previous-js <path-to-0.6-js> --output result.json` — benchmark dei timer per grafici
 
 Questi test non richiedono rete, database GLPI o credenziali. Gli script operativi `verifica-tutto.sh` e `backup-plugin.sh` restano utilizzabili senza Python Playwright.
+
+## 0.8.0 — Un unico ZIP dalla checkout
+
+```bash
+python3 -B tools/maintainer/package_from_repo.py
+sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
+unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
+```
+
+Lo script usa una copia temporanea con radice `mdoverhaul/`, esclude il codice GitHub non distribuibile e genera ZIP e SHA512. Nessun kit di patch; l'update dal plugin 0.6/0.7 è diretto. I file sono pubblicati sul branch di sviluppo, non su `main`.
+

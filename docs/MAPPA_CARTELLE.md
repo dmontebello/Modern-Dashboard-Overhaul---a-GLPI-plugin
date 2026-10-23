@@ -1,10 +1,10 @@
-# Mappa cartelle — Modern Dashboard Overhaul 0.7.0
+# Mappa cartelle — Modern Dashboard Overhaul 0.8.0
 
 Questo albero è un **esempio Docker Compose**, non l'output di una verifica remota. I nomi di servizi/cartelle possono variare. I percorsi di montaggio `mdoverhaul` descrivono la configurazione di riferimento.
 
 ```text
 PACCHETTO DISTRIBUITO (sul PC o file server)
-Modern_Dashboard_Overhaul_0.7.0_Pilot.zip
+Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
 └── mdoverhaul/
     ├── setup.php                 [metadati e hook GLPI]
     ├── hook.php                  [install / uninstall]
@@ -20,7 +20,7 @@ Modern_Dashboard_Overhaul_0.7.0_Pilot.zip
     ├── src/
     │   ├── Dashboard.php         [RSS: card e HTML]
     │   ├── FeedFormatter.php     [RSS: normalizzazione]
-    │   └── Settings.php          [cinque flag GLPI]
+    │   └── Settings.php          [sette flag GLPI]
     ├── front/
     │   └── config.php            [WebGUI Configura]
     ├── public/
@@ -56,7 +56,7 @@ Container GLPI: /var/glpi/          [volume Docker GLPI: config, file, log...]
 Container MySQL: /var/lib/mysql/   [volume Docker database GLPI]
     ├── dashboard e widget salvati
     ├── feed RSS nativi GLPI
-    └── glpi_configs / plugin:mdoverhaul [cinque opzioni]
+    └── glpi_configs / plugin:mdoverhaul [sette opzioni]
 ```
 
 **Flusso d'installazione:** file ZIP → estrazione sul server host → bind mount nel container → PHP caricato da GLPI → CSS/JS serviti al browser. Uno ZIP non è un programma in esecuzione e il bind mount non è una sincronizzazione di cartelle.
@@ -66,3 +66,8 @@ Container MySQL: /var/lib/mysql/   [volume Docker database GLPI]
 **Flusso di backup:** `tools/backup-plugin.sh` salva **solo il codice**; un ripristino completo richiede anche database/volumi, configurazioni Compose, certificati e tutte le altre risorse GLPI secondo la procedura generale dell'ambiente.
 
 Il nome vecchio `arensecurity` non deve essere reinstallato. Le stringhe `arensecurity_feed_...` e `arensecurity_rss...` che restano nel codice sono **chiavi salvate da GLPI**, mantenute per compatibilità delle dashboard precedenti.
+
+## 0.8.0 — Distribuzione unica
+
+Il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` contiene una sola cartella `mdoverhaul/` (con `setup.php`, `hook.php`, `src/`, `front/`, `public/`, `config/`, `tests/`, `tools/`, `docs/`, `README.md`, `SHA512SUMS`). Esclude `.git/`, `.github/`, precedenti ZIP distribuiti e `config/ui.local.php`. Usare l'unica cartella host `plugins/mdoverhaul/`, senza creare plugin secondari.
+

@@ -1,6 +1,6 @@
-# Regole obbligatorie per ogni release — Modern Dashboard Overhaul 0.7.0
+# Regole obbligatorie per ogni release — Modern Dashboard Overhaul 0.8.0
 
-**Obiettivo:** nessuna versione senza README e documentazione sincronizzati con il codice. Questo documento fa parte del pacchetto **e deve essere aggiornato con esso**. Tutto si svolge localmente finché non sarà validata la 1.0; **non pubblicare su GitHub/Marketplace** prima di una richiesta esplicita.
+**Obiettivo:** nessuna versione senza README e documentazione sincronizzati con il codice. Questo documento fa parte del pacchetto **e deve essere aggiornato con esso**. Tutto si svolge localmente finché non sarà validata la 1.0; pubblicare sul branch GitHub di sviluppo la ZIP pilota completa; il Marketplace resta escluso finché non sarà richiesto.
 
 ## 1. Prima di cambiare il codice
 
@@ -69,3 +69,8 @@ unzip -t Modern_Dashboard_Overhaul_VERSIONE_Pilot.zip
 - [ ] Nessun dato privato nel pacchetto
 - [ ] SHA512SUMS rigenerato, ZIP confrontata ai sorgenti, sidecar verificato
 - [ ] Test su GLPI quando disponibili (non sostituibili con il solo lint)
+
+## 0.8.0 — Distribuzione GitHub completa
+
+Sul branch di sviluppo il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` e il sidecar `.zip.sha512` sono artefatti della release, non archivi automatici dei sorgenti. Genera il pacchetto dalla checkout con `python3 -B tools/maintainer/package_from_repo.py`, che esclude `.git/`, `.github/` e gli ZIP vecchi, sincronizza `SHA512SUMS` e crea la struttura `mdoverhaul/`. Pubblica sorgenti, checksum e ZIP insieme. Una verifica GitHub Actions ricostruisce l'archivio, ma l'installazione reale necessita comunque un collaudo separato.
+

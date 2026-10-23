@@ -1,8 +1,8 @@
-# Architettura — Modern Dashboard Overhaul 0.7.0
+# Architettura — Modern Dashboard Overhaul 0.8.0
 
 ## 1. In sintesi
 
-**Un solo plugin `mdoverhaul`, due moduli separati**, nessun servizio o database parallelo.
+**Un solo plugin `mdoverhaul`, quattro moduli configurabili**, nessun servizio o database parallelo.
 
 ```text
                      GLPI 11 (plugin mdoverhaul)
@@ -37,9 +37,9 @@ I moduli utilizzano i permessi e le dashboard di GLPI. RSS generici e RSS di sic
 
 | Componente | Funzione | Dove viene eseguito |
 | --- | --- | --- |
-| `setup.php` | Metadati 0.6.0, hook, registrazione selettiva dei moduli in base alle impostazioni | PHP GLPI nel container |
+| `setup.php` | Metadati 0.8.0, hook, registrazione selettiva dei moduli in base alle impostazioni | PHP GLPI nel container |
 | `hook.php` | Ciclo installazione/disinstallazione; nessuna tabella propria | PHP GLPI |
-| `src/Settings.php` | Cinque flag, validazione, lettura/scrittura configurazione GLPI; fallback configurazione 0.5 | PHP GLPI |
+| `src/Settings.php` | Sette flag, validazione, lettura/scrittura configurazione GLPI; fallback configurazione 0.5 | PHP GLPI |
 | `front/config.php` | WebGUI amministrativa, controllo `config:UPDATE`, token CSRF, POST/redirect/GET | PHP GLPI |
 | `src/Dashboard.php` | Catalogo RSS per feed attivi/visibili, provider dati, renderer HTML | PHP GLPI |
 | `src/FeedFormatter.php` | Normalizzazione feed, date/fusi, deduplica e validazione collegamenti | PHP GLPI |
@@ -52,7 +52,7 @@ Il plugin non contiene un server web autonomo: GLPI richiama PHP tramite i propr
 
 ## 3. Configurazione e runtime
 
-- I cinque flag sono `dashboard_restyling`, `rss_widgets`, `compact_empty_filters`, `dashboard_tabs`, `chart_text`.
+- I sette flag sono `dashboard_restyling`, `rss_widgets`, `compact_empty_filters`, `dashboard_tabs`, `chart_text`, `task_workspace`, `kanban_restyling`. Questi ultimi sono OFF per default.
 - `src/Settings.php` usa `Config::getConfigurationValues('plugin:mdoverhaul')` e `Config::setConfigurationValues(...)` in `glpi_configs` **già esistente**.
 - Quando non esiste ancora un valore salvato nel DB, si usa il fallback `config/ui.php`, eventualmente sovrascritto da `config/ui.local.php` locale. Dopo il primo salvataggio via GUI prevale il DB.
 - `dashboard_restyling=false`: non vengono caricati gli script di manipolazione della dashboard. Il CSS minimo della schermata Configura rimane disponibile.
@@ -103,3 +103,12 @@ Non rinominare le chiavi dei widget senza migrazione formale e collaudata. Il ve
 - RSS: il parser/cache native GLPI resta la fonte dei dati; il formatter scansiona al massimo 100 elementi e deduplica per GUID, URL o titolo, non per ID CVE contenuto nella notizia.
 
 Il benchmark UI descritto in [QA](../QA.md) è un carico simulato, non un profilo complessivo di GLPI reale.
+
+## 0.8.0 — Componenti aggiuntivi
+
+- `task_workspace`: `Hooks::MENU_TOADD` porta `TaskMenu` dentro Assistance; `front/tasks.php` espone ricerca nativa `ProjectTask` e Kanban read-only (TaskBoard con `canViewItem()` per record).
+- `kanban_restyling`: CSS per `#kanban-app` nativo GLPI senza modificare logica Vue o DnD; indipendente dal Tasks Workspace.
+- `dashboard_restyling`: aggiunge `ticket-mini-dashboard.css/js` nella pagina Ticket per contenere la mini-dashboard; le serie e i dati restano proprietà di GLPI.
+- `rss_widgets`: identificativi di feed e tipi storici immutati; tutte le sette impostazioni sono salvate in `plugin:mdoverhaul`.
+- `tools/maintainer/package_from_repo.py` copia i soli file del plugin da checkout nella staging `mdoverhaul/`, poi richiama il packager verificato con manifest SHA512. Il pacchetto risultante è completo; GitHub Actions può riprodurlo.
+
