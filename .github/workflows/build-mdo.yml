@@ -1,0 +1,36 @@
+name: Build and validate MDO plugin ZIP
+on:
+  push:
+    branches:
+      - feature/tasks-workspace-settings
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PHP and JavaScript
+        run: |
+          php -l setup.php
+          php -l front/config.php
+          php -l front/tasks.php
+          php -l src/Settings.php
+          php -l src/TaskMenu.php
+          php -l src/TaskBoard.php
+          php tests/unit_php.php
+          node --check public/js/dashboard-overhaul.js
+          node --check public/js/ticket-mini-dashboard.js
+      - name: Build full GLPI ZIP
+        run: |
+          python3 -B tools/maintainer/package_from_repo.py
+          sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
+          unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MDO-0.8.0-Pilot
+          path: |
+            Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
+            Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
+          if-no-files-found: error
