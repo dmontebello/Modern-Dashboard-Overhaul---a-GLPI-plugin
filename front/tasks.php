@@ -147,10 +147,17 @@ echo '<a class="btn ' . ($view === 'list' ? 'btn-primary' : 'btn-outline-seconda
 echo '<a class="btn ' . ($view === 'board' ? 'btn-primary' : 'btn-outline-secondary') . '"' . ($view === 'board' ? ' aria-current="page"' : '') . ' href="' . $esc($boardUrl()) . '">'
     . '<i class="ti ti-layout-kanban me-1"></i>Kanban</a></nav>';
 if ($view === 'list') {
-    echo '<p class="mdo-tasks-hint mdo-tasks-list-hint">' . $esc($tr(
-        'La creazione di un progetto non crea automaticamente attività. Usa Nuova task per aggiungere la prima; ricerca e permessi restano quelli nativi GLPI.',
-        'Creating a project does not automatically create tasks. Use New task to add the first one; search and permissions remain native GLPI.'
-    )) . '</p>';
+    echo '<p class="mdo-tasks-hint mdo-tasks-list-hint">' . $esc(
+        ProjectTask::canCreate()
+            ? $tr(
+                'La creazione di un progetto non crea automaticamente attività. Usa Nuova task per aggiungere la prima; ricerca e permessi restano quelli nativi GLPI.',
+                'Creating a project does not automatically create tasks. Use New task to add the first one; search and permissions remain native GLPI.'
+            )
+            : $tr(
+                'Questa vista mostra le attività accessibili con ricerca e permessi nativi GLPI.',
+                'This view shows accessible tasks with native GLPI search and permissions.'
+            )
+    ) . '</p>';
     // GLPI has no front/projecttask.php. Keep native search, pagination and export
     // inside the workspace rather than creating a second page below the header.
     $params = Search::manageParams(ProjectTask::class, $_GET);
