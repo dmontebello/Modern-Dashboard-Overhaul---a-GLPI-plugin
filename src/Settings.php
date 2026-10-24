@@ -8,7 +8,7 @@ use Config;
 use InvalidArgumentException;
 
 /**
- * Native GLPI configuration, with zero plugin-owned SQL tables.
+ * Native GLPI configuration; standalone storage is managed by TaskSchema.
  * No filesystem writes: compatible with a Docker read-only bind mount.
  */
 final class Settings
@@ -25,6 +25,7 @@ final class Settings
         'dashboard_tabs' => 'dashboard_tabs',
         'chart_text' => 'chart_text',
         'task_workspace' => 'task_workspace',
+        'tasks_standalone' => 'tasks_standalone',
         'kanban_restyling' => 'kanban_restyling',
     ];
 
@@ -32,6 +33,7 @@ final class Settings
     {
         $defaults = array_fill_keys(array_keys(self::KEYS), true);
         $defaults['task_workspace'] = false;
+        $defaults['tasks_standalone'] = false;
         $defaults['kanban_restyling'] = false;
         $path = __DIR__ . '/../config/ui.php';
         $old = is_file($path) ? require $path : [];
@@ -53,7 +55,7 @@ final class Settings
         return $defaults;
     }
 
-    /** @return array<string, bool> The seven supported switches. */
+    /** @return array<string, bool> Module switches; standalone remains opt-in. */
     public static function get(): array
     {
         if (self::$cached !== null) {
@@ -90,6 +92,9 @@ final class Settings
                 throw new InvalidArgumentException('Impostazioni incomplete o non valide.');
             }
             $values[$key] = $input[$key];
+        }
+        if ($values['tasks_standalone'] === '1' && !TaskSchema::isReady()) {
+            throw new InvalidArgumentException('Aggiornare il plugin e lo schema prima di abilitare le attività indipendenti.');
         }
         Config::setConfigurationValues(self::CONTEXT, $values);
         self::$cached = null;

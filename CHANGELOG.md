@@ -1,5 +1,17 @@
 # Changelog — Modern Dashboard Overhaul
 
+## 0.8.1-dev.2 — attività indipendenti (2026-10-24)
+
+- Nuovo oggetto CommonDBTM nel plugin, schema versione 1 e upgrade idempotente.
+- ACL di profilo/entità/proprietario/assegnatario/gruppo e hook Search pubblico.
+- CRUD con middleware CSRF GLPI, nuova scelta tipo, sottoviste native separate,
+  card con tipo/ID, nessuna percentuale inventata per standalone.
+- Ottava sotto-opzione opt-in; dati conservati con OFF, cestino e uninstall.
+- Backup/rollback, test negativi/CRUD/schema simulati e documentazione aggiornati.
+- NON COLLAUDATO LIVE, inclusa la migrazione reale. Main e ZIP legacy invariati.
+
+[Note complete](docs/releases/0.8.1-dev.2.md).
+
 ## 0.8.1-dev.1 — pianificata, NON ANCORA IMPLEMENTATA (2026-10-24)
 
 - L'utente segnala su GLPI reale Settings illeggibili in dark mode, il pulsante Continua che non apre il form Task nativo, spaziature della scelta progetto, mini KPI Ticket, toolbar e legenda ECharts.

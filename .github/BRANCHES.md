@@ -28,3 +28,11 @@ GitHub Actions convalida la ZIP su push a `Dev` e `Main` e sulle PR destinate a 
 ## Sviluppo successivo alla 0.8.0
 
 Documenti canonici da aprire con Codex: [specifica 0.8.1](../docs/specs/MDO_0_8_1_DEV_WORKPLAN.md), [stato/handoff Dev](../docs/dev/STATUS.md), [policy di versionamento](../docs/dev/VERSIONING_POLICY.md). La 0.8.1 Dev non e stata ancora implementata; le note storiche sopra riguardano 0.8.0. Ogni candidata deve riportare version, build SHA, fix/test/next steps nei documenti prima del push. Main solo con PR e approvazione dopo staging.
+
+
+## Stato implementazione 0.8.1-dev.2
+
+Le candidate P0/P1 sono implementate su Dev, con note e test; la dichiarazione
+precedente “non implementata” è lo stato storico dell'handoff. La CI pubblica
+solo pacchetti Dev verificati, con source SHA distinto dal publisher. Non chiude
+il collaudo live e non autorizza Main. Consultare docs/dev/STATUS.md.

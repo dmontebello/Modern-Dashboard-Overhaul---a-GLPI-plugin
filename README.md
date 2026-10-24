@@ -1,9 +1,8 @@
 # Modern Dashboard Overhaul
 
-> **Dev 0.8.1 (lavoro da implementare):** [Specifica Codex e problemi live](docs/specs/MDO_0_8_1_DEV_WORKPLAN.md) · [Registro stato e handoff](docs/dev/STATUS.md) · [Policy versioni Dev](docs/dev/VERSIONING_POLICY.md). La build attuale del plugin e ancora 0.8.0; il piano 0.8.1 non costituisce un fix gia distribuito.
+ > **Candidata Dev 0.8.1-dev.2:** [Note](docs/releases/0.8.1-dev.2.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
 
-
-**Versione:** `0.8.0` (pilot interno) · **Autore:** Davide Montebello · **Licenza:** MIT  
+**Versione:** `0.8.1-dev.2` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
 Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
@@ -120,3 +119,21 @@ alias [MDO_Dev_Latest.zip](https://raw.githubusercontent.com/dmontebello/Modern-
 L'alias è aggiornato solo se il commit testato è ancora HEAD Dev. Il manager GLPI
 e Settings mostrano la versione unica; lo ZIP contiene provenienza e data UTC.
 NON COLLAUDATO LIVE. Lo ZIP 0.8.0 su Main resta la pubblicazione precedente.
+
+
+## Attività indipendenti — 0.8.1-dev.2
+
+Dentro lo stesso plugin, `StandaloneTask` usa una tabella dedicata e diritti di
+profilo propri. Non crea Project né ProjectTask senza parent. Attivazione opt-in:
+backup, upgrade nativo del plugin, diritti nella scheda MDO del profilo, quindi
+Tasks Workspace + Attività indipendenti in Settings e nuovo login.
+Il workspace separa le ricerche native Progetto/Indipendenti e offre elenco,
+Kanban read-only, creazione, modifica, completamento, cestino/ripristino.
+Disabilitare conserva dati; disinstallare non esegue DROP.
+
+Pacchetti Dev completi dopo CI positiva:
+[0.8.1-dev.1](https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.1-dev.1.zip),
+[0.8.1-dev.2](https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.1-dev.2.zip),
+[Latest](https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/MDO_Dev_Latest.zip).
+Ogni ZIP ha `.sha512`; SHA sorgente, build e hash sono anche nei record
+`docs/releases/<version>.build.json`. Lo ZIP 0.8.0 e Main restano invariati.

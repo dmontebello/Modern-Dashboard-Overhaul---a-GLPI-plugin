@@ -5,56 +5,74 @@ declare(strict_types=1);
 use GlpiPlugin\Mdoverhaul\Settings;
 use GlpiPlugin\Mdoverhaul\TaskBoard;
 use GlpiPlugin\Mdoverhaul\TaskMenu;
+use GlpiPlugin\Mdoverhaul\StandaloneTask;
 
 require_once __DIR__ . '/../src/Settings.php';
 require_once __DIR__ . '/../src/TaskMenu.php';
 require_once __DIR__ . '/../src/TaskBoard.php';
+require_once __DIR__ . '/../src/TaskSchema.php';
+require_once __DIR__ . '/../src/StandaloneTask.php';
 
 Session::checkCentralAccess();
 if (!Plugin::isPluginActive('mdoverhaul') || !Settings::get()['task_workspace']) {
     Html::displayNotFoundError();
     return;
 }
-if (!ProjectTask::canView()) {
-    Session::checkRight('projecttask', ProjectTask::READMY);
-    return;
-}
-
 $isIt = str_starts_with(strtolower((string) (Session::getLanguage() ?? 'en')), 'it');
 $tr = static fn (string $it, string $en): string => $isIt ? $it : $en;
 $esc = static fn (string $value): string => htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $scalar = static fn (string $key, string $fallback = ''): string =>
     isset($_GET[$key]) && is_string($_GET[$key]) ? $_GET[$key] : $fallback;
 
+if ($scalar('source') === 'standalone' && !StandaloneTask::enabled()) { Html::displayNotFoundError(); return; }
+if (!ProjectTask::canView() && !StandaloneTask::canView()) {
+    Session::checkRight('projecttask', ProjectTask::READMY); return;
+}
+
+$standalone = $scalar('source', ProjectTask::canView() ? 'project' : 'standalone') === 'standalone';
+if ($standalone && !StandaloneTask::enabled()) { Html::displayNotFoundError(); return; }
+if ($standalone && !StandaloneTask::canView()) { Session::checkRight(StandaloneTask::$rightname, StandaloneTask::READMY); return; }
+if (!$standalone && !ProjectTask::canView()) { Session::checkRight('projecttask', ProjectTask::READMY); return; }
+$itemtype = $standalone ? StandaloneTask::class : ProjectTask::class;
+
 $view = $scalar('view') === 'board' ? 'board' : 'list';
 $group = $scalar('group') === 'progress' ? 'progress' : 'state';
+if ($standalone) { $group = 'state'; }
 $filter = $scalar('filter', 'all');
 $filter = in_array($filter, ['open', 'all', 'done', 'overdue'], true) ? $filter : 'all';
 $dueFilter = $scalar('due', 'all');
 $dueFilter = in_array($dueFilter, ['all', 'overdue', 'today', 'week', 'none'], true) ? $dueFilter : 'all';
 $sort = $scalar('board_sort', 'due');
 $sort = in_array($sort, ['due', 'name', 'project', 'state', 'progress'], true) ? $sort : 'due';
+if ($standalone && in_array($sort, ['project', 'progress'], true)) { $sort = 'due'; }
 $q = trim(substr($scalar('q'), 0, 120));
 $projectId = filter_var($scalar('project', '0'), FILTER_VALIDATE_INT);
 $projectId = $projectId === false ? 0 : max(0, $projectId);
+$creationProjectId = $projectId;
+if ($standalone) { $projectId = 0; }
 $stateId = filter_var($scalar('state', '-1'), FILTER_VALIDATE_INT);
 $stateId = $stateId === false ? -1 : max(-1, $stateId);
-$taskForm = static fn (int $id): string => ProjectTask::getFormURL() . '?id=' . $id;
+$taskForm = static fn (int $id): string => $itemtype::getFormURL() . '?id=' . $id;
 $projectForm = static fn (int $id): string => Project::getFormURL() . '?id=' . $id;
 global $CFG_GLPI;
 $base = rtrim((string) $CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/tasks.php';
 $boardUrl = static fn (array $args = []): string => $base . '?' . http_build_query(array_replace([
     'view' => 'board', 'group' => $group, 'filter' => $filter, 'q' => $q,
     'project' => $projectId, 'state' => $stateId, 'due' => $dueFilter, 'board_sort' => $sort,
+    'source' => $standalone ? 'standalone' : 'project',
 ], $args), '', '&', PHP_QUERY_RFC3986);
 
-$creating = $scalar('new') === '1' && ProjectTask::canCreate();
+$creating = $scalar('new') === '1' && (ProjectTask::canCreate() || StandaloneTask::canCreate());
+$kind = $scalar('kind');
+if ($creating && $kind === 'standalone' && StandaloneTask::canCreate()) {
+    Html::redirect(StandaloneTask::getFormURL()); return;
+}
 $creationError = false;
-if ($creating && $projectId > 0) {
+if ($creating && $kind === 'project' && ProjectTask::canCreate() && $creationProjectId > 0) {
     // Native ProjectTask requires a real project; never bypass its create rights.
     try {
-        if (TaskBoard::canCreateInProject($projectId)) {
-            Html::redirect(ProjectTask::getFormURL() . '?projects_id=' . $projectId);
+        if (TaskBoard::canCreateInProject($creationProjectId)) {
+            Html::redirect(ProjectTask::getFormURL() . '?projects_id=' . $creationProjectId);
             return;
         }
     } catch (Throwable $error) {
@@ -66,24 +84,33 @@ Html::header('Tasks', '', 'helpdesk', strtolower(TaskMenu::class));
 echo '<div class="mdo-tasks container-xl">';
 echo '<header class="mdo-tasks-head"><div><p class="mdo-tasks-eyebrow">MODERN DASHBOARD OVERHAUL</p>';
 echo '<h1>' . $esc($tr('Attività', 'Tasks')) . '</h1>';
-echo '<p class="text-secondary">' . $esc($tr(
-    'Attività di progetto GLPI, separate dai ticket e dalle richieste.',
-    'Native GLPI project tasks, separate from tickets and requests.'
-)) . '</p></div><div class="mdo-tasks-actions">';
+echo '<p class="text-secondary">' . $esc($standalone
+    ? $tr('Attività indipendenti, senza progetto obbligatorio.', 'Independent tasks, with no required project.')
+    : $tr('Attività di progetto GLPI, separate dai ticket e dalle richieste.', 'Native GLPI project tasks, separate from tickets and requests.')
+) . '</p></div><div class="mdo-tasks-actions">';
 if (Project::canView()) {
     echo '<a class="btn btn-outline-secondary" href="' . $esc(Project::getSearchURL()) . '"><i class="ti ti-briefcase me-1"></i>'
         . $esc($tr('Progetti', 'Projects')) . '</a>';
 }
-if (ProjectTask::canCreate()) {
-    echo '<a class="btn btn-outline-primary" href="' . $esc($base . '?new=1' . ($projectId > 0 ? '&project=' . $projectId : '')) . '" title="'
-        . $esc($tr('Per aggiungere una task seleziona prima un progetto.', 'Select a project before creating a task.')) . '">'
+if (ProjectTask::canCreate() || StandaloneTask::canCreate()) {
+    echo '<a class="btn btn-outline-primary" href="' . $esc($base . '?new=1&source=' . ($standalone ? 'standalone' : 'project')) . '">'
         . '<i class="ti ti-plus me-1"></i>' . $esc($tr('Nuova task', 'New task')) . '</a>';
 }
 echo '</div></header>';
 if ($creating) {
+    if ($kind !== 'project' || !ProjectTask::canCreate()) {
+        echo '<div class="mdo-tasks-create"><h2>' . $esc($tr('Tipo di attività', 'Task type')) . '</h2><div class="mdo-tasks-create-actions">';
+        if (StandaloneTask::canCreate()) {
+            echo '<a class="btn btn-primary" href="' . $esc(StandaloneTask::getFormURL()) . '">' . $esc($tr('Task indipendente', 'Independent task')) . '</a>';
+        }
+        if (ProjectTask::canCreate()) {
+            echo '<a class="btn btn-outline-primary" href="' . $esc($base . '?new=1&kind=project&source=' . ($standalone ? 'standalone' : 'project')) . '">' . $esc($tr('Task di progetto', 'Project task')) . '</a>';
+        }
+        echo '</div></div></div>'; Html::footer(); return;
+    }
     echo '<div class="mdo-tasks-create"><h2>' . $esc($tr('Scegli il progetto', 'Choose a project')) . '</h2>';
     echo '<p>' . $esc($tr('La nuova attività si apre nel form nativo GLPI del progetto scelto.', 'The new task opens in the native GLPI form for the selected project.')) . '</p>';
-    if ($creationError || $projectId > 0 || $scalar('continue') === '1') {
+    if ($creationError || $creationProjectId > 0 || $scalar('continue') === '1') {
         echo '<p role="alert">' . $esc($tr(
             'Il progetto selezionato non è disponibile per creare task. Controlla i diritti di progetto e riprova.',
             'The selected project is not available for creating tasks. Check project rights and retry.'
@@ -95,6 +122,7 @@ if ($creating) {
     if (Project::canView()) {
         echo '<form id="mdo-project-create" method="get" action="' . $esc($base) . '" class="mdo-tasks-create-form">';
         echo '<input type="hidden" name="continue" value="1">';
+        echo '<input type="hidden" name="kind" value="project"><input type="hidden" name="source" value="' . ($standalone ? 'standalone' : 'project') . '">';
         echo '<input type="hidden" name="new" value="1"><div class="mdo-tasks-project-picker">';
         echo '<span class="mdo-tasks-project-label">' . $esc($tr('Progetto GLPI', 'GLPI project')) . '</span>';
         $level = ob_get_level();
@@ -143,6 +171,11 @@ if ($creating) {
     Html::footer();
     return;
 }
+echo '<nav class="mdo-tasks-view-tabs" aria-label="' . $esc($tr('Origine attività', 'Task source')) . '">';
+foreach (['project' => [ProjectTask::canView(), $tr('Progetto', 'Project')], 'standalone' => [StandaloneTask::canView(), $tr('Indipendenti', 'Independent')]] as $key => [$visible, $label]) {
+    if ($visible) { echo '<a class="btn btn-outline-secondary"' . (($standalone ? 'standalone' : 'project') === $key ? ' aria-current="true"' : '') . ' href="' . $esc($boardUrl(['source'=>$key,'view'=>$view,'project'=>0,'state'=>-1])) . '">' . $esc($label) . '</a>'; }
+}
+echo '</nav>';
 echo '<nav class="mdo-tasks-view-tabs" aria-label="' . $esc($tr('Viste delle attività', 'Task views')) . '">';
 echo '<a class="btn ' . ($view === 'list' ? 'btn-primary' : 'btn-outline-secondary') . '"' . ($view === 'list' ? ' aria-current="page"' : '') . ' href="' . $esc($boardUrl(['view' => 'list'])) . '">'
     . '<i class="ti ti-list me-1"></i>' . $esc($tr('Elenco', 'List')) . '</a>';
@@ -150,7 +183,7 @@ echo '<a class="btn ' . ($view === 'board' ? 'btn-primary' : 'btn-outline-second
     . '<i class="ti ti-layout-kanban me-1"></i>Kanban</a></nav>';
 if ($view === 'list') {
     echo '<p class="mdo-tasks-hint mdo-tasks-list-hint">' . $esc(
-        ProjectTask::canCreate()
+        !$standalone && ProjectTask::canCreate()
             ? $tr(
                 'La creazione di un progetto non crea automaticamente attività. Usa Nuova task per aggiungere la prima; ricerca e permessi restano quelli nativi GLPI.',
                 'Creating a project does not automatically create tasks. Use New task to add the first one; search and permissions remain native GLPI.'
@@ -162,13 +195,13 @@ if ($view === 'list') {
     ) . '</p>';
     // GLPI has no front/projecttask.php. Keep native search, pagination and export
     // inside the workspace rather than creating a second page below the header.
-    $params = Search::manageParams(ProjectTask::class, $_GET);
+    $params = Search::manageParams($itemtype, $_GET);
     $params['target'] = $boardUrl(['view' => 'list']);
     $params['display_type'] = Search::HTML_OUTPUT;
     echo '<section class="mdo-tasks-native-search" aria-label="' . $esc($tr('Elenco attività', 'Task list')) . '">';
     echo '<div class="search_page row search-no-forced-height"><div class="col search-container disable-overflow-y" data-glpi-search-container>';
-    Search::showGenericSearch(ProjectTask::class, $params);
-    Search::showList(ProjectTask::class, $params);
+    Search::showGenericSearch($itemtype, $params);
+    Search::showList($itemtype, $params);
     echo '</div></div></section></div>';
     Html::footer();
     return;
@@ -179,7 +212,7 @@ echo '<p class="mdo-tasks-hint">' . $esc($tr(
 )) . '</p>';
 
 try {
-    $loaded = TaskBoard::load();
+    $loaded = $standalone ? StandaloneTask::loadBoard() : TaskBoard::load();
 } catch (Throwable $error) {
     Toolbox::logInFile('php-errors', '[mdoverhaul Tasks] ' . $error->getMessage() . "\n");
     echo '<div class="alert alert-danger" role="alert">' . $esc($tr(
@@ -236,7 +269,7 @@ $activeFilters = (int) ($q !== '') + (int) ($projectId > 0) + (int) ($stateId >=
 echo '<details class="mdo-tasks-filter-panel"' . ($activeFilters > 0 ? ' open' : '') . '><summary>'
     . $esc($tr('Filtri e ordinamento', 'Filters and sorting'))
     . ($activeFilters > 0 ? ' · ' . $activeFilters . ' ' . $esc($tr('attivi', 'active')) : '') . '</summary>';
-echo '<form class="mdo-tasks-filters" method="get" action="' . $esc($base) . '"><input type="hidden" name="view" value="board">';
+echo '<form class="mdo-tasks-filters" method="get" action="' . $esc($base) . '"><input type="hidden" name="view" value="board"><input type="hidden" name="source" value="' . ($standalone ? 'standalone' : 'project') . '">';
 echo '<label>' . $esc($tr('Cerca', 'Search')) . '<input class="form-control" name="q" maxlength="120" value="' . $esc($q) . '" placeholder="Task, ID..."></label>';
 echo '<label>' . $esc($tr('Mostra', 'Show')) . '<select class="form-select" name="filter">';
 foreach (['open' => $tr('Da completare', 'Incomplete'), 'all' => $tr('Tutte', 'All'), 'done' => $tr('Completate', 'Completed'), 'overdue' => $tr('Scadute', 'Overdue')] as $key => $label) {
@@ -248,27 +281,31 @@ foreach (['all' => $tr('Qualsiasi', 'Any'), 'overdue' => $tr('Scadute', 'Overdue
     echo '<option value="' . $key . '"' . ($dueFilter === $key ? ' selected' : '') . '>' . $esc($label) . '</option>';
 }
 echo '</select></label>';
+if (!$standalone) {
 echo '<label>' . $esc($tr('Progetto', 'Project')) . '<select class="form-select" name="project"><option value="0">' . $esc($tr('Tutti', 'All')) . '</option>';
 foreach ($projects as $id => $name) {
     echo '<option value="' . (int) $id . '"' . ($projectId === (int) $id ? ' selected' : '') . '>' . $esc($name) . '</option>';
 }
 echo '</select></label>';
+}
 echo '<label>' . $esc($tr('Stato', 'State')) . '<select class="form-select" name="state"><option value="-1">' . $esc($tr('Tutti', 'All')) . '</option>';
 foreach ($states as $id => $name) {
     echo '<option value="' . (int) $id . '"' . ($stateId === (int) $id ? ' selected' : '') . '>' . $esc($name) . '</option>';
 }
 echo '</select></label>';
 echo '<label>' . $esc($tr('Colonne', 'Group by')) . '<select class="form-select" name="group">';
-foreach (['state' => $tr('Stato GLPI', 'GLPI state'), 'progress' => $tr('Avanzamento percentuale', 'Percent complete')] as $key => $label) {
+foreach (['state' => ($standalone ? $tr('Stato', 'Status') : $tr('Stato GLPI', 'GLPI state')), 'progress' => $tr('Avanzamento percentuale', 'Percent complete')] as $key => $label) {
+    if ($standalone && $key === 'progress') { continue; }
     echo '<option value="' . $key . '"' . ($group === $key ? ' selected' : '') . '>' . $esc($label) . '</option>';
 }
 echo '</select></label>';
 echo '<label>' . $esc($tr('Ordina per', 'Sort by')) . '<select class="form-select" name="board_sort">';
 foreach (['due' => $tr('Scadenza', 'Due date'), 'name' => $tr('Titolo', 'Title'), 'project' => $tr('Progetto', 'Project'), 'state' => $tr('Stato', 'State'), 'progress' => $tr('Avanzamento', 'Progress')] as $key => $label) {
+    if ($standalone && in_array($key, ['project','progress'], true)) { continue; }
     echo '<option value="' . $key . '"' . ($sort === $key ? ' selected' : '') . '>' . $esc($label) . '</option>';
 }
 echo '</select></label><div class="mdo-tasks-filter-actions"><button class="btn btn-primary" type="submit"><i class="ti ti-search me-1"></i>'
-    . $esc($tr('Filtra', 'Apply')) . '</button><a class="btn btn-outline-secondary" href="' . $esc($base . '?view=board') . '">'
+    . $esc($tr('Filtra', 'Apply')) . '</button><a class="btn btn-outline-secondary" href="' . $esc($boardUrl(['q'=>'','filter'=>'all','due'=>'all','project'=>0,'state'=>-1,'board_sort'=>'due'])) . '">'
     . $esc($tr('Reimposta', 'Reset')) . '</a></div></form></details>';
 if ($projectId > 0 && isset($projects[$projectId])) {
     echo '<a class="btn btn-outline-secondary" href="' . $esc($projectForm($projectId) . '&forcetab=Project%243') . '">'
@@ -289,7 +326,7 @@ echo '<p class="mdo-tasks-results" role="status">' . count($filtered) . ' ' . $e
 if ($filtered === []) {
     echo '<div class="mdo-tasks-empty" role="status"><h2>' . $esc($all === []
         ? $tr('Nessuna attività visibile', 'No visible tasks') : $tr('Nessun risultato', 'No results')) . '</h2><p>'
-        . $esc($all === [] ? $tr('Le attività dei progetti accessibili appariranno qui.', 'Tasks from accessible projects will appear here.')
+        . $esc($all === [] ? ($standalone ? $tr('Le attività indipendenti accessibili appariranno qui.', 'Accessible independent tasks will appear here.') : $tr('Le attività dei progetti accessibili appariranno qui.', 'Tasks from accessible projects will appear here.'))
             : $tr('Modifica i filtri o reimpostali per vedere le altre attività.', 'Change or reset filters to see other tasks.')) . '</p></div></div>';
     Html::footer();
     return;
@@ -317,12 +354,12 @@ foreach ($columns as $column) {
         echo '<p class="mdo-tasks-hint">' . $esc($tr('Nessuna attività', 'No tasks')) . '</p>';
     }
     foreach ($column['items'] as $task) {
-        echo '<article class="mdo-tasks-card"><a class="mdo-tasks-card-title" href="' . $esc($taskForm($task['id'])) . '">'
+        echo '<article class="mdo-tasks-card" data-task-type="' . ($standalone ? 'standalone' : 'project') . '"><small>' . $esc($standalone ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc($taskForm($task['id'])) . '">'
             . $esc($task['name'] ?: '—') . '</a>';
         if ($task['project_readable']) {
             echo '<a class="mdo-tasks-project" href="' . $esc($projectForm($task['project_id'])) . '">'
                 . $esc($task['project']) . '</a>';
-        } else {
+        } elseif (!$standalone) {
             echo '<span class="mdo-tasks-project">' . $esc($tr('Progetto non accessibile', 'Restricted project')) . '</span>';
         }
         if ($task['description'] !== '') {
@@ -337,9 +374,11 @@ foreach ($columns as $column) {
         if (TaskBoard::dateTimestamp($task['real_end']) !== null) {
             echo '<p class="mdo-tasks-date">' . $esc($tr('Fine effettiva', 'Actual end')) . ': ' . $esc($dueDate($task['real_end'])) . '</p>';
         }
+        if (!$standalone) {
         echo '<div class="mdo-tasks-progress" role="progressbar" aria-label="' . $esc($tr('Avanzamento', 'Progress')) . '" aria-valuenow="'
             . (int) $task['percent_done'] . '" aria-valuemin="0" aria-valuemax="100"><span style="width:'
             . (int) $task['percent_done'] . '%"></span></div><small>' . (int) $task['percent_done'] . '%</small>';
+        }
         echo '</article>';
     }
     echo '</div></section>';

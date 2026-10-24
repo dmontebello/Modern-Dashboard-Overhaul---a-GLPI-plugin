@@ -1,4 +1,6 @@
-# Sicurezza e dati — Modern Dashboard Overhaul 0.8.0
+# Sicurezza e dati — Modern Dashboard Overhaul 0.8.1-dev.2
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 ## Modello di fiducia
 
@@ -49,3 +51,25 @@ Le vulnerabilità **CVE-2026-109618 e CVE-2026-109619** (CVSS v4 9.2) interessan
 La creazione ProjectTask usa ProjectTask::can(-1, CREATE, input) con progetto esistente non cancellato/template; non aggiunge Project READ al diritto core. runtime.php richiede login e plugin attivo, espone solo provenienza pubblica. Test reali ACL e CSRF restano necessari.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+StandaloneTask ha una ACL distinta da ProjectTask. Richiede login, plugin e
+padre/sotto-opzione attivi, schema pronto, bit di profilo e scope di entità.
+READMY significa owner/assignee/gruppo corrente; READALL non salta le entità.
+L'hook Search e l'interfaccia API producono gli stessi criteri; la board applica
+anche can(id,READ)/ITEM_CAN prima di mostrare dati o conteggi.
+
+Owner e entità sono fissati alla creazione e non trasferibili via update. Una
+nuova assegnazione richiede User/Group leggibile e appartenente all'entità o
+gruppo antenato ricorsivo. Campi scrivibili allowlist, ID/date/stato validati;
+contenuti testo escaped. Login zero, parametri ostili e riferimenti cross-entity
+negati. Cestino e restore richiedono DELETE + scope; purge vietato anche dal modello.
+
+Le scritture passano dai controller GLPI 11 e CheckCsrfListener nativo. Non
+ripetere la validazione di un token già consumato. Le negative CSRF nei test
+sono un middleware double: serve collaudo reale. Profili usano la matrice e il
+POST Profile nativi, nessun endpoint custom per concedersi diritti. Snapshot e
+dump contengono dati privati: mantenerli fuori da plugin/repository/pubblicazioni.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).

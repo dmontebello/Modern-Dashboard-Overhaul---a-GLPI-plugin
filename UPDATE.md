@@ -1,4 +1,6 @@
-# Aggiornare Modern Dashboard Overhaul a 0.8.0 Pilot
+# Aggiornare Modern Dashboard Overhaul a 0.8.1-dev.2 Pilot
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 **Un solo archivio installabile:** `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip`. Contiene Dashboard, RSS, Tasks Workspace, Kanban e Settings nella directory `mdoverhaul/`. Non è un kit patch né uno ZIP automatico dei sorgenti GitHub; non serve installare prima la 0.7.0. Compatibilità dichiarata GLPI 11.0.x, test GLPI live ancora necessario.
 
@@ -55,3 +57,18 @@ Prova dashboard, widget RSS già salvati, pagina Ticket con sette contatori, Tas
 P0 non introduce migrazioni; aggiornare dal pacchetto versionato solo su staging, verificare SHA/build in Settings e cache-busting GLPI, ricaricare OPcache secondo installazione. Rollback ripristinando i file precedenti senza disinstallare o cancellare dati.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](docs/releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+Da 0.8.0/0.8.1-dev.1 a 0.8.1-dev.2: backup DB/plugin/volumi e upgrade nativo
+GLPI obbligatori prima di attivare standalone. Viene creata una sola tabella
+propria e un nuovo diritto per profilo (inizialmente zero); i dati ProjectTask,
+RSS e dashboard non vengono migrati né copiati.
+
+Rollback funzionale immediato: tasks_standalone OFF, conserva tabella e dati.
+Per rollback completo usare snapshot coordinati DB/file/volumi e versione
+plugin corrispondente; esportare prima le attività create dopo il backup.
+Il ripristino di un DB precedente perderebbe quei nuovi record. Non disinstallare
+per ripulire: l'uninstall è intenzionalmente conservativo e non esegue DROP.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](docs/releases/0.8.1-dev.2.md).

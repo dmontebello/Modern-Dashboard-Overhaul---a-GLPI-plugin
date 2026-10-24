@@ -72,6 +72,12 @@ $fields = [
         $i18n('Abilita Assistance → Tasks: ricerca nativa GLPI e Kanban di ProjectTask in sola lettura. Non crea ticket.', 'Enable Assistance → Tasks: native GLPI search and a read-only ProjectTask Kanban. No tickets are created.'),
         false,
     ],
+    'tasks_standalone' => [
+        $i18n('Attività indipendenti', 'Independent tasks'),
+        $i18n('Sotto-opzione Tasks Workspace: attività senza progetto con tabella e diritti dei profili propri. Richiede upgrade del plugin; disattivandola i dati vengono conservati.',
+            'Tasks Workspace sub-option: tasks without a project, with their own table and profile rights. Requires plugin upgrade; disabling preserves data.'),
+        true,
+    ],
     'kanban_restyling' => [
         $i18n('Kanban restyling', 'Kanban restyling'),
         $i18n('Migliora le colonne e le card del Kanban nativo GLPI senza cambiare trascinamento e dati.', 'Improves native GLPI Kanban columns and cards without changing drag-and-drop or data.'),
@@ -97,8 +103,8 @@ foreach (['source_commit' => $i18n('Commit sorgente', 'Source commit'), 'build_i
 }
 echo '</dl>';
 echo '<p class="mdo-settings-intro">' . $escape($i18n(
-    'Le opzioni sono salvate nella configurazione nativa di GLPI. Nessuna nuova tabella e nessuna modifica ai widget o alle dashboard esistenti.',
-    'Options are stored in GLPI native configuration. No extra tables and no changes to your dashboard data.'
+    'Le opzioni sono salvate nella configurazione nativa di GLPI. Le attività indipendenti usano una tabella dedicata del plugin; progetti, ticket e dashboard restano nativi.',
+    'Options use GLPI native configuration. Independent tasks use a dedicated plugin table; projects, tickets and dashboards remain native.'
 )) . '</p>';
 echo '<form method="post" action="' . $escape($url) . '">';
 echo '<input type="hidden" name="_glpi_csrf_token" value="' . $escape(Session::getNewCSRFToken()) . '">';
@@ -126,8 +132,8 @@ echo '<div class="mdo-settings-actions">';
 echo '<button class="btn btn-primary" type="submit"><i class="ti ti-device-floppy me-2" aria-hidden="true"></i>'
     . $escape($i18n('Salva impostazioni', 'Save settings')) . '</button>';
 echo '<span class="text-secondary small">' . $escape($i18n(
-    'Le sotto-opzioni Restyling si applicano soltanto quando il modulo è attivo. Ricarica la dashboard dopo il salvataggio.',
-    'Restyling sub-options take effect only when the module is enabled. Reload your dashboard after saving.'
+    'Ogni sotto-opzione richiede il relativo modulo padre attivo. Ricarica la pagina dopo il salvataggio.',
+    'Each sub-option requires its parent module to be enabled. Reload the page after saving.'
 )) . '</span></div>';
 echo '</form></div></div></div>';
 

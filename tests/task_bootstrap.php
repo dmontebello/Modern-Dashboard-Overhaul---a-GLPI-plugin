@@ -5,13 +5,16 @@ declare(strict_types=1);
 const READ = 1;
 const UPDATE = 2;
 const CREATE = 4;
+const DELETE = 8;
+const ERROR = 3;
 
 class CommonGLPI {}
+require_once __DIR__ . '/common_db_double.php';
 final class Config
 {
     public static array $values = [];
     public static function getConfigurationValues(string $context): array { return self::$values[$context] ?? []; }
-    public static function setConfigurationValues(string $context, array $values): void { self::$values[$context] = $values; }
+    public static function setConfigurationValues(string $context, array $values): void { self::$values[$context] = array_replace(self::$values[$context] ?? [], $values); }
 }
 final class Session
 {
@@ -23,13 +26,25 @@ final class Session
     public static bool $create = true;
     public static bool $central = true;
     public static bool $config = true;
+    public static int $standaloneRights = 0;
+    public static array $tokens = [];
     public static string $language = 'it_IT';
     public static ?string $now = null;
     public static function getLanguage(): string { return self::$language; }
     public static function getCurrentTime(): ?string { return self::$now; }
     public static function checkCentralAccess(): void { if (!self::$central) { throw new RuntimeException('central denied'); } }
     public static function checkRight(string $key, int $right): void { if ($key === 'config' && self::$config) { return; } throw new RuntimeException('read denied'); }
-    public static function getNewCSRFToken(): string { return 'isolated-test-token'; }
+    public static function getNewCSRFToken(): string { self::$tokens['isolated-test-token']=true; return 'isolated-test-token'; }
+    public static function getLoginUserID(): int { return self::$user; }
+    public static function haveRight($name,$right): bool { return $name==='plugin_mdoverhaul_standalonetask' && (self::$standaloneRights & $right)===$right; }
+    public static function haveRightsOr($name,array $rights): bool { foreach($rights as $right) { if(self::haveRight($name,$right)) { return true; } } return false; }
+    public static function addMessageAfterRedirect(...$args): void {}
+    public static function checkCSRF(array $input): void
+    {
+        $token=$input['_glpi_csrf_token']??'';
+        if (!is_string($token) || !isset(self::$tokens[$token])) { throw new RuntimeException('CSRF denied by middleware double'); }
+        unset(self::$tokens[$token]);
+    }
     public static function haveAccessToEntity(int $id, bool $recursive = false): bool { return in_array($id, self::$entities, true); }
 }
 final class Project
@@ -148,33 +163,71 @@ final class TaskFakeDB
 {
     public array $queries = [];
     public bool $fail = false;
+    public bool $hasTaskTable = true;
+    public array $schemaFields = [];
+    public array $schemaKeys = [];
+    public array $profileRights = [];
+    public int $creates = 0;
+    public int $alterations = 0;
+    public function tableExists($table): bool { return $this->hasTaskTable; }
+    public function fieldExists($table,$field): bool { return isset($this->schemaFields[$field]); }
+    public function doQuery($sql): bool
+    {
+        if (!str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasks`')) { throw new RuntimeException('Unexpected schema SQL'); }
+        $this->hasTaskTable=true; $this->creates++;
+        preg_match_all('/`([a-z_]+)` (?:int|varchar|mediumtext|timestamp|tinyint)/',$sql,$matches);
+        $this->schemaFields=array_fill_keys($matches[1],true);
+        return true;
+    }
     public function request(array $query): array
     {
         $this->queries[] = $query;
         if ($this->fail) { throw new RuntimeException('private DB failure'); }
         $table = $query['FROM'];
-        $rows = $table === 'glpi_projecttasks' ? ProjectTask::$rows : Project::$rows;
+        $rows = match($table) { 'glpi_projecttasks'=>ProjectTask::$rows,'glpi_projects'=>Project::$rows,default=>CommonDBTM::$storage[$table]??[] };
         $rows = array_filter($rows, static function (array $row) use ($query, $table): bool {
-            foreach ($query['WHERE'] as $field => $value) {
-                $key = substr($field, strlen($table) + 1);
-                if (is_array($value) ? !in_array($row[$key] ?? 0, $value, true) : ($row[$key] ?? 0) != $value) { return false; }
-            }
-            return true;
+            return self::matches($row,$query['WHERE'],$table);
         });
         krsort($rows);
         return array_slice(array_values($rows), 0, $query['LIMIT']);
     }
+    public static function matches(array $row,array $where,string $table): bool
+    {
+            foreach ($where as $field => $value) {
+                if (is_int($field)) { if (!self::matches($row,$value,$table)) { return false; } continue; }
+                if ($field==='AND') { foreach($value as $condition) { if(!self::matches($row,$condition,$table)) { return false; } } continue; }
+                if ($field==='OR') {
+                    $one=false; foreach($value as $key=>$condition) { if(self::matches($row,is_int($key)?$condition:[$key=>$condition],$table)) { $one=true; } }
+                    if (!$one) { return false; } continue;
+                }
+                $key = substr($field, strlen($table) + 1);
+                if (is_array($value) ? !in_array($row[$key] ?? 0, $value, true) : ($row[$key] ?? 0) != $value) { return false; }
+            }
+            return true;
+    }
 }
 require_once __DIR__ . '/../src/Settings.php';
 require_once __DIR__ . '/../src/TaskBoard.php';
+require_once __DIR__ . '/../src/TaskSchema.php';
+require_once __DIR__ . '/../src/BuildInfo.php';
+require_once __DIR__ . '/../src/StandaloneTask.php';
 require_once __DIR__ . '/../src/TaskMenu.php';
 
 function taskFixture(): void
 {
     global $DB, $CFG_GLPI;
     $DB = new TaskFakeDB();
+    $DB->schemaFields=array_fill_keys(['id','entities_id','name','content','users_id_owner','users_id_assign','groups_id_assign','status','due_date','date_creation','date_mod','is_deleted'],true);
+    (new ReflectionProperty(\GlpiPlugin\Mdoverhaul\TaskSchema::class,'ready'))->setValue(null,null);
+    Config::setConfigurationValues(\GlpiPlugin\Mdoverhaul\Settings::CONTEXT,['task_schema_version'=>'1']);
+    CommonDBTM::$storage=[];
     $CFG_GLPI = ['root_doc' => '/glpi'];
     Session::$user = 1;
+    Session::$standaloneRights=0;
+    Session::$tokens=[];
+    $_SESSION['glpigroups']=[];
+    $_SESSION['glpiactive_entity']=1;
+    $_SESSION['glpiactiveentities']=[1];
     Session::$entities = [1];
     Session::$projectRead = Session::$projectAll = Session::$taskRead = Session::$create = Session::$central = true;
     Session::$language = 'it_IT';

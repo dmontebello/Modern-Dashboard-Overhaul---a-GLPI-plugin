@@ -70,3 +70,12 @@ Prima dell'approvazione della PR serve una verifica con profili reali: se il
 disallineamento si conferma, documentare/segnalare il comportamento del core e
 valutare un extension point pubblico disponibile. Non alterare il core né
 aggiungere nel plugin un secondo motore ACL per forzare l'equivalenza.
+
+
+## Decisione utente del 24/10/2026 — 0.8.1-dev.2
+
+La persistenza di task realmente indipendenti è ora esplicitamente autorizzata
+nella specifica 0.8.1: implementata come StandaloneTask/CommonDBTM nello stesso
+plugin, con tabella e ACL dedicate. Le valutazioni precedenti rimangono storiche.
+Stage/Status indipendenti, altri parent, Notion e worklog restano non approvati.
+Migrazione e comportamento GLPI reale NON COLLAUDATO LIVE; vedere STATUS.

@@ -1,5 +1,7 @@
 # Matrice di test verso Modern Dashboard Overhaul 1.0 (baseline 0.6.0)
 
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
+
 > Revisione per **0.7.0**: vedere [note di release](RELEASE_NOTES_IT.md) e [QA](../QA.md) per le variazioni di prestazioni e sicurezza.
 
 **Distinguere sempre**: test statico del pacchetto ≠ test GUI simulato ≠ test su GLPI reale. Gli esiti già documentati sono in [QA.md](../QA.md). Questa matrice è ripetibile a ogni versione.
@@ -82,3 +84,17 @@ Checklist da eseguire su GLPI 11.0.9 staging: contrasto Settings (>=4.5:1) in li
 Testare 390/768/1024/1440, light/dark, zoom 200%, contrasto testo >=4.5 e controlli >=3, selezione Project AJAX/GET/redirect/salvataggio, resize e riduzione GridStack, toolbar/legenda ticket_status. Mock e staging devono avere esiti separati.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+Aggiunte prove standalone: superadmin/READALL, READMY owner/assegnatario/gruppo,
+nessun diritto, solo standalone senza ProjectTask, entità/parent gruppo ricorsivo,
+input ostili, owner/entity immutabili, assignee cross-entity, cestino/restore,
+purge vietato, plugin/padre/sotto-opzione OFF e dati conservati. Test CRUD HTTP
+su controller reali con persistenza simulata; middleware CSRF double dichiarato.
+
+Schema: installazione nuova/reinstall idempotente, indici, grant zero e mantenimento
+di grant/dati con fixture DB. SQL MariaDB, upgrade/rollback e backup veri NON
+COLLAUDATO LIVE. Vedere STAGING_0_8_1 per prove GLPI obbligatorie prima di Main.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).

@@ -1,10 +1,12 @@
-# Configurazione — Modern Dashboard Overhaul 0.8.0
+# Configurazione — Modern Dashboard Overhaul 0.8.1-dev.2
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 ## Dove si trova
 
 **GLPI → Configurazione → Plugin → Modern Dashboard Overhaul → Configura** (chiave inglese). Richiede `config:UPDATE`; un profilo senza questo diritto non deve poter aprire o salvare la pagina.
 
-## Le sette opzioni
+## Le otto opzioni
 
 | Opzione in GUI | Chiave interna | Predefinito | Effetto |
 | --- | --- | --- | --- |
@@ -14,6 +16,7 @@
 | Testi dei grafici | `chart_text` | Attivo | Contrasto/dimensioni dei testi dei grafici supportati; richiede Restyling |
 | **Widget RSS** | `rss_widgets` | Attivo | Registra i widget dei feed RSS visibili, indipendentemente da Restyling |
 | **Tasks Workspace** | `task_workspace` | Spento | Assistance → Tasks, ricerca ProjectTask nativa e board read-only |
+| Attività indipendenti | `tasks_standalone` | Spento | Sotto-opzione Tasks Workspace; richiede schema e diritti dedicati |
 | **Kanban Restyling** | `kanban_restyling` | Spento | Skin del Kanban Vue GLPI, indipendente dal workspace |
 
 Le tre opzioni di dettaglio hanno effetto **solo quando Dashboard Restyling è attivo**. La schermata può restare accessibile anche se entrambi i moduli sono spenti.
@@ -43,6 +46,7 @@ Database MySQL GLPI
         ├── dashboard_tabs
         ├── chart_text
         ├── task_workspace
+        ├── tasks_standalone
         └── kanban_restyling
 ```
 
@@ -91,3 +95,22 @@ Le decisioni che richiedono dati aggiuntivi sono descritte in
 Settings mostra versione, canale Dev, commit sorgente testato, build ID e data UTC. I colori sono locali e riconoscono data-glpi-theme-dark. Sette flag invariati; provenienza assente mostrata come build non generata.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+Otto flag, i precedenti sette preservati. tasks_standalone è opt-in e sotto
+il padre task_workspace; kanban_restyling resta indipendente. Schema e diritti
+non vengono creati da Settings: prima upgrade amministrativo, poi profili.
+
+Configurazione: Profili → profilo centrale → scheda MDO attività indipendenti:
+READALL per tutte nelle entità attive, READMY per proprie/assegnate a utente o
+gruppo, CREATE, UPDATE, DELETE. Nuovi diritti inizialmente zero per ogni profilo.
+Dare READMY/READALL prima di usare il workspace; scritture solo nello scope letto.
+Rifare login dopo modifiche ai diritti. Super-Admin non riceve un grant MDO
+implicito. Attivare Tasks Workspace + Attività indipendenti; OFF conserva dati.
+
+Nuova task propone tipo indipendente o progetto secondo i diritti. Indipendente
+non richiede progetto; progetto usa esclusivamente form e ACL ProjectTask GLPI.
+Elenco e Kanban separano i tipi e i relativi filtri. Nessun DnD globale di scrittura.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).

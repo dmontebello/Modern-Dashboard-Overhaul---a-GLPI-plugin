@@ -1,6 +1,6 @@
 # MDO: prerelease, build ID, ZIP e documentazione per ogni Dev
 
-Stato 2026-10-24: REQUISITO / NON ANCORA IMPLEMENTATO NEL CODICE.
+Valutazione iniziale 2026-10-24 (storica): REQUISITO / NON ANCORA IMPLEMENTATO NEL CODICE.
 Riferimento: [specifica tecnica](../specs/MDO_0_8_1_DEV_WORKPLAN.md) e [stato corrente](STATUS.md).
 
 ## Due branch permanenti
@@ -50,3 +50,13 @@ Il nome versionato non viene sovrascritto; Latest cambia solo dopo questi gate.
 Il publisher registra checksum e provenienza in docs/releases/<version>.build.json
 con un commit bot [skip ci]. Questi record generati non sono contenuto sorgente
 dei pacchetti successivi. I documenti storici sopra restano tali.
+
+
+## Corrente: 0.8.1-dev.2
+
+Il meccanismo P0 ha già pubblicato 0.8.1-dev.1 dopo la CI verde del source SHA
+7e3b93a. P1 incrementa a 0.8.1-dev.2, con proprie note e registro generato.
+Il gate controlla anche la dichiarazione corrente di README contro setup.php;
+la presenza di una versione soltanto in una sezione storica non è sufficiente.
+Pacchetti versionati immutabili e vecchio 0.8.0 conservati, alias aggiornata solo
+dopo test e verifica HEAD; non confondere source commit e commit del publisher.

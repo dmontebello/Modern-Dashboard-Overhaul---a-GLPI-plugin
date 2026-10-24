@@ -46,6 +46,11 @@ def documentation_errors(root):
     if '-dev.' not in ver:
         return []
     errors = []
+    readme = root / 'README.md'
+    if readme.is_file():
+        declared = re.search(r'\*\*Versione:\*\* `([^`]+)`', readme.read_text())
+        if not declared or declared[1] != ver:
+            errors.append('README current version does not match setup.php')
     for name in ['CHANGELOG.md', 'README.md', 'QA.md', 'docs/dev/STATUS.md', 'docs/dev/VERSIONING_POLICY.md', f'docs/releases/{ver}.md']:
         path = root / name
         if not path.is_file() or ver not in path.read_text():

@@ -1,4 +1,6 @@
-# Installazione e ripristino — Modern Dashboard Overhaul 0.8.0
+# Installazione e ripristino — Modern Dashboard Overhaul 0.8.1-dev.2
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 Questa procedura è generica per GLPI 11.0.x; per un ambiente particolare verificare sempre i percorsi prima di copiare comandi. **Non fare prove direttamente in produzione senza un backup recuperabile di DB e volumi GLPI.**
 
@@ -108,3 +110,19 @@ Per 0.8.0 usa soltanto lo ZIP pubblicato nel branch `Main`, non "Download ZIP" d
 Usare il pacchetto versionato Dev con sidecar SHA512 e build-info.json; verificare anche il manifest interno. Effettuare upgrade file/plugin in staging e controllare versione/asset HTTP. Non installare il vecchio ZIP 0.8.0 per testare questa candidata.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+Procedura STAGING: 1) backup coerente DB, directory plugin e volumi; provare il
+ripristino; 2) verificare ZIP/sidecar e build-info del commit testato; 3) sostituire
+la sola cartella mdoverhaul; 4) eseguire l'upgrade dalla gestione plugin GLPI,
+non da una pagina Tasks; 5) controllare creazione schema 1 e tabella dedicata;
+6) configurare i profili con i nuovi diritti; 7) attivare l'ottava opzione,
+rifare login e collaudare. Nessuna migrazione DB reale eseguita da Codex.
+
+Hook install/upgrade idempotente: completa campi/indici senza duplicare righe,
+non azzera grant esistenti e registra task_schema_version=1 solo a fine upgrade.
+Se l'upgrade è incompleto la feature non è disponibile; non forzare il flag.
+Gli altri moduli mantengono dati e impostazioni. Nessun deploy Main automatico.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).

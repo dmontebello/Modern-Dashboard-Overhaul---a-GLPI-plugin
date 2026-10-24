@@ -66,3 +66,7 @@
 .mdo-tasks-create-actions {display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;align-items:center;}
 .mdo-tasks-native-search .search-container {display:flex;flex-direction:column;justify-content:flex-start;gap:0;}
 @media(max-width:560px){.mdo-tasks-create-actions{flex-direction:column;align-items:stretch;}.mdo-tasks-create-actions .btn{width:100%;}}
+.mdo-standalone-form fieldset {display:grid;grid-template-columns:minmax(0,1fr);gap:12px;border:0;padding:0;margin:20px 0;min-width:0;}
+.mdo-standalone-form :is(input,textarea,select,.select2-container) {max-width:100%;min-width:0;}
+[data-glpi-theme-dark="1"] .mdo-tasks {--mdo-task-muted:#bdcbdc;--mdo-task-surface:#1d2b3c;color:#f0f4fa;}
+.mdo-tasks .text-secondary {color:var(--mdo-task-muted)!important;}

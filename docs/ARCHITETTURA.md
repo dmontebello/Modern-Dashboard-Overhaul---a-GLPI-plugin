@@ -1,4 +1,6 @@
-# Architettura — Modern Dashboard Overhaul 0.8.0
+# Architettura — Modern Dashboard Overhaul 0.8.1-dev.2
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 ## 1. In sintesi
 
@@ -119,3 +121,22 @@ Il benchmark UI descritto in [QA](../QA.md) è un carico simulato, non un profil
 BuildInfo legge metadata pubblici generati, runtime.php li espone al JS autenticato. Il hook asset GLPI usa la versione di setup.php: niente query string fittizie. Nessuna nuova persistenza applicativa in P0.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+StandaloneTask estende CommonDBTM e implementa ExtraVisibilityCriteria dentro
+GlpiPlugin\Mdoverhaul. La sola tabella nuova è glpi_plugin_mdoverhaul_tasks:
+id, entities_id, name varchar(255), content mediumtext, users_id_owner,
+users_id_assign, groups_id_assign, status (1/2/3), due_date, date_creation,
+date_mod, is_deleted. Indici su entità, owner, assignee, gruppo, stato, scadenza
+e cancellazione; nessuna FK a Project e nessuna modifica DDL alle tabelle core.
+
+Le ProjectTask restano nel core. Due sottoviste Search native separate evitano
+una UNION/paginazione artificiale tra modelli con ACL differenti. La board
+riusa gli stessi criteri di visibilità e controlla can(id,READ) per ogni riga.
+Per la tabella custom, le search options dichiarano itemtype esplicito; hook
+addDefaultWhere in array DBIterator, nessuna dipendenza da Search @internal.
+I gruppi assegnati possono essere ricorsivi, la singola task non è ricorsiva:
+la sua entità è fissa. Il suo stato minimo è un unico asse, non Stage+Status.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).

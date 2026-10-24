@@ -25,6 +25,8 @@ namespace {
         public static function setConfigurationValues(string $scope, array $values): void { self::$values[$scope] = array_replace(self::$values[$scope] ?? [], $values); }
     }
     class CommonGLPI {}
+    class CommonDBTM extends CommonGLPI {}
+    interface ExtraVisibilityCriteria { public static function getVisibilityCriteria(bool $forceall=false): array; }
     final class ProjectTask {
         public static bool $visible = true;
         public static function canView(): bool { return self::$visible; }
@@ -87,7 +89,7 @@ namespace {
     Plugin::$legacyActive=true;
     check(!plugin_mdoverhaul_check_config(),'dual-active legacy blocked');
     Plugin::$legacyActive=false;
-    check(array_keys(Settings::defaults())===['dashboard_restyling','rss_widgets','compact_empty_filters','dashboard_tabs','chart_text','task_workspace','kanban_restyling'],'exactly seven settings');
+    check(array_keys(Settings::defaults())===['dashboard_restyling','rss_widgets','compact_empty_filters','dashboard_tabs','chart_text','task_workspace','tasks_standalone','kanban_restyling'],'eight settings preserve legacy flags plus opt-in standalone');
     check(!Settings::defaults()['task_workspace'] && !Settings::defaults()['kanban_restyling'], 'Tasks and Kanban defaults remain OFF');
     $start=Config::$reads;
     Settings::get();Settings::get();Settings::get();
@@ -96,6 +98,7 @@ namespace {
     $inputs=array_fill_keys(array_keys(Settings::defaults()),'1');
     // Feature switches default OFF; enable each explicitly below when tested.
     $inputs['task_workspace']='0';
+    $inputs['tasks_standalone']='0';
     $inputs['kanban_restyling']='0';
     $inputs['rss_widgets']='0';
     Settings::save($inputs);

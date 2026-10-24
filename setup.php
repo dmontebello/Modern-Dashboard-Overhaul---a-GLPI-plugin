@@ -4,19 +4,25 @@ use Glpi\Plugin\Hooks;
 use GlpiPlugin\Mdoverhaul\Dashboard;
 use GlpiPlugin\Mdoverhaul\Settings;
 
-define('PLUGIN_MDOVERHAUL_VERSION', '0.8.1-dev.1');
+define('PLUGIN_MDOVERHAUL_VERSION', '0.8.1-dev.2');
 require_once __DIR__ . '/src/BuildInfo.php';
 require_once __DIR__ . '/src/Settings.php';
 require_once __DIR__ . '/src/FeedFormatter.php';
 require_once __DIR__ . '/src/Dashboard.php';
 require_once __DIR__ . '/src/TaskMenu.php';
 require_once __DIR__ . '/src/TaskBoard.php';
+require_once __DIR__ . '/src/TaskSchema.php';
+require_once __DIR__ . '/src/StandaloneTask.php';
+require_once __DIR__ . '/src/TaskProfile.php';
 
 function plugin_init_mdoverhaul(): void
 {
     global $PLUGIN_HOOKS;
 
     $PLUGIN_HOOKS['csrf_compliant']['mdoverhaul'] = true;
+    if (class_exists(\Profile::class)) {
+        Plugin::registerClass(\GlpiPlugin\Mdoverhaul\TaskProfile::class, ['addtabon' => \Profile::class]);
+    }
     // The settings page remains available even when all optional modules are off.
     $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['mdoverhaul'] = 'front/config.php';
     $PLUGIN_HOOKS[Hooks::ADD_CSS]['mdoverhaul'] = ['css/settings.css'];

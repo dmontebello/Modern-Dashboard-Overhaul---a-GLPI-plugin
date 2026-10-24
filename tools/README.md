@@ -1,4 +1,6 @@
-# Controlli e backup - Modern Dashboard Overhaul 0.8.0 - VM Linux
+# Controlli e backup - Modern Dashboard Overhaul 0.8.1-dev.2 - VM Linux
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 Questi script NON installano il plugin, NON modificano Docker Compose, NON fermano servizi
 ed NON modificano il database. L'unico script che crea un archivio e backup-plugin.sh.
@@ -127,3 +129,15 @@ Lo script usa una copia temporanea con radice `mdoverhaul/`, esclude il codice G
 package_from_repo.py genera Modern_Dashboard_Overhaul_0.8.1-dev.1.zip e sidecar. check_dev_docs.py verifica note e versioni; publish_dev.py valida sorgenti/metadata e pubblica soltanto Dev dopo i gate CI. Un checkout dirty produce metadata dirty e non può essere pubblicato.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](../docs/releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+Aggiunti standalone_php.php e standalone_ui_playwright.py ai gate CI; publisher
+rimane vincolato al source testato e al branch Dev. check_dev_docs.py controlla
+anche la dichiarazione versione corrente di README. Per il backup prima del
+collaudo: bash tools/backup-standalone.sh /percorso/client.cnf database /backup-esterno.
+Richiede mariadb-dump o mysqldump; nessun valore credenziale nel comando o nel
+repository. Lo script crea dump con umask 077 e checksum, non avvia upgrade.
+Backup/restore DB reali non eseguiti da Codex.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](../docs/releases/0.8.1-dev.2.md).

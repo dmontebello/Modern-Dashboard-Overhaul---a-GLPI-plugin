@@ -1,4 +1,6 @@
-# Mappa cartelle — Modern Dashboard Overhaul 0.8.0
+# Mappa cartelle — Modern Dashboard Overhaul 0.8.1-dev.2
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 Questo albero è un **esempio Docker Compose**, non l'output di una verifica remota. I nomi di servizi/cartelle possono variare. I percorsi di montaggio `mdoverhaul` descrivono la configurazione di riferimento.
 
@@ -78,3 +80,14 @@ Il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` contiene una sola cartella `
 Aggiunti src/BuildInfo.php, front/runtime.php, tools/maintainer/versioning.py, publish_dev.py, check_dev_docs.py, test di Settings e packaging, docs/releases. build-info.json viene generato solo nel pacchetto.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+src/StandaloneTask.php (modello/ACL/Search), TaskSchema.php (schema 1),
+TaskProfile.php (matrice native Profile); front/standalonetask.php e
+standalonetask.form.php (controller Search e CRUD); hook.php gestisce upgrade e
+criterio pubblico Search. tools/backup-standalone.sh prepara backup privato.
+Nuovi tests/common_db_double.php, standalone_php.php, render_standalone.php e
+standalone_ui_playwright.py sono esclusivamente test dichiarati, non runtime GLPI.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).

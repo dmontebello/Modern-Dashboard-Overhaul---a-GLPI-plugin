@@ -1,4 +1,6 @@
-# QA — Modern Dashboard Overhaul 0.8.0 (Pilot)
+# QA — Modern Dashboard Overhaul 0.8.1-dev.2 (Dev)
+
+Stato corrente: NON COLLAUDATO LIVE. Gli esiti e ambienti precedenti sotto restano storici.
 
 **Ambiente:** codice della 0.6.0 Documented Pilot verificato con SHA-512; modifiche 0.7.0 analizzate ed eseguite offline. **Non è un test end-to-end della GLPI di produzione.**
 
@@ -86,3 +88,38 @@ nessun accesso allo staging GLPI 11.0.9, confermato dall'utente. I bug segnalati
 non sono dichiarati risolti sul GLPI reale. Comandi e limiti nelle
 [note di versione](docs/releases/0.8.1-dev.1.md); risultati CI del preciso SHA
 codice nel record generato docs/releases/0.8.1-dev.1.build.json dopo pubblicazione.
+
+
+## Candidata 0.8.1-dev.2
+
+IMPLEMENTATO e TESTATO CON DOUBLES. NON COLLAUDATO LIVE: nessuna istanza GLPI
+11.0.9 raggiungibile, nessuna migrazione DB reale eseguita.
+
+| Verifica locale eseguita | Esito |
+| --- | --- |
+| Sintassi PHP/Bash/JS | PASS: 26 PHP, 7 Bash, 2 JS |
+| Parser Python e workflow YAML | PASS |
+| Moduli/RSS PHP | PASS: 67 |
+| Tasks/ProjectTask PHP | PASS: 63 |
+| Standalone PHP | PASS: 59 |
+| Packaging/provenienza/tamper | PASS: 8 |
+| Browser dashboard | PASS: 86, DOM/ECharts fixture |
+| Browser Tasks | PASS: 175, controller e doubles |
+| Browser Settings | PASS: 560, otto switch, contrasto AA e zoom |
+| Browser standalone | PASS: 108, CRUD HTTP e persistenza simulata, form responsive/zoom |
+| Gate documenti e build ZIP/manifest | PASS, build locale marcata dirty senza SHA fittizio |
+| DB migration/backup/restore e GLPI live | NON ESEGUITO |
+
+Comandi nelle [note](docs/releases/0.8.1-dev.2.md). Dopo commit, la CI ripete
+le prove sullo SHA esatto e genera il pacchetto pulito; record definitivo in
+`docs/releases/0.8.1-dev.2.build.json`. Nessun risultato locale simula una CI verde.
+
+Prove aggiunte: ACL owner/assignee/gruppi/entità/ricorsività/READMY/READALL,
+parametri ostili e XSS, CRUD, cestino/restore/purge vietato, CSRF tramite middleware
+double, modulo/plugin OFF, diritti iniziali zero, install/reinstall idempotente
+con schema simulato e nessun INSERT Project/ProjectTask. I test UI usano gli
+stessi controller con stato persistente simulato, non il database/Select2 GLPI.
+
+Da collaudare: migrazione e backup/restore veri; scheda diritti Profile, login,
+Search/AJAX/export/API, User/Group dropdown, diritti effettivi, geometria GridStack,
+ECharts ticket_status, cache HTTP, DnD nativo e temi reali. Nessun bug live chiuso.

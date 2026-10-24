@@ -1,4 +1,6 @@
-# Regole obbligatorie per ogni release — Modern Dashboard Overhaul 0.8.0
+# Regole obbligatorie per ogni release — Modern Dashboard Overhaul 0.8.1-dev.2
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 **Obiettivo:** nessuna versione senza README e documentazione sincronizzati con il codice. Questo documento fa parte del pacchetto **e deve essere aggiornato con esso**. Tutto si svolge localmente finché non sarà validata la 1.0; pubblicare sul branch GitHub di sviluppo la ZIP pilota completa; il Marketplace resta escluso finché non sarà richiesto.
 
@@ -96,3 +98,17 @@ Il contenuto storico di questo documento regola la 0.8.0. Per il prossimo svilup
 La pipeline della candidata testa prima di aggiornare Latest. Verifica HEAD remoto esatto, source SHA, run ID, manifest, checksum, file e prerelease; un branch avanzato conserva il precedente alias. Versionati immutabili, nessuna release/Main automatica.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+0.8.1-dev.1 pubblicata dal source 7e3b93a dopo CI 40090042032 PASS; il publisher
+4f5ed1c è distinto dal commit testato. 0.8.1-dev.2 segue lo stesso gate con
+release notes/code nello stesso commit, poi record source/build/UTC/SHA512
+generato dalla CI. Nome immutabile nuovo, alias solo dopo verde + controllo HEAD.
+Nessun overwrite del vecchio 0.8.0, merge Main, PR o deploy automatico.
+
+Anche con CI verde la migrazione e i bug UI restano NON COLLAUDATO LIVE finché
+l'utente non collauda staging e approva. Il nuovo schema richiede backup prima
+che l'operatore esegua l'upgrade GLPI. Candidato Dev non equivale a release stabile.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).

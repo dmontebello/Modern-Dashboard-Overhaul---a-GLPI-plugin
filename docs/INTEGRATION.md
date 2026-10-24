@@ -1,4 +1,6 @@
-# Integrazione con GLPI 11 — Modern Dashboard Overhaul 0.8.0
+# Integrazione con GLPI 11 — Modern Dashboard Overhaul 0.8.1-dev.2
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 Queste note identificano **i punti d'integrazione del codice attuale**; non garantiscono compatibilità con futuri aggiornamenti GLPI. Fonte di verifica: implementazioni GLPI 11.0.9 e file distribuiti nel plugin.
 
@@ -55,3 +57,19 @@ Registrazione condizionale `Hooks::MENU_TOADD` (`helpdesk` → `TaskMenu`); pagi
 ProjectTask, Search, Dropdown AJAX, CommonDBChild e cache versione GLPI rimangono nativi. La geometria ECharts cambia solo per il card_id ticket_status; serie, palette e interazioni non vengono sostituite. Main e asset del core invariati.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+Nuovo oggetto nello stesso namespace/plugin, CommonDBTM, stato singolo e schema
+proprio. Nessun ProjectTask orfano, progetto contenitore, TicketTask o Reminder
+sostitutivo. La classe esplicita itemtype nelle opzioni Search per la tabella
+custom; usa l'hook pubblico addDefaultWhere e ExtraVisibilityCriteria per i
+percorsi nativi compatibili. Liste/board dei due tipi sono separate; card con
+tipo e ID evitano collisioni tra ProjectTask #1 e StandaloneTask #1.
+
+Il form nuovo usa controller/plugin router, Entity/User/Group/Dropdown e token
+CSRF nativi. Non cambia API Vue, dati di ECharts o layout GridStack persistito.
+Collaudare Search/AJAX/export e API native del nuovo oggetto: non sono stati
+eseguiti su GLPI 11.0.9 reale in questo ambiente.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).

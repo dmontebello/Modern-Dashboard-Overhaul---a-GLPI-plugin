@@ -1,5 +1,9 @@
 # MDO Dev — stato operativo e handoff
 
+> **Corrente: 0.8.1-dev.2.** Implementato e testato con doubles; **NON COLLAUDATO LIVE**.
+> La cronologia seguente mantiene le valutazioni precedenti. Note correnti in
+> [0.8.1-dev.2](../releases/0.8.1-dev.2.md), collaudo in [staging](STAGING_0_8_1.md).
+
 Data valutazione: 2026-10-24. Stato: REGRESSIONI GLPI LIVE APERTE. Questo documento descrive cosa è osservato, non ciò che è stato risolto.
 Documenti da leggere: [specifica 0.8.1](../specs/MDO_0_8_1_DEV_WORKPLAN.md), [versioning](VERSIONING_POLICY.md).
 
@@ -57,7 +61,7 @@ Nota: il cliente segnala persistenza dei bug precedenti, ma non tutte le ultime 
 A ogni candidato: versione e SHA codice esatti, build_id, ZIP/checksum, file modificati e fix, nuove/risolte regressioni con prove, test PASS/FAIL/NON ESEGUITI, migrazioni, rischio e rollback, prossimi passi. Aggiornare CHANGELOG, README, QA e docs/releases/<version>.md nello stesso commit; non cancellare le righe storiche. Non registrare dati privati.
 
 
-## Candidata corrente: 0.8.1-dev.1 — P0, 2026-10-24
+## Registro 0.8.1-dev.1 — P0, 2026-10-24
 
 Base effettivamente aggiornata prima del lavoro: 45b4e968451813c579bb14b343f6cc3ad69fca8e.
 IMPLEMENTATO: versione unica, metadata build e gate pubblicazione; CSS Settings,
@@ -76,3 +80,33 @@ Rollback P0: file del plugin precedenti, nessuna migrazione. Main invariato.
 Staging non raggiungibile da Codex; l'utente eseguirà il collaudo dopo pubblicazione.
 
 | 2026-10-24 | 0.8.1-dev.1 | Source SHA generato da CI | Test isolati, esiti in QA/CI | NON COLLAUDATO LIVE | P0 candidato; segue P1 |
+
+
+## Registro 0.8.1-dev.2 — P1
+
+Base P1: publisher 4f5ed1c della candidata P0. P0 codice esatto
+7e3b93a62e965d03ccfdb7ecc91471e033eaec62; CI 40090042032 PASS, incluso publisher.
+ZIP P0 SHA512: 8ce18180015b0382c7f8402eeb0527e81b0df077f1f1a05b8ef4a1298bc703208c738a8fe995508d4c0eff1e474b8bac51cb8a9e714812d2641f2794f3972865.
+
+P1 IMPLEMENTATO: StandaloneTask, tabella dedicata versione schema 1, profili,
+ACL e Search pubblica; form, CRUD/cestino/restore, sottoviste native e ottavo flag
+opt-in. Nessun progetto fittizio o ProjectTask orfano. Migration solo da hook
+amministrativo GLPI; nessun upgrade dal GET. Rights nuovi zero per tutti i profili.
+
+STANDALONE-01: implementato/testato con doubles, **NON COLLAUDATO LIVE**, inclusi
+DDL, upgrade e ripristino DB. SETTINGS-01/TASK-01/02/03/TICKET-01/DASH-01/CHART-01
+rimangono aperti fino alle prove dell'utente. BUILD-01 verificato in CI; HTTP
+native e OPcache dello staging da verificare. Source SHA, build ID e SHA512 P1
+sono generati in build-info.json e docs/releases/0.8.1-dev.2.build.json dalla CI.
+
+| 2026-10-24 | 0.8.1-dev.1 | codice 7e3b93a / CI 40090042032 / publisher 4f5ed1c | PASS automatico | NON COLLAUDATO LIVE | P0 pubblicato solo Dev |
+| 2026-10-24 | 0.8.1-dev.2 | fonte esatta nel record CI generato | esiti in QA/CI | NON COLLAUDATO LIVE | P1 candidato, schema 1 opt-in |
+
+Rollback funzionale: standalone OFF, nessuna cancellazione. Per rollback versione
+usare snapshot coordinati DB/plugin/volumi, esportando prima le task nuove.
+Main invariato 0dd4debe1b68088190132c0dfcca9c3bae068099. Nessuna PR/Main/deploy.
+
+Verifiche locali P1 PASS: 26 PHP/7 Bash/2 JS sintassi; parser Python/YAML;
+67 moduli, 63 Tasks, 59 standalone PHP; 8 packaging; 86 dashboard, 175 Tasks,
+560 Settings e 108 standalone UI. Gate documenti e ZIP/manifest PASS.
+Build locale dirty dichiarata; source/build/checksum definitivo dal publisher CI.

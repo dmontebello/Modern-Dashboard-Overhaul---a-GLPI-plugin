@@ -68,21 +68,21 @@ verify(TaskBoard::filter($rows, '<img onerror=alert(1)>', 'all', -1, 0) === [], 
 Session::$projectAll = false;
 $choices = TaskBoard::creationProjects();
 verify(array_keys($choices['projects']) === [1], 'creation choices require project READ and UPDATE and native task CREATE');
-taskPage(['new' => '1', 'project' => '1']);
+taskPage(['new' => '1', 'kind'=>'project', 'project' => '1']);
 verify(Html::$redirect === '/glpi/front/projecttask.form.php?projects_id=1', 'explicit project redirects to native form with root path');
 taskFixture();
 Session::$projectRead = false;
-taskPage(['new' => '1', 'project' => '1']);
+taskPage(['new' => '1', 'kind'=>'project', 'project' => '1']);
 verify(Html::$redirect === '/glpi/front/projecttask.form.php?projects_id=1', 'native creation does not require an extra Project READ permission');
 taskFixture();
-verify(str_contains(taskPage(['new'=>'1','continue'=>'1','project'=>'0']), 'role="alert"'), 'empty selection is an explicit error, never a silent reload');
+verify(str_contains(taskPage(['new'=>'1','kind'=>'project','continue'=>'1','project'=>'0']), 'role="alert"'), 'empty selection is an explicit error, never a silent reload');
 Session::$projectAll = false;
 Html::$redirect = null;
-$html = taskPage(['new' => '1', 'project' => '2']);
+$html = taskPage(['new' => '1', 'kind'=>'project', 'project' => '2']);
 verify(Html::$redirect === null && !str_contains($html, 'SEGRETO'), 'manipulated creation project rejected without disclosure');
 for ($id = 4; $id < 1010; $id++) { Project::$rows[$id] = array_replace(Project::$rows[1], ['id' => $id]); }
 verify(TaskBoard::creationProjects()['truncated'] && !isset(TaskBoard::creationProjects()['projects'][1]), 'project choices bounded with explicit truncation');
-taskPage(['new' => '1', 'project' => '1']);
+taskPage(['new' => '1', 'kind'=>'project', 'project' => '1']);
 verify(Html::$redirect === '/glpi/front/projecttask.form.php?projects_id=1', 'known project outside chooser sample checked directly');
 taskFixture();
 Session::$create = false;
@@ -104,11 +104,11 @@ verify(str_contains(taskPage(['view' => 'board']), 'Vista parziale'), 'partial s
 $DB->fail = true;
 $html = taskPage(['view' => 'board']);
 verify(str_contains($html, 'role="alert"') && !str_contains($html, 'private DB failure') && Toolbox::$errors !== [], 'DB failure rendered safely and logged');
-$html = taskPage(['new' => '1']);
+$html = taskPage(['new' => '1', 'kind'=>'project']);
 verify(str_contains($html, 'name="project"') && !str_contains($html, 'private DB failure'), 'native project dropdown independent of failing optional SQL scan');
 
 taskFixture();
-$html = taskPage(['new' => '1']);
+$html = taskPage(['new' => '1', 'kind'=>'project']);
 verify(str_contains($html, 'name="project"') && str_contains($html, 'Progetto consentito')
     && !str_contains($html, 'SEGRETO altra entità'), 'native project selector shows permitted projects only');
 $html = taskPage([]);

@@ -25,7 +25,7 @@ final class TaskMenu extends CommonGLPI
 
     public static function canView(): bool
     {
-        return Settings::get()['task_workspace'] && ProjectTask::canView();
+        return Settings::get()['task_workspace'] && (ProjectTask::canView() || StandaloneTask::canView());
     }
 
     public static function getMenuContent(): array|false

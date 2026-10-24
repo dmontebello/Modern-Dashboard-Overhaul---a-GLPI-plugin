@@ -1,4 +1,6 @@
-# Note di versione — Modern Dashboard Overhaul 0.8.0
+# Note di versione — Modern Dashboard Overhaul 0.8.1-dev.2
+
+> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 **Stato:** Pilot interno verso la 1.0.0 · **Autore:** Davide Montebello · **ID:** `mdoverhaul`.
 
@@ -37,3 +39,13 @@ Proposta integrazione Tasks Workspace nel plugin unico `mdoverhaul`: menu Assist
 Candidata P0: versione e provenienza, contrasto Settings, creazione/layout Tasks, misura mini Ticket, toolbar e legenda specifica. Le regressioni live restano aperte. Vedere docs/releases per note complete e stato.
 
 Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
+
+## Aggiornamento 0.8.1-dev.2
+
+Task indipendenti senza progetto con CommonDBTM, ACL e persistenza dedicate,
+ottavo flag opt-in, sottoviste native, CRUD/cestino/restore e retention. Backend,
+UI e idempotenza sono testati con doubles, NON COLLAUDATO LIVE. I fix P0 non
+sono certificati risolti sullo staging dell'utente. Installazione/schema e rischi
+sono descritti nelle note complete della candidata corrente.
+
+Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
