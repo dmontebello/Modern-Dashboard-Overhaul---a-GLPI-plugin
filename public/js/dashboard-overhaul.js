@@ -308,8 +308,9 @@
                 if (!chart || chart.isDisposed?.()) return;
                 // Round geometry to 32px bands: drag-resizing cannot repaint
                 // the whole ECharts option on every single pixel.
-                const sizeBand = Math.round(Math.min(element.clientWidth, element.clientHeight) / 32);
-                const signature = `${dash.classList.contains('theme-dark')}:${sizeBand}`;
+                const widthBand = Math.round(element.clientWidth / 48);
+                const heightBand = Math.round(element.clientHeight / 32);
+                const signature = `${dash.classList.contains('theme-dark')}:${widthBand}:${heightBand}`;
                 const state = chartStates.get(element);
                 if (state && state.chart === chart && state.signature === signature) return;
                 const css = getComputedStyle(dash);
@@ -323,8 +324,28 @@
                 if (Array.isArray(option.title) && option.title.length) {
                     patch.title = option.title.map(t => match(t,{textStyle:{color:ink,fontSize:Math.max(22,Math.min(34,Math.round(Math.min(element.clientWidth,element.clientHeight)*0.13))),fontWeight:700},subtextStyle:{color:muted}}));
                 }
+                // Native ECharts legend + Grid are kept: reserve one scrolling row
+                // for horizontal legends on bar/line charts instead of wrapping
+                // multiple legend rows over the plotted data.
+                const cartesian = Array.isArray(option.series) &&
+                    option.series.some(s => ['bar','line','scatter'].includes(s.type));
+                const horizontalLegend = cartesian && Array.isArray(option.legend) &&
+                    option.legend.some(l => l.orient !== 'vertical' && l.show !== false);
                 if (Array.isArray(option.legend) && option.legend.length) {
-                    patch.legend = option.legend.map(t => match(t,{textStyle:{color:ink,fontSize:13},pageTextStyle:{color:muted}}));
+                    patch.legend = option.legend.map(l => match(l,{
+                        textStyle:{color:ink,fontSize:horizontalLegend ? 12 : 13},
+                        pageTextStyle:{color:muted,fontSize:12},
+                        ...(horizontalLegend && l.orient !== 'vertical' ? {
+                            type:'scroll',orient:'horizontal',top:6,left:8,right:8,
+                            itemWidth:12,itemHeight:12,itemGap:12,
+                            pageIconSize:12,pageButtonItemGap:5,
+                        } : {})
+                    }));
+                }
+                if (horizontalLegend && Array.isArray(option.grid) && option.grid.length
+                    && element.clientHeight >= 130) {
+                    const reserve = Math.min(78, Math.max(48, Math.round(element.clientHeight * 0.22)));
+                    patch.grid = option.grid.map(g => match(g,{top:reserve,containLabel:true}));
                 }
                 for (const key of ['xAxis','yAxis']) {
                     if (Array.isArray(option[key]) && option[key].length) {

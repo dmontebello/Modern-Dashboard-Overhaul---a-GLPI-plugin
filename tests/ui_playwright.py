@@ -102,6 +102,15 @@ def run():
                 page.wait_for_timeout(1700)
                 ok(page.locator('.g-chart .chart').first.evaluate('(e)=>e.__mock?.hits > 0'),'desktop: grafici ECharts inizializzati asincronamente stilizzati')
                 ok(page.locator('.g-chart .chart').first.evaluate('(e)=>e.__mock?.lastPatch.series[0].data === undefined'),'desktop: serie/dati ECharts invariati')
+                ok(page.locator('.g-chart .chart').nth(1).evaluate('(e)=>e.__mock?.hits > 0'),'desktop: ECharts native bar chart styled asynchronously')
+                ok(page.locator('.g-chart .chart').nth(1).evaluate('''e=>e.__mock.lastPatch.legend[0].type === "scroll" &&
+                    e.__mock.lastPatch.grid[0].top >= 48 &&
+                    e.__mock.lastPatch.series.every(s=>s.data===undefined)'''),
+                    'desktop: single-row scrollable legend, reserved plotting space, native series intact')
+                tooltop=page.locator('.dashboard').evaluate('''e=>{
+                  const p=e.getBoundingClientRect(),tb=e.querySelector(':scope > .toolbar:not(.left-toolbar)').getBoundingClientRect();
+                  return tb.top - p.top; }''')
+                ok(tooltop >= 9,'desktop: dashboard actions spaced away from upper border')
                 before=page.evaluate('ModernDashboardOverhaul.debugInfo()[0].refreshCount')
                 page.evaluate('''()=>{const e=document.querySelector('.big-number .formatted-number .number');for(let i=0;i<250;i++)e.textContent=String(i); }''')
                 page.wait_for_timeout(440)
@@ -127,6 +136,38 @@ def run():
         ok(page.evaluate('ModernDashboardOverhaul.debugInfo().length')==0,'non-dashboard: nessun controller attivo')
         ok(page.evaluate('ModernDashboardOverhaul.version')=='0.7.0','versione JS coerente')
         page.close()
+        # GLPI 11 native mini dashboard has a -45px bottom margin. Simulate the
+        # native search wrapper and a tall 2-row KPI grid (no GLPI server).
+        mini=browser.new_page(viewport={'width': 1200, 'height': 700})
+        mini.route('http://mdo.test/**', lambda route: route.fulfill(status=200,content_type='text/html',body='''<!doctype html><html><head><style>
+            body{margin:20px;background:#182433}
+            .dashboard-card{border:2px solid #56697f;width:970px;border-radius:10px;background:#1d2c40}
+            .card-body{padding:8px}
+            .dashboard.mini{position:relative;margin-bottom:-45px!important;box-sizing:content-box}
+            .grid-stack{position:relative;height:70px;width:100%}
+            .grid-stack-item{position:absolute;left:0;top:0;height:140px;width:90%}
+            .grid-stack-item-content{height:100%}
+            .grid-stack-item-content>.card{height:100%;background:#eaf0f7}
+            </style></head><body><div class="dashboard-card"><div class="card-body">
+            <div class="dashboard mini"><div class="grid-stack">
+            <div class="grid-stack-item"><div class="grid-stack-item-content"><div class="card big-number">6 chiamate</div></div></div>
+            </div></div></div></div></body></html>'''))
+        mini.goto('http://mdo.test/front/ticket.php')
+        mini.add_style_tag(content=(fixture.parent.parent/'public/css/ticket-mini-dashboard.css').read_text('utf-8'))
+        mini.add_script_tag(content=(fixture.parent.parent/'public/js/ticket-mini-dashboard.js').read_text('utf-8'))
+        mini.wait_for_function('''() => {
+          const grid=document.querySelector('.grid-stack');
+          return grid && grid.getBoundingClientRect().height >= 140;
+        }''')
+        bounds=mini.locator('.dashboard-card').evaluate('''e=>{
+          const outer=e.getBoundingClientRect(),tile=e.querySelector('.grid-stack-item .card').getBoundingClientRect(),
+                dash=e.querySelector('.dashboard.mini');
+          return {within:tile.bottom<=outer.bottom-2,
+            margin:getComputedStyle(dash).marginBottom};
+        }''')
+        ok(bounds['within'] and bounds['margin']=='0px',
+           'mini Ticket: grid and KPI contained in border; GLPI negative margin neutralized')
+        mini.close()
         browser.close()
     print(f'\n{TESTS} UI tests PASSED (Chromium headless, isolated GLPI-like DOM).')
 

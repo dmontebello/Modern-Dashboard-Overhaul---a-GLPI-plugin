@@ -1,8 +1,9 @@
-/* MDO 0.8.0 - recover height of embedded mini Ticket dashboard, presentation only. */
+/* MDO 0.8.0 - recover native mini Ticket grid height, without changing GLPI widget coordinates. */
 (() => {
   'use strict';
   if (!/(?:^|\/)ticket\.php$/.test(location.pathname)) return;
   const wired = new WeakSet();
+  // Native mini margin-bottom:-45px is neutralized by ticket-mini-dashboard.css.
   function fix(grid) {
     if (!grid.isConnected) return;
     const top = grid.getBoundingClientRect().top;

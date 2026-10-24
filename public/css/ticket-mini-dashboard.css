@@ -1,8 +1,46 @@
-/* MDO 0.8.0 - GLPI Ticket mini dashboard only, preserving GridStack layout. */
-.dashboard-card:has(.dashboard.mini) {box-sizing:border-box;overflow:visible;}
-.dashboard-card:has(.dashboard.mini)>.card-body {box-sizing:border-box;overflow:visible;padding-bottom:14px!important;}
-.dashboard.mini {box-sizing:border-box;min-width:0;padding-bottom:9px!important;}
-.dashboard.mini .grid-stack {box-sizing:border-box;min-width:0;overflow:visible!important;padding-bottom:5px;}
-.dashboard.mini .grid-stack-item-content {box-sizing:border-box;min-height:0;}
-.dashboard.mini .grid-stack-item-content>.card {box-sizing:border-box;max-width:100%;min-width:0;margin:0!important;}
-@media(max-width:800px) {.dashboard-card:has(.dashboard.mini)>.card-body{padding-inline:10px!important;}.dashboard.mini .grid-stack-item-content>.card.big-number{padding:8px 10px!important;}}
+/* MDO: GLPI native .dashboard.mini uses margin-bottom:-45px to overlap search.
+ * That is incompatible with a two-row/oversized KPI mini grid and makes its
+ * light panel escape the parent card. Respect intrinsic height instead. */
+.dashboard-card:has(> .card-body > .dashboard.mini) {
+    box-sizing: border-box;
+    height: auto !important;
+    min-height: 0;
+}
+.dashboard-card:has(> .card-body > .dashboard.mini) > .card-body {
+    display: flow-root;
+    box-sizing: border-box;
+    height: auto !important;
+    min-height: 0;
+    padding: 10px 12px 14px !important;
+}
+.dashboard-card > .card-body > .dashboard.mini {
+    box-sizing: border-box;
+    margin: 0 auto !important; /* override GLPI -45px: main regression */
+    max-width: 100%;
+    min-width: 0;
+    height: auto !important;
+    padding-bottom: 6px !important;
+}
+.dashboard-card .dashboard.mini > .grid-stack {
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    margin: 0 !important;
+    padding-bottom: 6px;
+}
+.dashboard-card .dashboard.mini .grid-stack-item-content {
+    box-sizing: border-box;
+    min-height: 0;
+}
+.dashboard-card .dashboard.mini .grid-stack-item-content > .card {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0 !important;
+}
+@media (max-width: 800px) {
+    .dashboard-card > .card-body > .dashboard.mini .grid-stack-item-content > .card.big-number {
+        padding: 8px 10px !important;
+    }
+}

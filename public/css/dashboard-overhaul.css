@@ -252,3 +252,21 @@
     line-height: 1.4;
     font-size: clamp(13px, 1.1rem, 16px);
 }
+
+/* Header controls: native GLPI positions the action toolbar at top:0.
+ * Keep breathing room on standard dashboards, not in mini/embed/fullscreen.
+ * No changes to permissions, buttons or click/keyboard handlers. */
+.dashboard.mdo-restyle:not(.mini):not(.fullscreen):not(.embed) > .toolbar:not(.left-toolbar) {
+    top: 11px;
+    right: 11px;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 3px;
+    min-height: 40px;
+    padding: 3px 5px;
+    max-width: calc(100% - 20px);
+}
+.dashboard.mdo-restyle:not(.mini):not(.fullscreen):not(.embed) > .toolbar:not(.left-toolbar) .btn {
+    flex: 0 0 auto;
+}

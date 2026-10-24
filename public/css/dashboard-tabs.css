@@ -1,8 +1,9 @@
 /* Navigation enhancement only: keep native select in DOM and trigger its change.
  * The original + and permissions remain native. Horizontal overflow is intentional. */
 .dashboard { --mdo-tabs-enabled: 1; }
-.dashboard.mdo-tabs-ready:not(.mini):not(.embed):not(.fullscreen) { padding-top: 58px; }
+.dashboard.mdo-tabs-ready:not(.mini):not(.embed):not(.fullscreen) { padding-top: 74px; }
 .dashboard.mdo-tabs-ready > .toolbar.left-toolbar {
+    top: 11px;
     right: var(--mdo-toolbar-reserve, 300px);
     width: auto;
     min-width: 0;
@@ -74,9 +75,9 @@
 }
 /* Preserve native edit/filter workflow; do not navigate away from an edit form. */
 .dashboard.mdo-tabs-ready:is(.edit-mode,.filter-mode) .change-dashboard { display: none !important; }
-.dashboard.mdo-tabs-ready.mdo-toolbar-stacked:not(.mini):not(.embed):not(.fullscreen) { padding-top: 120px; }
+.dashboard.mdo-tabs-ready.mdo-toolbar-stacked:not(.mini):not(.embed):not(.fullscreen) { padding-top: 136px; }
 .dashboard.mdo-tabs-ready.mdo-toolbar-stacked > .toolbar.left-toolbar {
-    top: 43px;
+    top: 53px;
     right: 5px;
     left: 5px;
 }
