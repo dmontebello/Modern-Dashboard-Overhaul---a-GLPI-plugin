@@ -19,4 +19,5 @@ for ($id = 1; $id <= $count; $id++) {
         'content' => 'Descrizione di esempio per verificare leggibilità, contrasto e titoli lunghi.'];
 }
 $DB->fail = !empty($options['error']);
-echo taskPage($options['query'] ?? ['view' => 'board']);
+$body = taskPage($options['query'] ?? ['view' => 'board']);
+echo !empty($options['response']) ? json_encode(['body' => $body, 'redirect' => Html::$redirect], JSON_THROW_ON_ERROR) : $body;

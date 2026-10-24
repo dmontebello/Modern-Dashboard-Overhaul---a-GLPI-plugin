@@ -89,3 +89,10 @@ Il contenuto storico di questo documento regola la 0.8.0. Per il prossimo svilup
 - Codex deve creare docs/releases/<version>.md e aggiornare CHANGELOG, docs/dev/STATUS.md, README, QA e documentazione d'impatto INSIEME al commit candidato: fix, prove reali e mock distinti, checksum, installazione, rollback, rischi, prossimi passi.
 - Task standalone in P1 introducono schema plugin separato: il vecchio vincolo "nessuna tabella" descrive 0.8.0, non autorizza a rappresentare falsamente una task senza Project. Le nuove tabelle richiedono migrazione idempotente e backup database/volumi.
 - Branch Main resta immutato fino al collaudo dell'utente e PR esplicitamente approvata.
+
+
+## Aggiornamento 0.8.1-dev.1
+
+La pipeline della candidata testa prima di aggiornare Latest. Verifica HEAD remoto esatto, source SHA, run ID, manifest, checksum, file e prerelease; un branch avanzato conserva il precedente alias. Versionati immutabili, nessuna release/Main automatica.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).

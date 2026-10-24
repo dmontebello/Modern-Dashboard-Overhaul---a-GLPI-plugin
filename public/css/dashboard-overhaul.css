@@ -257,16 +257,18 @@
  * Keep breathing room on standard dashboards, not in mini/embed/fullscreen.
  * No changes to permissions, buttons or click/keyboard handlers. */
 .dashboard.mdo-restyle:not(.mini):not(.fullscreen):not(.embed) > .toolbar:not(.left-toolbar) {
-    top: 11px;
-    right: 11px;
+    top: 16px;
+    inset-inline-end: 12px;
+    right: 12px;
     display: inline-flex;
     align-items: center;
     flex-wrap: nowrap;
     gap: 3px;
     min-height: 40px;
-    padding: 3px 5px;
+    padding: 6px 7px;
     max-width: calc(100% - 20px);
 }
 .dashboard.mdo-restyle:not(.mini):not(.fullscreen):not(.embed) > .toolbar:not(.left-toolbar) .btn {
     flex: 0 0 auto;
 }
+:dir(rtl) .dashboard.mdo-restyle:not(.mini):not(.fullscreen):not(.embed) > .toolbar:not(.left-toolbar) {right:auto;left:12px;}

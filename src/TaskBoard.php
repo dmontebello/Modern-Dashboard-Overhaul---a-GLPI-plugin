@@ -149,7 +149,8 @@ final class TaskBoard
         $input = ['projects_id' => $projectId];
         return $project->getFromDB($projectId)
             && empty($project->fields['is_deleted']) && empty($project->fields['is_template'])
-            && $project->can($projectId, READ) && $project->can($projectId, UPDATE)
+            // Native CommonDBChild checks the parent's update right and entity.
+            // Requiring Project READ as well incorrectly rejects native creation.
             && $task->can(-1, CREATE, $input);
     }
 

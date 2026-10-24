@@ -75,3 +75,10 @@ Risultati effettivi e limiti in [rapporto Tasks](specs/TASKS_IMPLEMENTATION.md).
 ## Gate nuovo MDO 0.8.1 Dev, NON ESEGUITO — 2026-10-24
 
 Checklist da eseguire su GLPI 11.0.9 staging: contrasto Settings (>=4.5:1) in light/dark; selezione AJAX progetto con ID, "Continua" porta al form ProjectTask?projects_id=ID, Salva e lettura della task in progetto/lista/Kanban; scelta task autonoma senza alcun glpi_projects; ACL owner/team/profili/entita ricorsive; form responsive 390/768/1024/1440 e zoom 200%; mini Ticket rientra nei bordi; toolbar superiore ha padding; legenda "Stato chiamate per mese" non copre assi/plot; nessuna regressione RSS, Export, Search, Vue DnD; metadata ver/version+SHA+build ID coerenti con ZIP, install/update/rollback/migrazione. CI mock non sostituisce questi test. Dettagli e responsabilita nella [specifica 0.8.1](specs/MDO_0_8_1_DEV_WORKPLAN.md).
+
+
+## Aggiornamento 0.8.1-dev.1
+
+Testare 390/768/1024/1440, light/dark, zoom 200%, contrasto testo >=4.5 e controlli >=3, selezione Project AJAX/GET/redirect/salvataggio, resize e riduzione GridStack, toolbar/legenda ticket_status. Mock e staging devono avere esiti separati.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).

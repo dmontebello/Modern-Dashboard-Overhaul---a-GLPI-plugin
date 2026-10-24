@@ -30,3 +30,10 @@ Vedi [CHANGELOG](../CHANGELOG.md), [QA](../QA.md) e [UPDATE](../UPDATE.md).
 Proposta integrazione Tasks Workspace nel plugin unico `mdoverhaul`: menu Assistance → Tasks, elenco ProjectTask nativo, board read-only e Skin Kanban nativo indipendente dai moduli dashboard/RSS. Opzioni disattivate per default. Nessuna migrazione task o modifica ai ticket. Test su GLPI reale ancora necessari prima dell'installazione.
 
 **Distribuzione 0.8.0:** unico ZIP installabile con i moduli Dashboard, RSS, Tasks e Kanban e sette opzioni Configura. Include correzione sperimentale mini-dashboard Ticket; da confermare su GLPI reale. Scaricare ZIP + `.zip.sha512` dal branch GitHub, non dall'archivio sorgenti automatico.
+
+
+## Aggiornamento 0.8.1-dev.1
+
+Candidata P0: versione e provenienza, contrasto Settings, creazione/layout Tasks, misura mini Ticket, toolbar e legenda specifica. Le regressioni live restano aperte. Vedere docs/releases per note complete e stato.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).

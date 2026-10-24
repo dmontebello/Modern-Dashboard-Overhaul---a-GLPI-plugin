@@ -38,6 +38,9 @@ def run():
             markup = re.sub(r'<link rel=\"stylesheet\"[^>]+>', '', fixture.read_text('utf-8'))
             markup = re.sub(r'<script src=\"[^\"]+\"></script>', '', markup)
             page.set_content(markup)
+            version = re.search(r"define\('PLUGIN_MDOVERHAUL_VERSION', '([^']+)'\)", (fixture.parent.parent/'setup.php').read_text()).group(1)
+            page.evaluate('(v) => window.MdoBuild = {version:v}', version)
+            page.locator('.g-chart .chart').nth(1).evaluate("e => e.closest('.grid-stack-item').setAttribute('data-card-options', JSON.stringify({card_id:'ticket_status'}))")
             for f in ['dashboard-theme.css','dashboard-overhaul.css','dashboard-tabs.css','compact-filters.css','chart-text.css','security-watch.css']:
                 page.add_style_tag(content=(fixture.parent.parent/'public/css'/f).read_text('utf-8'))
             page.add_script_tag(content=(fixture.parent.parent/'public/js/dashboard-overhaul.js').read_text('utf-8'))
@@ -134,7 +137,7 @@ def run():
         page.add_script_tag(content=(fixture.parent.parent/'public/js/dashboard-overhaul.js').read_text('utf-8'))
         page.wait_for_timeout(70)
         ok(page.evaluate('ModernDashboardOverhaul.debugInfo().length')==0,'non-dashboard: nessun controller attivo')
-        ok(page.evaluate('ModernDashboardOverhaul.version')=='0.7.0','versione JS coerente')
+        ok(page.evaluate('ModernDashboardOverhaul.version')=='unavailable','no fabricated JS version without native runtime metadata')
         page.close()
         # GLPI 11 native mini dashboard has a -45px bottom margin. Simulate the
         # native search wrapper and a tall 2-row KPI grid (no GLPI server).
@@ -167,6 +170,12 @@ def run():
         }''')
         ok(bounds['within'] and bounds['margin']=='0px',
            'mini Ticket: grid and KPI contained in border; GLPI negative margin neutralized')
+        mini.locator('.grid-stack-item').evaluate('e=>e.style.height="220px"')
+        mini.wait_for_function('document.querySelector(".grid-stack").getBoundingClientRect().height>=232')
+        ok(mini.locator('.dashboard-card').evaluate('e=>e.querySelector(".card.big-number").getBoundingClientRect().bottom<=e.getBoundingClientRect().bottom'), 'mini Ticket follows growing native item bounds')
+        mini.locator('.grid-stack-item').evaluate('e=>e.style.height="90px"')
+        mini.wait_for_function('document.querySelector(".grid-stack").getBoundingClientRect().height<=110')
+        ok(True,'mini Ticket shrinks after responsive item resize without saved-coordinate changes')
         mini.close()
         browser.close()
     print(f'\n{TESTS} UI tests PASSED (Chromium headless, isolated GLPI-like DOM).')

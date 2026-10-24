@@ -77,3 +77,12 @@ decisioni strutturali restano elencati nel
 Il cliente osserva: contrasto scuro dei dettagli nelle opzioni Settings; selettore Project di Nuova task e pulsanti adiacenti; "Continua" che non raggiunge il form nativo; persistenti problemi di mini KPI Ticket, toolbar e legenda ECharts. Richieste nuove Task indipendenti e versione Dev visibile.
 
 La pipeline #40074660688 e verde: 67 PHP, 61 Tasks PHP, 84 UI Dashboard, 167 UI Tasks, soltanto **doubles e DOM fixture**. Non prova il flusso di creazione con Ajax GLPI o i layout reali. Nessuno dei bug sopra puo essere marcato risolto sullo staging. Riferimenti: [specifica 0.8.1](docs/specs/MDO_0_8_1_DEV_WORKPLAN.md), [registro stato](docs/dev/STATUS.md).
+
+
+## Candidata 0.8.1-dev.1
+
+IMPLEMENTATO / test automatici: 67 PHP moduli, 63 Tasks, 8 packaging, 86 UI dashboard, 175 UI Tasks, 512 UI Settings; sintassi 18 PHP/6 Bash/2 JS e parsing Python/YAML. Build ZIP e manifest verificati. NON COLLAUDATO LIVE:
+nessun accesso allo staging GLPI 11.0.9, confermato dall'utente. I bug segnalati
+non sono dichiarati risolti sul GLPI reale. Comandi e limiti nelle
+[note di versione](docs/releases/0.8.1-dev.1.md); risultati CI del preciso SHA
+codice nel record generato docs/releases/0.8.1-dev.1.build.json dopo pubblicazione.

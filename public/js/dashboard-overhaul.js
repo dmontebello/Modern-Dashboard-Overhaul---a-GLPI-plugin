@@ -7,7 +7,7 @@
 (() => {
     'use strict';
     if (window.ModernDashboardOverhaul) return;
-    const VERSION = '0.7.0';
+    const VERSION = window.MdoBuild?.version || 'unavailable';
     const controllers = new Map();
     const SELF = '[data-mdo-owned]';
     const isItalian = (document.documentElement.lang || navigator.language || '').toLowerCase().startsWith('it');
@@ -319,6 +319,10 @@
                 const surface = css.getPropertyValue('--mdo-surface').trim();
                 const border = css.getPropertyValue('--mdo-border').trim();
                 const option = chart.getOption();
+                const item = element.closest('.grid-stack-item');
+                let cardOptions = {};
+                try { cardOptions = JSON.parse(item?.getAttribute('data-card-options') || '{}'); } catch (_) { /* Native metadata may be absent while loading. */ }
+                const monthlyStatus = cardOptions.card_id === 'ticket_status' || /^ticket_status(?:_|$)/.test(item?.getAttribute('gs-id') || '');
                 const match = (entry, patch) => entry && entry.id !== undefined ? {id:entry.id,...patch} : patch;
                 const patch = {backgroundColor:'transparent', textStyle:{color:ink,fontFamily:'system-ui, sans-serif'}};
                 if (Array.isArray(option.title) && option.title.length) {
@@ -329,23 +333,23 @@
                 // multiple legend rows over the plotted data.
                 const cartesian = Array.isArray(option.series) &&
                     option.series.some(s => ['bar','line','scatter'].includes(s.type));
-                const horizontalLegend = cartesian && Array.isArray(option.legend) &&
+                const horizontalLegend = monthlyStatus && cartesian && Array.isArray(option.legend) &&
                     option.legend.some(l => l.orient !== 'vertical' && l.show !== false);
                 if (Array.isArray(option.legend) && option.legend.length) {
                     patch.legend = option.legend.map(l => match(l,{
                         textStyle:{color:ink,fontSize:horizontalLegend ? 12 : 13},
                         pageTextStyle:{color:muted,fontSize:12},
                         ...(horizontalLegend && l.orient !== 'vertical' ? {
-                            type:'scroll',orient:'horizontal',top:6,left:8,right:8,
+                            type:'scroll',orient:'horizontal',top:element.clientHeight < 110 ? 0 : 8,bottom:'auto',left:8,right:8,
                             itemWidth:12,itemHeight:12,itemGap:12,
                             pageIconSize:12,pageButtonItemGap:5,
                         } : {})
                     }));
                 }
-                if (horizontalLegend && Array.isArray(option.grid) && option.grid.length
-                    && element.clientHeight >= 130) {
-                    const reserve = Math.min(78, Math.max(48, Math.round(element.clientHeight * 0.22)));
-                    patch.grid = option.grid.map(g => match(g,{top:reserve,containLabel:true}));
+                if (horizontalLegend && Array.isArray(option.grid) && option.grid.length) {
+                    const reserve = Math.min(56, Math.max(24, element.clientHeight - 56), 48);
+                    patch.grid = option.grid.map(g => match(g,{top:reserve,
+                        bottom:Math.max(20,Math.min(Number.parseFloat(g.bottom) || 28,element.clientHeight * 0.25)),containLabel:true}));
                 }
                 for (const key of ['xAxis','yAxis']) {
                     if (Array.isArray(option[key]) && option[key].length) {

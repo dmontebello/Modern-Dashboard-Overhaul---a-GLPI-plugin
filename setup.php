@@ -4,13 +4,13 @@ use Glpi\Plugin\Hooks;
 use GlpiPlugin\Mdoverhaul\Dashboard;
 use GlpiPlugin\Mdoverhaul\Settings;
 
+define('PLUGIN_MDOVERHAUL_VERSION', '0.8.1-dev.1');
+require_once __DIR__ . '/src/BuildInfo.php';
 require_once __DIR__ . '/src/Settings.php';
 require_once __DIR__ . '/src/FeedFormatter.php';
 require_once __DIR__ . '/src/Dashboard.php';
 require_once __DIR__ . '/src/TaskMenu.php';
 require_once __DIR__ . '/src/TaskBoard.php';
-
-define('PLUGIN_MDOVERHAUL_VERSION', '0.8.0');
 
 function plugin_init_mdoverhaul(): void
 {
@@ -51,6 +51,7 @@ function plugin_init_mdoverhaul(): void
         $styles[] = 'css/dashboard-theme.css';
         $styles[] = 'css/dashboard-overhaul.css';
         $styles[] = 'css/ticket-mini-dashboard.css';
+        $scripts[] = 'front/runtime.php';
         $scripts[] = 'js/ticket-mini-dashboard.js';
         if ($settings['compact_empty_filters']) {
             $styles[] = 'css/compact-filters.css';

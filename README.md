@@ -110,3 +110,13 @@ Due opzioni **disabilitate per impostazione predefinita** nella Configura del pl
 - **Mini Ticket:** quando Dashboard Restyling è attivo, CSS/JS dedicato evita che le KPI sforino il riquadro. Da verificare su GLPI reale.
 - Tutte le sette opzioni restano nel plugin padre `mdoverhaul`, senza plugin aggiuntivi, ticket o DB autonomo.
 
+
+
+## Candidata Dev 0.8.1-dev.1
+
+[Note di versione](docs/releases/0.8.1-dev.1.md) e [stato operativo](docs/dev/STATUS.md).
+Dopo CI verde: archivio completo Modern_Dashboard_Overhaul_0.8.1-dev.1.zip e
+alias [MDO_Dev_Latest.zip](https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/MDO_Dev_Latest.zip), entrambi con SHA512.
+L'alias è aggiornato solo se il commit testato è ancora HEAD Dev. Il manager GLPI
+e Settings mostrano la versione unica; lo ZIP contiene provenienza e data UTC.
+NON COLLAUDATO LIVE. Lo ZIP 0.8.0 su Main resta la pubblicazione precedente.

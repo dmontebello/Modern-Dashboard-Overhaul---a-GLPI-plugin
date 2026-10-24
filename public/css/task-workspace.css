@@ -59,3 +59,10 @@
 .mdo-tasks-create-form .mdo-tasks-project-picker {flex:1 1 320px;max-width:min(100%,560px);min-width:220px;}
 .mdo-tasks-create-form .mdo-tasks-project-label {display:block;font-size:13px;font-weight:650;margin-bottom:7px;}
 .mdo-tasks-create-form .select2-container {width:100%!important;max-width:100%;}
+/* A bounded native picker and a separate action row, including Select2 AJAX. */
+.mdo-tasks-create {max-width:800px;}
+.mdo-tasks-create .mdo-tasks-create-form {display:block;margin:16px 0 0;}
+.mdo-tasks-create-form .mdo-tasks-project-picker {width:100%;max-width:100%;min-width:0;}
+.mdo-tasks-create-actions {display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;align-items:center;}
+.mdo-tasks-native-search .search-container {display:flex;flex-direction:column;justify-content:flex-start;gap:0;}
+@media(max-width:560px){.mdo-tasks-create-actions{flex-direction:column;align-items:stretch;}.mdo-tasks-create-actions .btn{width:100%;}}

@@ -37,3 +37,16 @@ Nel commit con ogni candidato funzionale Codex deve aggiornare almeno:
 - docs/ARCHITETTURA.md, docs/CONFIGURAZIONE.md, docs/INSTALLAZIONE.md, UPDATE.md, docs/SECURITY.md e docs/INTEGRATION.md se cambia schema, ACL, asset o flusso.
 
 Evidenziare sempre: IMPLEMENTATO, TESTATO CON DOUBLES, TESTATO SU STAGING GLPI, NON TESTATO, BLOCCATO, PROPOSTO. Nessuna affermazione falsa di test reali. L'handoff non deve dipendere dalla memoria della chat. Lo stato attuale 0.8.0 resta storico anche dopo l'introduzione della 0.8.1.
+
+
+## Implementazione da 0.8.1-dev.1
+
+Il tooling ora gestisce SemVer prerelease e build-info.json generato: la versione
+rimane unica in setup.php. La SHA512SUMS del checkout copre i sorgenti; quella
+interna alla ZIP copre anche metadata generati, senza saltarne gli hash.
+La workflow testa il codice/documentazione, poi costruisce e verifica il pacchetto
+con source SHA/build ID e pubblica solo se origin/Dev è ancora lo SHA testato.
+Il nome versionato non viene sovrascritto; Latest cambia solo dopo questi gate.
+Il publisher registra checksum e provenienza in docs/releases/<version>.build.json
+con un commit bot [skip ci]. Questi record generati non sono contenuto sorgente
+dei pacchetti successivi. I documenti storici sopra restano tali.

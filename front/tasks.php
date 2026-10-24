@@ -83,7 +83,7 @@ echo '</div></header>';
 if ($creating) {
     echo '<div class="mdo-tasks-create"><h2>' . $esc($tr('Scegli il progetto', 'Choose a project')) . '</h2>';
     echo '<p>' . $esc($tr('La nuova attività si apre nel form nativo GLPI del progetto scelto.', 'The new task opens in the native GLPI form for the selected project.')) . '</p>';
-    if ($creationError || $projectId > 0) {
+    if ($creationError || $projectId > 0 || $scalar('continue') === '1') {
         echo '<p role="alert">' . $esc($tr(
             'Il progetto selezionato non è disponibile per creare task. Controlla i diritti di progetto e riprova.',
             'The selected project is not available for creating tasks. Check project rights and retry.'
@@ -93,7 +93,8 @@ if ($creating) {
     // Avoid constructing our own project catalogue via a plugin SQL query.
     $dropdownReady = false;
     if (Project::canView()) {
-        echo '<form method="get" action="' . $esc($base) . '" class="mdo-tasks-create-form">';
+        echo '<form id="mdo-project-create" method="get" action="' . $esc($base) . '" class="mdo-tasks-create-form">';
+        echo '<input type="hidden" name="continue" value="1">';
         echo '<input type="hidden" name="new" value="1"><div class="mdo-tasks-project-picker">';
         echo '<span class="mdo-tasks-project-label">' . $esc($tr('Progetto GLPI', 'GLPI project')) . '</span>';
         $level = ob_get_level();
@@ -122,9 +123,6 @@ if ($creating) {
             Toolbox::logInFile('php-errors', '[mdoverhaul Tasks project dropdown] ' . $error->getMessage() . "\n");
         }
         echo '</div>';
-        if ($dropdownReady) {
-            echo '<button class="btn btn-primary" type="submit">' . $esc($tr('Continua', 'Continue')) . '</button>';
-        }
         echo '</form>';
     }
     if (!$dropdownReady) {
@@ -133,11 +131,15 @@ if ($creating) {
             'If the selector is unavailable, open a project from GLPI native search and use its Tasks tab.'
         )) . '</p>';
     }
+    echo '<div class="mdo-tasks-create-actions">';
+    if ($dropdownReady) {
+        echo '<button class="btn btn-primary" type="submit" form="mdo-project-create">' . $esc($tr('Continua', 'Continue')) . '</button>';
+    }
     if (Project::canView()) {
         echo '<a class="btn btn-outline-secondary" href="' . $esc(Project::getSearchURL()) . '">'
             . $esc($tr('Apri elenco progetti GLPI', 'Open GLPI project list')) . '</a> ';
     }
-    echo '<a class="btn btn-outline-secondary" href="' . $esc($base) . '">' . $esc($tr('Torna alle attività', 'Back to tasks')) . '</a></div></div>';
+    echo '<a class="btn btn-outline-secondary" href="' . $esc($base) . '">' . $esc($tr('Torna alle attività', 'Back to tasks')) . '</a></div></div></div>';
     Html::footer();
     return;
 }

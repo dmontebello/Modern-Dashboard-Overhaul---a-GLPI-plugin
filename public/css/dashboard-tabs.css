@@ -3,7 +3,7 @@
 .dashboard { --mdo-tabs-enabled: 1; }
 .dashboard.mdo-tabs-ready:not(.mini):not(.embed):not(.fullscreen) { padding-top: 74px; }
 .dashboard.mdo-tabs-ready > .toolbar.left-toolbar {
-    top: 11px;
+    top: 16px;
     right: var(--mdo-toolbar-reserve, 300px);
     width: auto;
     min-width: 0;
@@ -77,7 +77,7 @@
 .dashboard.mdo-tabs-ready:is(.edit-mode,.filter-mode) .change-dashboard { display: none !important; }
 .dashboard.mdo-tabs-ready.mdo-toolbar-stacked:not(.mini):not(.embed):not(.fullscreen) { padding-top: 136px; }
 .dashboard.mdo-tabs-ready.mdo-toolbar-stacked > .toolbar.left-toolbar {
-    top: 53px;
+    top: 66px;
     right: 5px;
     left: 5px;
 }

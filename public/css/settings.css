@@ -1,5 +1,16 @@
 /* Modern Dashboard Overhaul settings page, exclusively scoped. */
-.mdo-settings { max-width: 980px; margin: 16px auto; }
+.mdo-settings { --mdo-settings-ink:#1a293b;--mdo-settings-muted:#45566c;--mdo-settings-surface:#fff;--mdo-settings-border:#667b92;--mdo-settings-accent:#155da2; max-width:980px; margin:16px auto; color:var(--mdo-settings-ink); }
+:is([data-glpi-theme-dark="1"],[data-bs-theme="dark"],.theme-dark) .mdo-settings {--mdo-settings-ink:#f0f4fa;--mdo-settings-muted:#bdcbdc;--mdo-settings-surface:#1d2b3c;--mdo-settings-border:#8194ad;--mdo-settings-accent:#9bc5ff;}
+.mdo-settings .mdo-settings-card {background:var(--mdo-settings-surface);color:var(--mdo-settings-ink);border-color:var(--mdo-settings-border);}
+.mdo-settings :is(.mdo-settings-intro,.mdo-setting-detail,.text-secondary,.mdo-settings-version,.mdo-build-info) {color:var(--mdo-settings-muted)!important;}
+.mdo-settings :is(.mdo-setting-row,.mdo-settings-actions) {border-color:var(--mdo-settings-border);}
+.mdo-settings .mdo-module-label {color:var(--mdo-settings-accent);}
+.mdo-settings :is(a,button,input):focus-visible {outline:3px solid var(--mdo-settings-accent);outline-offset:3px;}
+.mdo-settings .form-check-input {border:2px solid var(--mdo-settings-border);}
+.mdo-settings .form-check-input:checked {background-color:#286fc1;border-color:var(--mdo-settings-border);}
+.mdo-settings .btn-primary {background:#206bc4;border-color:#206bc4;color:#fff;}
+.mdo-build-info {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0;font-size:12px;}
+.mdo-build-info :is(dt,dd) {margin:0;overflow-wrap:anywhere;}
 .mdo-settings-card { border: 1px solid var(--tblr-border-color); border-radius: 12px; }
 .mdo-settings-intro { color: var(--tblr-secondary-color, var(--tblr-body-color)); font-size: 14px; line-height: 1.55; }
 .mdo-setting-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 3px; border-top: 1px solid var(--tblr-border-color); }
@@ -14,3 +25,4 @@
 .mdo-settings-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; border-top: 1px solid var(--tblr-border-color); padding-top: 20px; }
 .mdo-settings-actions .btn { min-height: 39px; font-weight: 650; }
 @media (max-width: 560px) { .mdo-settings { margin: 6px auto; } .mdo-setting-row { align-items: flex-start; } .mdo-setting-child { margin-inline-start: 8px; } }
+@media(max-width:768px){.mdo-build-info{grid-template-columns:minmax(0,1fr);}.mdo-settings-card>.card-body{padding:16px;}}

@@ -9,6 +9,14 @@
 
 Le versioni sono cumulative: i cambiamenti più recenti sono riportati per primi. **Un rebuild documentale della stessa versione non implica una modifica del software in esecuzione.**
 
+## 0.8.1-dev.1 — candidata P0 (2026-10-24)
+
+Versionamento e build verificabile, contrasto Settings, creazione ProjectTask
+con ACL native e layout, contenimento mini Ticket, toolbar e legenda ticket_status.
+Test isolati e gate CI/documentazione. NON COLLAUDATO LIVE: regressioni segnalate
+ancora aperte. Nessuna migrazione o pubblicazione Main.
+Dettagli: [release 0.8.1-dev.1](docs/releases/0.8.1-dev.1.md).
+
 ## Sviluppo P0/P1 — non pubblicato (2026-10-24)
 
 - Corretto il modello degli stati GLPI 11 (`projectstates_id` / `glpi_projectstates`),

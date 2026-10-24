@@ -1,12 +1,9 @@
-name: Build and validate MDO plugin ZIP
+name: Build and validate MDO Dev candidate
 on:
   push:
-    branches:
-      - Dev
-      - Main
+    branches: [Dev, Main]
   pull_request:
-    branches:
-      - Main
+    branches: [Main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -18,34 +15,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Check PHP and JavaScript
+      - name: Check code and candidate documentation
         run: |
           bash tools/verifica-sintassi.sh --local
           php tests/unit_php.php
           php tests/tasks_php.php
-      - name: Install browser test dependencies
+          python3 -B tests/packaging_test.py
+          python3 -B tools/maintainer/check_dev_docs.py
+      - name: Install browser dependencies
         run: |
           python3 -m pip install playwright==1.62.0
           python3 -m playwright install --with-deps chromium
-      - name: Responsive UI (isolated GLPI doubles)
+      - name: Responsive UI (NON COLLAUDATO LIVE)
         run: |
           python3 tests/ui_playwright.py
           python3 tests/tasks_ui_playwright.py
-      - name: Build full GLPI ZIP
+          python3 tests/settings_ui_playwright.py
+      - name: Build exact tested source
         run: |
-          python3 -B tools/maintainer/package_from_repo.py
-          sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
-          unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
+          mdo_version="$(python3 -c 'import sys; sys.path.insert(0,"tools/maintainer"); from versioning import version; from pathlib import Path; print(version(Path(".")))')"
+          python3 -B tools/maintainer/package_from_repo.py --output "build/candidate/Modern_Dashboard_Overhaul_${mdo_version}.zip"
+          python3 -B tools/maintainer/publish_dev.py "build/candidate/Modern_Dashboard_Overhaul_$(python3 -c 'import sys; sys.path.insert(0,"tools/maintainer"); from versioning import version; from pathlib import Path; print(version(Path(".")))').zip" --source-sha "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID" --verify-only
       - uses: actions/upload-artifact@v4
         with:
-          name: MDO-0.8.0-Pilot
+          name: MDO-Dev-candidate
           path: |
-            Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
-            Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
+            build/candidate/Modern_Dashboard_Overhaul_0.8.1-dev.*.zip
+            build/candidate/Modern_Dashboard_Overhaul_0.8.1-dev.*.zip.sha512
           if-no-files-found: error
-
   publish_dev_zip:
-    name: Publish tested ZIP to Dev
     needs: bundle
     if: github.ref == 'refs/heads/Dev' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
@@ -55,64 +53,18 @@ jobs:
       group: mdo-dev-zip-publish
       cancel-in-progress: true
     steps:
-      - name: Checkout exact tested commit
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-          persist-credentials: true
-      - name: Download ZIP from successful test job
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
-          name: MDO-0.8.0-Pilot
-      - name: Verify and recover source manifest
-        shell: bash
-        run: |
-          set -euo pipefail
-          zip="Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
-          sha512sum -c "${zip}.sha512"
-          unzip -t "$zip"
-          unzip -p "$zip" mdoverhaul/SHA512SUMS > SHA512SUMS
-          test -s SHA512SUMS
-          # Verify that the packaged file manifest reflects the source checkout
-          # (not merely a self-consistent but stale artifact).
-          python3 - <<'PY'
-          import hashlib
-          import pathlib
-          import zipfile
-          base = pathlib.Path(".")
-          zipfile_path = base / "Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
-          with zipfile.ZipFile(zipfile_path) as archive:
-              files = [x for x in archive.namelist() if x != "mdoverhaul/SHA512SUMS"]
-              expected = {
-                  line.split("  ", 1)[1]: line.split("  ", 1)[0]
-                  for line in (base / "SHA512SUMS").read_text(encoding="utf-8").splitlines()
-              }
-              assert set(expected) == {x.removeprefix("mdoverhaul/") for x in files}
-              for name, digest in expected.items():
-                  on_disk = base / name
-                  assert on_disk.is_file(), f"Source missing: {name}"
-                  actual = hashlib.sha512(on_disk.read_bytes()).hexdigest()
-                  assert actual == digest, f"Stale source file in ZIP: {name}"
-          PY
-      - name: Publish archive, sidecar and manifest on Dev only
-        shell: bash
+          name: MDO-Dev-candidate
+          path: build/verified
+      - name: Publish only the current tested Dev source
         env:
           TESTED_SHA: ${{ github.sha }}
         run: |
-          set -euo pipefail
-          git fetch --no-tags origin Dev
-          current="$(git rev-parse origin/Dev)"
-          if [ "$current" != "$TESTED_SHA" ]; then
-            echo "Dev moved while tests ran. Skipping stale ZIP; next workflow publishes."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- SHA512SUMS Modern_Dashboard_Overhaul_0.8.0_Pilot.zip Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
-          if git diff --cached --quiet; then
-            echo "Dev ZIP already matches tested sources."
-            exit 0
-          fi
-          git commit -m "build(dev): update tested MDO 0.8.0 ZIP and checksums [skip ci]"
-          git push origin HEAD:Dev
+          python3 -B tools/maintainer/publish_dev.py "build/verified/Modern_Dashboard_Overhaul_$(python3 -c 'import sys; sys.path.insert(0,"tools/maintainer"); from versioning import version; from pathlib import Path; print(version(Path(".")))').zip" --source-sha "$TESTED_SHA" --run-id "$GITHUB_RUN_ID"

@@ -48,3 +48,10 @@ Type:  arensecurity_rss       [default 10]
 ## 0.8.0 — ProjectTask in Assistance
 
 Registrazione condizionale `Hooks::MENU_TOADD` (`helpdesk` → `TaskMenu`); pagina `/plugins/mdoverhaul/front/tasks.php`, sempre protetta da `ProjectTask::canView()` e flag `task_workspace`. L'elenco chiama `Search::show(ProjectTask::class)` e sfrutta ricerca/autorizzazioni native GLPI. La board alternativa usa `TaskBoard::load()` e `ProjectTask::canViewItem()` per ogni record e limita i candidati a 1000; nessuna scrittura. Il CSS `task-kanban.css` si limita a `#kanban-app`, senza sostituire Vue o gli handler drag/drop. Verifiche di integrazione live ancora pendenti.
+
+
+## Aggiornamento 0.8.1-dev.1
+
+ProjectTask, Search, Dropdown AJAX, CommonDBChild e cache versione GLPI rimangono nativi. La geometria ECharts cambia solo per il card_id ticket_status; serie, palette e interazioni non vengono sostituite. Main e asset del core invariati.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).

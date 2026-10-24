@@ -71,3 +71,10 @@ Il nome vecchio `arensecurity` non deve essere reinstallato. Le stringhe `arense
 
 Il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` contiene una sola cartella `mdoverhaul/` (con `setup.php`, `hook.php`, `src/`, `front/`, `public/`, `config/`, `tests/`, `tools/`, `docs/`, `README.md`, `SHA512SUMS`). Esclude `.git/`, `.github/`, precedenti ZIP distribuiti e `config/ui.local.php`. Usare l'unica cartella host `plugins/mdoverhaul/`, senza creare plugin secondari.
 
+
+
+## Aggiornamento 0.8.1-dev.1
+
+Aggiunti src/BuildInfo.php, front/runtime.php, tools/maintainer/versioning.py, publish_dev.py, check_dev_docs.py, test di Settings e packaging, docs/releases. build-info.json viene generato solo nel pacchetto.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).

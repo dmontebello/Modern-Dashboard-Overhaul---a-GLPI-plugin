@@ -22,12 +22,14 @@ final class Session
     public static bool $taskRead = true;
     public static bool $create = true;
     public static bool $central = true;
+    public static bool $config = true;
     public static string $language = 'it_IT';
     public static ?string $now = null;
     public static function getLanguage(): string { return self::$language; }
     public static function getCurrentTime(): ?string { return self::$now; }
     public static function checkCentralAccess(): void { if (!self::$central) { throw new RuntimeException('central denied'); } }
-    public static function checkRight(string $key, int $right): void { throw new RuntimeException('read denied'); }
+    public static function checkRight(string $key, int $right): void { if ($key === 'config' && self::$config) { return; } throw new RuntimeException('read denied'); }
+    public static function getNewCSRFToken(): string { return 'isolated-test-token'; }
     public static function haveAccessToEntity(int $id, bool $recursive = false): bool { return in_array($id, self::$entities, true); }
 }
 final class Project
@@ -46,6 +48,10 @@ final class Project
     public function can(int $id, int $right): bool
     {
         if ($this->fields === [] && !$this->getFromDB($id)) { return false; }
+        if ($right === UPDATE) {
+            return Session::$create && Session::haveAccessToEntity($this->getEntityID())
+                && !empty($this->fields['writable']) && empty($this->fields['hook_denied']);
+        }
         $visible = self::canView() && Session::haveAccessToEntity($this->getEntityID())
             && (Session::$projectAll || ($this->fields['users_id'] ?? 0) === Session::$user || in_array(Session::$user, $this->team, true))
             && empty($this->fields['hook_denied']);

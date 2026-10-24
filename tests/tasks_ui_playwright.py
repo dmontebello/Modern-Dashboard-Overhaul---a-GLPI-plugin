@@ -9,6 +9,8 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 from playwright.sync_api import sync_playwright
@@ -107,6 +109,14 @@ def run():
 
         def serve(route):
             parsed = {key: values[-1] for key, values in parse_qs(urlparse(route.request.url).query).items()}
+            if urlparse(route.request.url).path.endswith('projecttask.form.php'):
+                route.fulfill(status=200, content_type='text/html', body='<h1>Native form destination (double)</h1>')
+                return
+            if parsed.get('new') == '1':
+                response = json.loads(subprocess.check_output([os.environ.get('MDO_PHP') or shutil.which('php'), str(ROOT/'tests/render_tasks.php'), json.dumps({'response':True,'query':parsed})], text=True))
+                if response['redirect']:
+                    route.fulfill(status=303, headers={'Location':response['redirect']})
+                    return
             route.fulfill(status=200, content_type="text/html", body=markup(query=parsed))
 
         page.route("http://mdo.test/**", serve)
@@ -124,6 +134,41 @@ def run():
         check(page.locator('.mdo-tasks-view-tabs [aria-current="page"]').inner_text() == "Elenco", "list navigation")
         page.get_by_role("link", name="Kanban", exact=True).click()
         check(page.locator(".mdo-tasks-card").count() == 100, "return to board")
+        class CreationHandler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+
+            def do_GET(self):
+                parsed = {key: values[-1] for key, values in parse_qs(urlparse(self.path).query).items()}
+                if urlparse(self.path).path.endswith('projecttask.form.php'):
+                    body = '<h1>Native form destination (double)</h1>'
+                else:
+                    response = json.loads(subprocess.check_output([os.environ.get('MDO_PHP') or shutil.which('php'), str(ROOT/'tests/render_tasks.php'), json.dumps({'response':True,'query':parsed})], text=True))
+                    if response['redirect']:
+                        self.send_response(303)
+                        self.send_header('Location', response['redirect'])
+                        self.end_headers()
+                        return
+                    body = markup(query=parsed)
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/html; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(body.encode())
+
+        server = ThreadingHTTPServer(('127.0.0.1', 0), CreationHandler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        for width in [390, 1440]:
+            page.set_viewport_size({'width':width,'height':1000})
+            page.goto(f'http://127.0.0.1:{server.server_port}/glpi/plugins/mdoverhaul/front/tasks.php?new=1&kind=project')
+            check(page.evaluate('document.documentElement.scrollWidth<=innerWidth'), f'{width}px project creation has no overflow')
+            check(page.locator('.mdo-tasks-create').evaluate('e=>e.getBoundingClientRect().width<=800'), f'{width}px bounded project picker')
+            check(page.locator('.mdo-tasks-create-actions').evaluate('e=>parseFloat(getComputedStyle(e).gap)>=12'), f'{width}px spaced actions')
+            page.locator('select[name="project"]').select_option('1')
+            page.get_by_role('button',name='Continua',exact=True).click()
+            page.wait_for_url('**/front/projecttask.form.php?projects_id=1')
+            check(page.get_by_role('heading').inner_text() == 'Native form destination (double)', f'{width}px actual GET form reaches native form URL (double)')
+        server.shutdown()
+        server.server_close()
 
         # Static DOM contract from GLPI 11 Column.vue. Does not execute Vue/DnD.
         native = '<div class="kanban"><div class="kanban-columns">'

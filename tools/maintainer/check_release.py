@@ -11,6 +11,7 @@ import stat
 import sys
 import zipfile
 from pathlib import Path
+from versioning import SEMVER, documentation_errors
 
 REQUIRED = [
     'README.md', 'CHANGELOG.md', 'UPDATE.md', 'QA.md', 'LICENSE',
@@ -40,11 +41,12 @@ def check(root: Path, zip_path=None):
     if not source.is_file():
         errors.append('setup.php missing')
         return errors, None
-    match = re.search(r"define\(\s*['\"]PLUGIN_MDOVERHAUL_VERSION['\"]\s*,\s*['\"](\d+\.\d+\.\d+)['\"]", source.read_text('utf-8'))
+    match = re.search(r"define\(\s*['\"]PLUGIN_MDOVERHAUL_VERSION['\"]\s*,\s*['\"](" + SEMVER + r")[ '\"]", source.read_text('utf-8'))
     if not match:
         errors.append('Cannot read version from setup.php')
         return errors, None
     version = match.group(1)
+    errors.extend(documentation_errors(root))
     for r in REQUIRED:
         f = root / r
         if not f.is_file() or f.is_symlink():

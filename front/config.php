@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use GlpiPlugin\Mdoverhaul\Settings;
+use GlpiPlugin\Mdoverhaul\BuildInfo;
 
 // In GLPI 11 /front/ plugin scripts are initialized by the central web router.
 require_once __DIR__ . '/../src/Settings.php';
+require_once __DIR__ . '/../src/BuildInfo.php';
 
 Session::checkRight('config', UPDATE);
 if (!Plugin::isPluginActive('mdoverhaul')) {
@@ -86,8 +88,14 @@ echo '<div class="mdo-settings container-xl">';
 echo '<div class="card mdo-settings-card"><div class="card-body">';
 echo '<div class="d-flex align-items-center gap-3 mb-3"><i class="ti ti-layout-dashboard fs-1 text-primary" aria-hidden="true"></i><div>';
 echo '<h2 class="m-0">Modern Dashboard Overhaul</h2>';
-echo '<p class="text-secondary mb-0">' . $escape($i18n('Versione 0.8.0 · moduli indipendenti', 'Version 0.8.0 · independent modules')) . '</p>';
+echo '<p class="mdo-settings-version">' . $escape(BuildInfo::version()) . ' · Dev</p>';
 echo '</div></div>';
+$build = BuildInfo::get();
+echo '<dl class="mdo-build-info">';
+foreach (['source_commit' => $i18n('Commit sorgente', 'Source commit'), 'build_id' => 'GitHub Actions build', 'built_at' => $i18n('Data UTC', 'UTC date')] as $key => $label) {
+    echo '<div><dt>' . $escape($label) . '</dt><dd>' . $escape((string) ($build[$key] ?? $i18n('Build non generata', 'Unbuilt checkout'))) . '</dd></div>';
+}
+echo '</dl>';
 echo '<p class="mdo-settings-intro">' . $escape($i18n(
     'Le opzioni sono salvate nella configurazione nativa di GLPI. Nessuna nuova tabella e nessuna modifica ai widget o alle dashboard esistenti.',
     'Options are stored in GLPI native configuration. No extra tables and no changes to your dashboard data.'

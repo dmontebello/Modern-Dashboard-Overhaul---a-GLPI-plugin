@@ -101,3 +101,10 @@ Se un file è montato ma non leggibile, verificare **percorso e permessi** prima
 
 Per 0.8.0 usa soltanto lo ZIP pubblicato nel branch `Main`, non "Download ZIP" dei sorgenti della repository. La ZIP contiene `mdoverhaul/` completa e non richiede di installare prima la 0.7.0. Scarica anche `.zip.sha512`, verifica il checksum e fai il test `unzip -t`. L'aggiornamento da 0.6/0.7 è documentato in [UPDATE](../UPDATE.md). Nessuna disinstallazione, nessuna nuova tabella.
 
+
+
+## Aggiornamento 0.8.1-dev.1
+
+Usare il pacchetto versionato Dev con sidecar SHA512 e build-info.json; verificare anche il manifest interno. Effettuare upgrade file/plugin in staging e controllare versione/asset HTTP. Non installare il vecchio ZIP 0.8.0 per testare questa candidata.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).

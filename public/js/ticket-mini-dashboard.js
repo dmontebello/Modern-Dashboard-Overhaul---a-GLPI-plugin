@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   if (!/(?:^|\/)ticket\.php$/.test(location.pathname)) return;
-  const wired = new WeakSet();
+  const wired = new WeakMap();
   // Native mini margin-bottom:-45px is neutralized by ticket-mini-dashboard.css.
   function fix(grid) {
     if (!grid.isConnected) return;
@@ -15,19 +15,28 @@
         card ? card.getBoundingClientRect().bottom - top : 0);
     }
     const needed = Math.ceil(bottom + 12);
-    if (bottom > 0 && Number.isFinite(needed)
-      && needed > grid.getBoundingClientRect().height + 2) {
-      grid.style.minHeight = needed + 'px';
+    if (Number.isFinite(needed)) {
+      const value = (bottom > 0 ? needed : 0) + 'px';
+      if (grid.style.getPropertyValue('--mdo-mini-content-height') !== value) {
+        grid.style.setProperty('--mdo-mini-content-height', value);
+      }
     }
   }
   function attach(grid) {
     if (wired.has(grid)) return;
-    wired.add(grid);
-    const schedule = () => requestAnimationFrame(() => fix(grid));
-    if (typeof ResizeObserver !== 'undefined') {
-      new ResizeObserver(schedule).observe(grid);
-    }
-    new MutationObserver(schedule).observe(grid, {childList:true,subtree:true});
+    let frame = 0;
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; fix(grid); }); };
+    const observed = new Set();
+    const sizes = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(schedule) : null;
+    const watch = () => {
+      const nodes = new Set([grid, ...grid.querySelectorAll(':scope > .grid-stack-item, .grid-stack-item-content > .card')]);
+      for (const node of nodes) { if (!observed.has(node)) { sizes?.observe(node); observed.add(node); } }
+      for (const node of observed) { if (!nodes.has(node)) { sizes?.unobserve(node); observed.delete(node); } }
+    };
+    new MutationObserver(records => { watch(); if (records.some(r => r.target !== grid || r.type === 'childList')) schedule(); })
+      .observe(grid, {childList:true,subtree:true,attributes:true,attributeFilter:['style','class','gs-y','gs-h']});
+    watch();
+    wired.set(grid, {sizes});
     schedule();
   }
   function scan() {

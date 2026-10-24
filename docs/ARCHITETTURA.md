@@ -112,3 +112,10 @@ Il benchmark UI descritto in [QA](../QA.md) è un carico simulato, non un profil
 - `rss_widgets`: identificativi di feed e tipi storici immutati; tutte le sette impostazioni sono salvate in `plugin:mdoverhaul`.
 - `tools/maintainer/package_from_repo.py` copia i soli file del plugin da checkout nella staging `mdoverhaul/`, poi richiama il packager verificato con manifest SHA512. Il pacchetto risultante è completo; GitHub Actions può riprodurlo.
 
+
+
+## Aggiornamento 0.8.1-dev.1
+
+BuildInfo legge metadata pubblici generati, runtime.php li espone al JS autenticato. Il hook asset GLPI usa la versione di setup.php: niente query string fittizie. Nessuna nuova persistenza applicativa in P0.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).

@@ -81,7 +81,7 @@ namespace {
     function check(bool $valid, string $message): void { global $tests; $tests++; if (!$valid)throw new \RuntimeException('FAILED test '.$tests.': '.$message);echo "[OK] $tests $message\n"; }
     function invalid(callable $action, string $message): void {try {$action();} catch (\InvalidArgumentException){check(true,$message);return;}check(false,$message);}
 
-    check(PLUGIN_MDOVERHAUL_VERSION==='0.8.0','semantic version is 0.8.0');
+    check(preg_match('/^0\.8\.1-dev\.[1-9][0-9]*$/D',PLUGIN_MDOVERHAUL_VERSION)===1,'central prerelease version');
     check(plugin_mdoverhaul_check_prerequisites(),'GLPI 11.0.9 requirements');
     check(plugin_mdoverhaul_check_config(),'active with no legacy plugin');
     Plugin::$legacyActive=true;

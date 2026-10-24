@@ -55,3 +55,24 @@ Nota: il cliente segnala persistenza dei bug precedenti, ma non tutte le ultime 
 ## Istruzioni per aggiornare questo file
 
 A ogni candidato: versione e SHA codice esatti, build_id, ZIP/checksum, file modificati e fix, nuove/risolte regressioni con prove, test PASS/FAIL/NON ESEGUITI, migrazioni, rischio e rollback, prossimi passi. Aggiornare CHANGELOG, README, QA e docs/releases/<version>.md nello stesso commit; non cancellare le righe storiche. Non registrare dati privati.
+
+
+## Candidata corrente: 0.8.1-dev.1 — P0, 2026-10-24
+
+Base effettivamente aggiornata prima del lavoro: 45b4e968451813c579bb14b343f6cc3ad69fca8e.
+IMPLEMENTATO: versione unica, metadata build e gate pubblicazione; CSS Settings,
+controllo creazione ProjectTask conforme al core, messaggi e layout, misura mini
+Ticket, offset toolbar e layout della sola legenda ticket_status.
+
+Tutti gli ID SETTINGS-01, TASK-01/02/03, TICKET-01, DASH-01, CHART-01 restano
+**APERTI — NON COLLAUDATO LIVE**: correzioni candidate e test isolati non chiudono
+il feedback utente. BUILD-01 implementato e da verificare anche sugli asset HTTP
+nello staging. STANDALONE-01 non ancora incluso: prossima candidata dev.2.
+
+Il commit sorgente esatto, build ID, data UTC e SHA512 sono registrati da CI in
+build-info.json e docs/releases/0.8.1-dev.1.build.json dopo test verdi. Non confondere
+lo SHA del publisher con quello del codice. Vedere le note complete della versione.
+Rollback P0: file del plugin precedenti, nessuna migrazione. Main invariato.
+Staging non raggiungibile da Codex; l'utente eseguirà il collaudo dopo pubblicazione.
+
+| 2026-10-24 | 0.8.1-dev.1 | Source SHA generato da CI | Test isolati, esiti in QA/CI | NON COLLAUDATO LIVE | P0 candidato; segue P1 |

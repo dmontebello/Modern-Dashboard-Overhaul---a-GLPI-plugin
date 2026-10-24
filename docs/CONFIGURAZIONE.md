@@ -84,3 +84,10 @@ delle ACL individuali: se il campione è troncato, conteggi e filtri sono indica
 come **parziali**. Per trovare anche le attività più vecchie usare l'elenco nativo.
 Le decisioni che richiedono dati aggiuntivi sono descritte in
 [Tasks: decisioni aperte](specs/TASKS_OPEN_DECISIONS.md).
+
+
+## Aggiornamento 0.8.1-dev.1
+
+Settings mostra versione, canale Dev, commit sorgente testato, build ID e data UTC. I colori sono locali e riconoscono data-glpi-theme-dark. Sette flag invariati; provenienza assente mostrata come build non generata.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).

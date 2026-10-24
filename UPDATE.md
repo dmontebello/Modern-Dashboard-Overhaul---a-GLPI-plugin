@@ -48,3 +48,10 @@ Prova dashboard, widget RSS già salvati, pagina Ticket con sette contatori, Tas
 - Tasks Workspace è basato sulle `ProjectTask` native, obbligatoriamente associate a un Project GLPI. La board alternativa è in sola lettura, con 1000 candidati recenti massimi; l'elenco nativo non ha questa limitazione.
 - Il CSS/JS della mini-dashboard Ticket è da collaudare sulla tua installazione specifica.
 - Aggiornare il plugin non aggiorna PHP e non corregge vulnerabilità del runtime.
+
+
+## Aggiornamento 0.8.1-dev.1
+
+P0 non introduce migrazioni; aggiornare dal pacchetto versionato solo su staging, verificare SHA/build in Settings e cache-busting GLPI, ricaricare OPcache secondo installazione. Rollback ripristinando i file precedenti senza disinstallare o cancellare dati.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](docs/releases/0.8.1-dev.1.md).

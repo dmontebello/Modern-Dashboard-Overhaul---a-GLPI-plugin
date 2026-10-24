@@ -42,3 +42,10 @@ Le vulnerabilità **CVE-2026-109618 e CVE-2026-109619** (CVSS v4 9.2) interessan
 
 `TaskMenu` controlla `ProjectTask::canView()`; `front/tasks.php` verifica l'accesso e `TaskBoard` usa `ProjectTask::canViewItem()` per ogni record, con soli metodi di lettura. Titoli e descrizioni vengono renderizzati con escaping HTML; i link puntano alle form GLPI. Il CSS Kanban non sovrascrive i comportamenti Vue. Nessun token esterno, nessuna tabella o servizio nuovo. Le impostazioni OFF non cancellano task.
 
+
+
+## Aggiornamento 0.8.1-dev.1
+
+La creazione ProjectTask usa ProjectTask::can(-1, CREATE, input) con progetto esistente non cancellato/template; non aggiunge Project READ al diritto core. runtime.php richiede login e plugin attivo, espone solo provenienza pubblica. Test reali ACL e CSRF restano necessari.
+
+Stato: NON COLLAUDATO LIVE. Note: [0.8.1-dev.1](releases/0.8.1-dev.1.md).
