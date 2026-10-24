@@ -16,7 +16,23 @@ Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: re
 
 Il plugin non introduce tabelle proprie, job cron, telemetria, password, download di font o scanner. Usa il parser/cache RSS di GLPI e salva le sette opzioni amministrative nella configurazione nativa `glpi_configs`.
 
-### 0.8.0 — scarica un unico ZIP completo (non il sorgente GitHub)
+### Dev: ZIP completo aggiornato automaticamente
+
+La versione **di sviluppo** è scaricabile direttamente dal branch [`Dev`](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/tree/Dev), senza aprire la sezione Artifacts. A ogni push di codice su `Dev`, GitHub Actions esegue i test e, **solo se passano**, aggiorna nella radice del branch lo ZIP completo, il file `.zip.sha512` e il manifesto `SHA512SUMS`. Un commit automatico dedicato modifica solo quei tre file. In caso di test falliti, lo ZIP rimane all'ultima build riuscita: verificare il run e il commit prima di installare.
+
+```bash
+mkdir -p /tmp/mdo-dev && cd /tmp/mdo-dev
+curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip \
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
+curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512 \
+  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512"
+sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
+unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
+```
+
+**Non installare insieme** le varianti Dev e Main nella medesima istanza GLPI: sono entrambe il singolo plugin `mdoverhaul`. Usare Dev soltanto su staging, lasciando `Main` invariato fino ad approvazione, PR e merge.
+
+### Main: 0.8.0 pubblicata (non il sorgente GitHub)
 
 Il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` contiene **una cartella principale `mdoverhaul/`** con tutti i moduli (Dashboard, RSS, Tasks, Kanban) e Settings, e non richiede l'installazione intermedia 0.7.
 

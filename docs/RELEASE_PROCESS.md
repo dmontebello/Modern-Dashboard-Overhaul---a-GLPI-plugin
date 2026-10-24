@@ -74,3 +74,7 @@ unzip -t Modern_Dashboard_Overhaul_VERSIONE_Pilot.zip
 
 Sul branch di pubblicazione `Main` il file `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip` e il sidecar `.zip.sha512` sono artefatti della release, non archivi automatici dei sorgenti. Genera il pacchetto dalla checkout con `python3 -B tools/maintainer/package_from_repo.py`, che esclude `.git/`, `.github/` e gli ZIP vecchi, sincronizza `SHA512SUMS` e crea la struttura `mdoverhaul/`. Pubblica sorgenti, checksum e ZIP insieme. Una verifica GitHub Actions ricostruisce l'archivio, ma l'installazione reale necessita comunque un collaudo separato.
 
+
+## Distribuzione continua del branch Dev
+
+Il workflow `.github/workflows/build-mdo.yml` genera lo ZIP dall'HEAD testato e lo allega come Artifact. Dopo il successo completo dei job, `publish_dev_zip` (permesso GitHub Actions `contents: write` limitato al job) aggiorna **solo su `Dev`** `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip`, il `.zip.sha512` e `SHA512SUMS`. Prima del commit, confronta `origin/Dev` con il commit testato: non pubblica un bundle obsoleto se nel frattempo è arrivato un nuovo push. Il commit automatico GitHub Actions non attiva un nuovo workflow. Nessuna pubblicazione automatica su `Main`: quel branch riceve soltanto le versioni approvate dopo collaudo e PR.
