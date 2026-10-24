@@ -48,3 +48,14 @@
 @media(max-width:1200px){.mdo-tasks-filters{grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media(max-width:720px){.mdo-tasks-summary{grid-template-columns:repeat(2,minmax(0,1fr));}.mdo-tasks-filters{grid-template-columns:repeat(2,minmax(0,1fr));}.mdo-tasks-head{align-items:stretch;}.mdo-tasks-column{flex-basis:min(88vw,330px);}}
 @media(max-width:430px){.mdo-tasks-filters{grid-template-columns:minmax(0,1fr);}.mdo-tasks-stat{padding:12px;}.mdo-tasks-stat strong{font-size:23px;}}
+
+/* Tasks list: native GLPI search stays inside MDO header without a floating gap.
+ * search-no-forced-height uses GLPI's own search page opt-out. */
+.mdo-tasks-native-search {margin:0; padding:0; min-width:0;}
+.mdo-tasks-native-search .search_page {margin:0!important; padding-top:0!important; width:100%;min-width:0;}
+.mdo-tasks-native-search .search-container {height:auto!important; min-height:0!important; max-height:none!important;overflow:visible!important; margin-top:0!important; padding-top:0!important;}
+.mdo-tasks-native-search .search-form-container {margin-top:0!important; padding-top:0!important;}
+.mdo-tasks-list-hint {margin:4px 0 12px!important;}
+.mdo-tasks-create-form .mdo-tasks-project-picker {flex:1 1 320px;max-width:min(100%,560px);min-width:220px;}
+.mdo-tasks-create-form .mdo-tasks-project-label {display:block;font-size:13px;font-weight:650;margin-bottom:7px;}
+.mdo-tasks-create-form .select2-container {width:100%!important;max-width:100%;}

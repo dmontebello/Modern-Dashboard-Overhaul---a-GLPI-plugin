@@ -98,7 +98,15 @@ $DB->fail = true;
 $html = taskPage(['view' => 'board']);
 verify(str_contains($html, 'role="alert"') && !str_contains($html, 'private DB failure') && Toolbox::$errors !== [], 'DB failure rendered safely and logged');
 $html = taskPage(['new' => '1']);
-verify(str_contains($html, 'role="alert"') && !str_contains($html, 'private DB failure'), 'project chooser failure handled safely');
+verify(str_contains($html, 'name="project"') && !str_contains($html, 'private DB failure'), 'native project dropdown independent of failing optional SQL scan');
+
+taskFixture();
+$html = taskPage(['new' => '1']);
+verify(str_contains($html, 'name="project"') && str_contains($html, 'Progetto consentito')
+    && !str_contains($html, 'SEGRETO altra entità'), 'native project selector shows permitted projects only');
+$html = taskPage([]);
+verify(str_contains($html, 'mdo-tasks-native-search') && str_contains($html, 'search-no-forced-height')
+    && str_contains($html, 'non crea automaticamente attività'), 'native search embedded directly below Tasks tabs with first-task hint');
 taskFixture();
 $rows = TaskBoard::load()['tasks'];
 $rows[0]['due'] = (new DateTimeImmutable('today'))->format('Y-m-d H:i:s');

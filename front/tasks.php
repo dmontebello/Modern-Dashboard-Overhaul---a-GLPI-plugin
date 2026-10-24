@@ -49,15 +49,14 @@ $boardUrl = static fn (array $args = []): string => $base . '?' . http_build_que
 ], $args), '', '&', PHP_QUERY_RFC3986);
 
 $creating = $scalar('new') === '1' && ProjectTask::canCreate();
-$creation = ['projects' => [], 'truncated' => false];
 $creationError = false;
-if ($creating) {
+if ($creating && $projectId > 0) {
+    // Native ProjectTask requires a real project; never bypass its create rights.
     try {
-        if ($projectId > 0 && TaskBoard::canCreateInProject($projectId)) {
+        if (TaskBoard::canCreateInProject($projectId)) {
             Html::redirect(ProjectTask::getFormURL() . '?projects_id=' . $projectId);
             return;
         }
-        $creation = TaskBoard::creationProjects();
     } catch (Throwable $error) {
         Toolbox::logInFile('php-errors', '[mdoverhaul Tasks] ' . $error->getMessage() . "\n");
         $creationError = true;
@@ -84,24 +83,59 @@ echo '</div></header>';
 if ($creating) {
     echo '<div class="mdo-tasks-create"><h2>' . $esc($tr('Scegli il progetto', 'Choose a project')) . '</h2>';
     echo '<p>' . $esc($tr('La nuova attività si apre nel form nativo GLPI del progetto scelto.', 'The new task opens in the native GLPI form for the selected project.')) . '</p>';
-    if ($creationError) {
-        echo '<p role="alert">' . $esc($tr('Impossibile caricare i progetti. Riprova o consulta i log GLPI.', 'Unable to load projects. Try again or check the GLPI logs.')) . '</p>';
-    } elseif ($projectId > 0) {
-        echo '<p role="alert">' . $esc($tr('Progetto non disponibile per la creazione.', 'Project unavailable for task creation.')) . '</p>';
+    if ($creationError || $projectId > 0) {
+        echo '<p role="alert">' . $esc($tr(
+            'Il progetto selezionato non è disponibile per creare task. Controlla i diritti di progetto e riprova.',
+            'The selected project is not available for creating tasks. Check project rights and retry.'
+        )) . '</p>';
     }
-    if ($creation['projects'] !== []) {
-        echo '<form method="get" action="' . $esc($base) . '"><input type="hidden" name="new" value="1">';
-        Dropdown::showFromArray('project', $creation['projects'], [
-            'display_emptychoice' => true, 'value' => 0, 'required' => true,
-            'emptylabel' => $tr('Scegli un progetto…', 'Choose a project…'),
-            'aria_label' => $tr('Progetto obbligatorio', 'Required project'),
-        ]);
-        echo '<button class="btn btn-primary" type="submit">' . $esc($tr('Continua', 'Continue')) . '</button></form>';
-    } else {
-        echo '<p role="status">' . $esc($tr('Nessun progetto disponibile per creare attività.', 'No projects available for task creation.')) . '</p>';
+    // Native-first: GLPI owns project search, entity/visibility filtering and AJAX.
+    // Avoid constructing our own project catalogue via a plugin SQL query.
+    $dropdownReady = false;
+    if (Project::canView()) {
+        echo '<form method="get" action="' . $esc($base) . '" class="mdo-tasks-create-form">';
+        echo '<input type="hidden" name="new" value="1"><div class="mdo-tasks-project-picker">';
+        echo '<span class="mdo-tasks-project-label">' . $esc($tr('Progetto GLPI', 'GLPI project')) . '</span>';
+        $level = ob_get_level();
+        try {
+            ob_start();
+            $rendered = Dropdown::show(Project::class, [
+                'name' => 'project',
+                'value' => 0,
+                'display_emptychoice' => true,
+                'required' => true,
+                'aria_label' => $tr('Seleziona il progetto per creare la task', 'Select the project to create the task'),
+                'condition' => ['is_deleted' => 0, 'is_template' => 0],
+                'entity' => -1,
+                'width' => '100%',
+                'addicon' => false,
+            ]);
+            $html = (string) ob_get_clean();
+            if ($rendered !== false && $html !== '') {
+                echo $html;
+                $dropdownReady = true;
+            }
+        } catch (Throwable $error) {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+            Toolbox::logInFile('php-errors', '[mdoverhaul Tasks project dropdown] ' . $error->getMessage() . "\n");
+        }
+        echo '</div>';
+        if ($dropdownReady) {
+            echo '<button class="btn btn-primary" type="submit">' . $esc($tr('Continua', 'Continue')) . '</button>';
+        }
+        echo '</form>';
     }
-    if ($creation['truncated']) {
-        echo '<p>' . $esc($tr('Scelta parziale: per gli altri progetti usa la ricerca nativa e la scheda Attività del progetto.', 'Partial selection: use native project search and the project Tasks tab for other projects.')) . '</p>';
+    if (!$dropdownReady) {
+        echo '<p role="status">' . $esc($tr(
+            'Se il selettore non è disponibile, apri il progetto dalla ricerca nativa GLPI e usa la scheda Attività.',
+            'If the selector is unavailable, open a project from GLPI native search and use its Tasks tab.'
+        )) . '</p>';
+    }
+    if (Project::canView()) {
+        echo '<a class="btn btn-outline-secondary" href="' . $esc(Project::getSearchURL()) . '">'
+            . $esc($tr('Apri elenco progetti GLPI', 'Open GLPI project list')) . '</a> ';
     }
     echo '<a class="btn btn-outline-secondary" href="' . $esc($base) . '">' . $esc($tr('Torna alle attività', 'Back to tasks')) . '</a></div></div>';
     Html::footer();
@@ -112,28 +146,28 @@ echo '<a class="btn ' . ($view === 'list' ? 'btn-primary' : 'btn-outline-seconda
     . '<i class="ti ti-list me-1"></i>' . $esc($tr('Elenco', 'List')) . '</a>';
 echo '<a class="btn ' . ($view === 'board' ? 'btn-primary' : 'btn-outline-secondary') . '"' . ($view === 'board' ? ' aria-current="page"' : '') . ' href="' . $esc($boardUrl()) . '">'
     . '<i class="ti ti-layout-kanban me-1"></i>Kanban</a></nav>';
+if ($view === 'list') {
+    echo '<p class="mdo-tasks-hint mdo-tasks-list-hint">' . $esc($tr(
+        'La creazione di un progetto non crea automaticamente attività. Usa Nuova task per aggiungere la prima; ricerca e permessi restano quelli nativi GLPI.',
+        'Creating a project does not automatically create tasks. Use New task to add the first one; search and permissions remain native GLPI.'
+    )) . '</p>';
+    // GLPI has no front/projecttask.php. Keep native search, pagination and export
+    // inside the workspace rather than creating a second page below the header.
+    $params = Search::manageParams(ProjectTask::class, $_GET);
+    $params['target'] = $boardUrl(['view' => 'list']);
+    $params['display_type'] = Search::HTML_OUTPUT;
+    echo '<section class="mdo-tasks-native-search" aria-label="' . $esc($tr('Elenco attività', 'Task list')) . '">';
+    echo '<div class="search_page row search-no-forced-height"><div class="col search-container disable-overflow-y" data-glpi-search-container>';
+    Search::showGenericSearch(ProjectTask::class, $params);
+    Search::showList(ProjectTask::class, $params);
+    echo '</div></div></section></div>';
+    Html::footer();
+    return;
+}
 echo '<p class="mdo-tasks-hint">' . $esc($tr(
     'Elenco e Kanban conservano filtri separati. Nell’elenco puoi usare anche le ricerche salvate GLPI.',
     'List and Kanban use separate filters. Native saved searches are also available in the list.'
 )) . '</p>';
-
-if ($view === 'list') {
-    echo '<p class="mdo-tasks-hint">' . $esc($tr(
-        'Ricerca, ordinamento, colonne e operazioni restano quelli nativi di GLPI, con i relativi permessi.',
-        'Search, sorting, columns and actions are provided by GLPI with native permissions.'
-    )) . '</p>';
-    echo '</div>';
-    // GLPI has no front/projecttask.php. Keep all native search actions here.
-    $params = Search::manageParams(ProjectTask::class, $_GET);
-    $params['target'] = $boardUrl(['view' => 'list']);
-    $params['display_type'] = Search::HTML_OUTPUT;
-    echo '<div class="search_page row"><div class="col search-container" data-glpi-search-container>';
-    Search::showGenericSearch(ProjectTask::class, $params);
-    Search::showList(ProjectTask::class, $params);
-    echo '</div></div>';
-    Html::footer();
-    return;
-}
 
 try {
     $loaded = TaskBoard::load();

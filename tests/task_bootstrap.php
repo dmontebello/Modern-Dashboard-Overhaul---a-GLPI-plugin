@@ -89,6 +89,20 @@ final class Dropdown
         if ($table !== 'glpi_projectstates') { throw new RuntimeException('Invalid native state table'); }
         return [1 => 'Attivo', 2 => 'Bloccato', 3 => 'In Review'][$id] ?? '';
     }
+    public static function show(string $type, array $options = []): bool
+    {
+        if ($type !== Project::class) { return false; }
+        echo '<select name="project" aria-label="Seleziona il progetto per creare la task"><option value="0">—</option>';
+        foreach (Project::$rows as $id => $row) {
+            $project = new Project();
+            if ($project->getFromDB((int) $id) && $project->can((int) $id, READ)
+                && empty($row['is_deleted']) && empty($row['is_template'])) {
+                echo '<option value="' . (int) $id . '">' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
+            }
+        }
+        echo '</select>';
+        return true;
+    }
     public static function showFromArray(string $name, array $elements, array $options): void
     {
         echo '<select name="' . htmlspecialchars($name) . '" aria-label="' . htmlspecialchars($options['aria_label']) . '"><option value="0">—</option>';
