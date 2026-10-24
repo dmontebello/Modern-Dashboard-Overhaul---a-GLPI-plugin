@@ -78,3 +78,14 @@ Sul branch di pubblicazione `Main` il file `Modern_Dashboard_Overhaul_0.8.0_Pilo
 ## Distribuzione continua del branch Dev
 
 Il workflow `.github/workflows/build-mdo.yml` genera lo ZIP dall'HEAD testato e lo allega come Artifact. Dopo il successo completo dei job, `publish_dev_zip` (permesso GitHub Actions `contents: write` limitato al job) aggiorna **solo su `Dev`** `Modern_Dashboard_Overhaul_0.8.0_Pilot.zip`, il `.zip.sha512` e `SHA512SUMS`. Prima del commit, confronta `origin/Dev` con il commit testato: non pubblica un bundle obsoleto se nel frattempo è arrivato un nuovo push. Il commit automatico GitHub Actions non attiva un nuovo workflow. Nessuna pubblicazione automatica su `Main`: quel branch riceve soltanto le versioni approvate dopo collaudo e PR.
+
+
+## Aggiornamento operativo Dev 0.8.1 — 24 ottobre 2026
+
+Il contenuto storico di questo documento regola la 0.8.0. Per il prossimo sviluppo valgono anche [specifica 0.8.1](specs/MDO_0_8_1_DEV_WORKPLAN.md), [policy versioni](dev/VERSIONING_POLICY.md) e [stato](dev/STATUS.md).
+
+- Nuove candidate Dev con suffisso 0.8.1-dev.N, build info e source SHA verificabili nell'interfaccia GLPI. L'implementazione del versioning e ancora P0 da sviluppare.
+- Non sovrascrivere un archivio denominato 0.8.0 con codice di 0.8.1; versione nominale e byte devono concordare. Mantenere alias MDO_Dev_Latest.zip solo dopo CI positiva.
+- Codex deve creare docs/releases/<version>.md e aggiornare CHANGELOG, docs/dev/STATUS.md, README, QA e documentazione d'impatto INSIEME al commit candidato: fix, prove reali e mock distinti, checksum, installazione, rollback, rischi, prossimi passi.
+- Task standalone in P1 introducono schema plugin separato: il vecchio vincolo "nessuna tabella" descrive 0.8.0, non autorizza a rappresentare falsamente una task senza Project. Le nuove tabelle richiedono migrazione idempotente e backup database/volumi.
+- Branch Main resta immutato fino al collaudo dell'utente e PR esplicitamente approvata.

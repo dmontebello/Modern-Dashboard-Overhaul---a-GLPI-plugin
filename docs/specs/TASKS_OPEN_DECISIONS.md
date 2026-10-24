@@ -1,3 +1,5 @@
+> **Nuovo requisito del 24 ottobre 2026:** task realmente senza progetto richieste dall'utente. Questo file descrive il modello storico P0/P1 MDO 0.8.0, non un divieto permanente. Il progetto tecnico NON IMPLEMENTATO e in [MDO 0.8.1 Dev](MDO_0_8_1_DEV_WORKPLAN.md); eventuali nuove tabelle richiedono ACL, migrazione e test staging.
+
 # Tasks — decisioni sul modello dati
 
 Stato: **proposte da valutare**, nessuna persistenza aggiunta in P0/P1.

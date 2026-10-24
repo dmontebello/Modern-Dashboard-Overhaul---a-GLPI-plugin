@@ -1,5 +1,8 @@
 # Modern Dashboard Overhaul
 
+> **Dev 0.8.1 (lavoro da implementare):** [Specifica Codex e problemi live](docs/specs/MDO_0_8_1_DEV_WORKPLAN.md) · [Registro stato e handoff](docs/dev/STATUS.md) · [Policy versioni Dev](docs/dev/VERSIONING_POLICY.md). La build attuale del plugin e ancora 0.8.0; il piano 0.8.1 non costituisce un fix gia distribuito.
+
+
 **Versione:** `0.8.0` (pilot interno) · **Autore:** Davide Montebello · **Licenza:** MIT  
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 

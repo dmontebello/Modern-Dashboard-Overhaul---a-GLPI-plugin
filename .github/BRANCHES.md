@@ -23,3 +23,8 @@ curl -fL -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip \
 Il vecchio branch `feature/tasks-workspace-settings` era già stato integrato e si può eliminare senza perdere il codice. Il vecchio `main` minuscolo va eliminato **solo dopo** aver impostato `Main` come branch predefinito. I link raw nei documenti e nel pacchetto MDO 0.8.0 puntano già al branch `Main`. I branch storici possono essere eliminati dopo avere impostato `Main` come predefinito.
 
 GitHub Actions convalida la ZIP su push a `Dev` e `Main` e sulle PR destinate a `Main`, ma **non esegue deployment automatici in produzione**.
+
+
+## Sviluppo successivo alla 0.8.0
+
+Documenti canonici da aprire con Codex: [specifica 0.8.1](../docs/specs/MDO_0_8_1_DEV_WORKPLAN.md), [stato/handoff Dev](../docs/dev/STATUS.md), [policy di versionamento](../docs/dev/VERSIONING_POLICY.md). La 0.8.1 Dev non e stata ancora implementata; le note storiche sopra riguardano 0.8.0. Ogni candidata deve riportare version, build SHA, fix/test/next steps nei documenti prima del push. Main solo con PR e approvazione dopo staging.

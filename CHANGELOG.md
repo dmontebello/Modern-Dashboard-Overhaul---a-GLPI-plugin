@@ -1,5 +1,12 @@
 # Changelog — Modern Dashboard Overhaul
 
+## 0.8.1-dev.1 — pianificata, NON ANCORA IMPLEMENTATA (2026-10-24)
+
+- L'utente segnala su GLPI reale Settings illeggibili in dark mode, il pulsante Continua che non apre il form Task nativo, spaziature della scelta progetto, mini KPI Ticket, toolbar e legenda ECharts.
+- Richiesti prerelease numerati 0.8.1-dev.N, metadata SHA e build ID visibili, ZIP versionati con alias Latest Dev e documentazione aggiornata ad ogni candidatura.
+- Richiesta una successiva build (almeno 0.8.1-dev.2) con task realmente senza progetto. Serve un oggetto GLPI-integrato del plugin, ACL e migrazione; **nessuna tabella nuova e stata aggiunta con questa voce del Changelog**.
+- [Specifica 0.8.1 Dev](docs/specs/MDO_0_8_1_DEV_WORKPLAN.md) e [stato](docs/dev/STATUS.md). CI 0.8.0 con mock verde, ma regressioni staging ancora APERTE.
+
 Le versioni sono cumulative: i cambiamenti più recenti sono riportati per primi. **Un rebuild documentale della stessa versione non implica una modifica del software in esecuzione.**
 
 ## Sviluppo P0/P1 — non pubblicato (2026-10-24)

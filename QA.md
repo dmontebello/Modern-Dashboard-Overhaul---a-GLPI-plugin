@@ -70,3 +70,10 @@ decisioni strutturali restano elencati nel
 [rapporto Tasks](docs/specs/TASKS_IMPLEMENTATION.md) e nelle
 [decisioni aperte](docs/specs/TASKS_OPEN_DECISIONS.md).
 
+
+
+## Feedback reale GLPI — 2026-10-24 (non superato)
+
+Il cliente osserva: contrasto scuro dei dettagli nelle opzioni Settings; selettore Project di Nuova task e pulsanti adiacenti; "Continua" che non raggiunge il form nativo; persistenti problemi di mini KPI Ticket, toolbar e legenda ECharts. Richieste nuove Task indipendenti e versione Dev visibile.
+
+La pipeline #40074660688 e verde: 67 PHP, 61 Tasks PHP, 84 UI Dashboard, 167 UI Tasks, soltanto **doubles e DOM fixture**. Non prova il flusso di creazione con Ajax GLPI o i layout reali. Nessuno dei bug sopra puo essere marcato risolto sullo staging. Riferimenti: [specifica 0.8.1](docs/specs/MDO_0_8_1_DEV_WORKPLAN.md), [registro stato](docs/dev/STATUS.md).
