@@ -90,3 +90,7 @@ Dev.5 mantiene gli ACL GLPI. StandaloneTask::canView richiede READMY o READALL a
 ## 0.8.1-dev.6 — Sicurezza Tasks
 
 Endpoint stage: ACL READ+UPDATE per item, entità, CSRF middleware GLPI e date_mod anti-stale. Diario/allegati: READ/UPDATE del parent su ogni GET/POST/download, storage privato sotto GLPI_DOC_DIR, token file casuale, download forzato e upload limitato a 15MiB. Rischi da testare: concorrenza non atomica, antivirus esterno, middleware CSRF, isolamento entità e download reali. NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+Il servizio dev.7 consente solo campi allowlist. Progetto ID non valido/non autorizzato causa errore senza ricadere su Standalone; POST verificato da middleware CSRF GLPI, `check(-1,CREATE)` nativo prima di `add`, redirect fuori catch GLPI11. Nessun bypass entità/profili. NON COLLAUDATO LIVE.

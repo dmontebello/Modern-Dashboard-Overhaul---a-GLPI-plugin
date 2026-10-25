@@ -131,3 +131,7 @@ In MDO 0.8.1-dev.5 l'opzione tasks_standalone non attribuisce automaticamente di
 ## 0.8.1-dev.6 — Note configurazione
 
 Il modulo Tasks resta opt-in con task_workspace e tasks_standalone. Diario e allegati richiedono schema2 e i diritti READ/UPDATE per task ed entità; nessun diritto assegnato automaticamente. Lo storage GLPI privato deve essere scrivibile e sottoposto a backup. NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+Nuova task dev.7 usa i flag già esistenti; senza progetto è possibile creare solo se task_workspace/tasks_standalone sono attivi, schema pronto e profilo con CREATE indipendenti. Con progetto occorrono diritti di creazione ProjectTask nativi. Nessun flag nuovo.

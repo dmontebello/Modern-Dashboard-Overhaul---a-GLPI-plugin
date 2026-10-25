@@ -143,3 +143,7 @@ Aggiornamento 0.8.1-dev.5 solo su staging: backup coordinato DB/plugin/volumi, Z
 ## Upgrade 0.8.1-dev.6
 
 Dopo backup coordinato plugin, DB e volume GLPI_DOC_DIR/mdoverhaul, aggiornare con gestore plugin GLPI per schema2; verificare tasknotes e taskfiles, migrazione ripetibile, permessi, file e rollback. Nessun deploy in produzione senza staging PASS LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+0.8.1-dev.7: non aggiunge schema rispetto a schema2 della dev.6; prima di aggiornare lo staging salvare snapshot coerente del DB/plugin/GLPI_DOC_DIR, verificare ZIP e SHA512, poi collaudare creazione con progetto e indipendente.

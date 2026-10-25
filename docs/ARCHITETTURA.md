@@ -162,3 +162,7 @@ TaskStageService scrive via API GLPI; TaskActivity e TaskAttachment hanno ACL pa
 ## 0.8.1-dev.6 — Aggiornamento documentale
 
 MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggiornamento ACL, storico completo delle annotazioni e allegati MDO privati; schema 2 e relative verifiche di sicurezza. Vedere docs/releases/0.8.1-dev.6.md, QA.md e docs/dev/STATUS.md per test, rischi, rollback e prossimi passi. NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+Form unificato `front/task.form.php` con TaskCreationService: lo stesso POST valida progetto facoltativo e inoltra a ProjectTask::check/add del core o StandaloneTask::check/add del plugin. Nessuna tabella, nessun endpoint SQL autonomo o conversione. Il form avanzato ProjectTask nativo continua dopo la creazione.

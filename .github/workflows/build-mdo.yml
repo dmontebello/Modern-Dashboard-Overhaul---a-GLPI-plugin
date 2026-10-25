@@ -27,6 +27,7 @@ jobs:
           php tests/tasks_php.php
           php tests/standalone_php.php
           php tests/task_activity_php.php
+          php tests/task_creation_php.php
           python3 -B tests/packaging_test.py
           python3 -B tools/maintainer/check_dev_docs.py
       - name: Install browser dependencies
@@ -37,6 +38,7 @@ jobs:
         run: |
           python3 tests/ui_playwright.py
           python3 tests/tasks_ui_playwright.py
+          python3 tests/task_creation_ui_playwright.py
           python3 tests/settings_ui_playwright.py
           python3 tests/standalone_ui_playwright.py
       - name: Build exact tested source

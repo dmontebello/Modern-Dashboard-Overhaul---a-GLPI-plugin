@@ -24,3 +24,8 @@
 ## Aggiornamento dopo ogni lavoro
 
 Aggiungi prove datate con SHA del **sorgente testato**, ID CI run/esiti per job, versione ZIP/hash, ambiente GLPI, risultati PASS/FAIL/NON ESEGUITI, rischi e next steps. Aggiorna nello stesso commit [backlog](product/backlog.md), [focus](project/current-focus.md) e QA/release notes interessate. Non cancellare i vecchi snapshot: [registro storico](dev/STATUS.md).
+
+
+## Dev.7 — checkpoint implementazione
+
+Form unico e servizio di creazione in sviluppo sul branch `feature/mdo-0.8.1-dev.7`, include validazione server-side, selezione itemtype e fallback non consentito, link nativo dopo salvataggio. Test isolati in CI feature branch; valore di prova sul GLPI live **NON ESEGUITO**. Nessuna nuova tabella rispetto alla dev.6. Una volta completato il publisher distinguere source SHA, publish SHA e build checksum. Main invariato.

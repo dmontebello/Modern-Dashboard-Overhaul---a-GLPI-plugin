@@ -158,3 +158,7 @@ Regression di dev.5: php tests/tasks_php.php e php tests/standalone_php.php veri
 ## 0.8.1-dev.6
 
 Tasks: schema2, diario e allegati. ZIP solo con pipeline e SHA512 verificati; NON COLLAUDATO LIVE. Consultare docs/releases/0.8.1-dev.6.md.
+
+## 0.8.1-dev.7 — allineamento
+
+La release 0.8.1-dev.7 usa lo stesso packaging immutabile di dev.6; i file del form unico vengono verificati con lint, test PHP e Playwright. ZIP e SHA512 solo tramite publisher Dev.

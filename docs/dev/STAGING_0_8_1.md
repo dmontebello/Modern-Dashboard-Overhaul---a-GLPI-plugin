@@ -142,3 +142,8 @@ Sorgente testato `60fb656aad0400a31788bf68760edf390961f166`; GitHub Actions #401
 ## 0.8.1-dev.6 — test staging ancora aperti
 
 Verificare schema 2, ACL, POST Kanban e upload/download storage GLPI. Per rollback servono insieme snapshot DB, plugin e volume documenti; nessun PASS LIVE registrato.
+
+
+## Aggiornamento 0.8.1-dev.7
+
+Verificare su staging dev.7 nuova task unica con/senza progetto, CSRF, permessi, dropdown GLPI AJAX, scadenza, inserimento e redirect senza duplicati.

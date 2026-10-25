@@ -66,3 +66,7 @@ Candidata Dev 0.8.1-dev.5: fix dell'ORDER nelle query ProjectTask, Project e Sta
 ## 0.8.1-dev.6 — Aggiornamento documentale
 
 MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggiornamento ACL, storico completo delle annotazioni e allegati MDO privati; schema 2 e relative verifiche di sicurezza. Vedere docs/releases/0.8.1-dev.6.md, QA.md e docs/dev/STATUS.md per test, rischi, rollback e prossimi passi. NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+Dev.7 introduce una nuova Task da un solo form. Con progetto valido crea ProjectTask nativa; senza progetto StandaloneTask; la scadenza viene mappata secondo il modello. Sicurezza e regressioni in docs/releases/0.8.1-dev.7.md. NON COLLAUDATO LIVE.

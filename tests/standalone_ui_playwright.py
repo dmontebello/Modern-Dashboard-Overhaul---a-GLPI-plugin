@@ -79,9 +79,8 @@ def run():
         threading.Thread(target=server.serve_forever,daemon=True).start()
         base=f'http://127.0.0.1:{server.server_port}/glpi/plugins/mdoverhaul/front/'
         page=browser.new_page(viewport={'width':390,'height':1000})
-        page.goto(base+'tasks.php?source=standalone&new=1')
+        page.goto(base+'standalonetask.form.php')
         check(page.get_by_role('link',name='Task di progetto',exact=True).count()==0,'standalone-only creator does not require ProjectTask rights')
-        page.get_by_role('link',name='Task indipendente',exact=True).click()
         page.locator('[name="name"]').fill('Browser independent')
         page.locator('[name="content"]').fill('<script>must remain text</script>')
         page.locator('[name="status"]').select_option('2')

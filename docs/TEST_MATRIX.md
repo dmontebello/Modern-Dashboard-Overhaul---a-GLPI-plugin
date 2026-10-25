@@ -116,3 +116,7 @@ Regressione SQL: TaskBoard::load, TaskBoard::creationProjects e StandaloneTask::
 ## QA 0.8.1-dev.6
 
 Testare su GLPI reale ACL, Stage, storico note paginato, allegati privati, upgrade schema2, responsive e rollback. CI automatica non equivale al collaudo live. NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+Test dev.7: nuovo form unico senza scelta, progetto vuoto/0/valido/negato/fuori entità, create grant solo-ProjectTask/solo-Standalone, manipolazione ID array e overflows, CSRF, redirect e fallimenti senza doppia task, Select2 AJAX reale, due date in timezone GLPI. NON COLLAUDATO LIVE.
