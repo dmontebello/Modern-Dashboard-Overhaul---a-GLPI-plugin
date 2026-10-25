@@ -6,12 +6,14 @@ use GlpiPlugin\Mdoverhaul\Settings;
 use GlpiPlugin\Mdoverhaul\TaskBoard;
 use GlpiPlugin\Mdoverhaul\TaskMenu;
 use GlpiPlugin\Mdoverhaul\StandaloneTask;
+use GlpiPlugin\Mdoverhaul\TaskStageService;
 
 require_once __DIR__ . '/../src/Settings.php';
 require_once __DIR__ . '/../src/TaskMenu.php';
 require_once __DIR__ . '/../src/TaskBoard.php';
 require_once __DIR__ . '/../src/TaskSchema.php';
 require_once __DIR__ . '/../src/StandaloneTask.php';
+require_once __DIR__ . '/../src/TaskStageService.php';
 
 Session::checkCentralAccess();
 if (!Plugin::isPluginActive('mdoverhaul') || !Settings::get()['task_workspace']) {
@@ -29,7 +31,12 @@ if (!ProjectTask::canView() && !StandaloneTask::canView()) {
     Session::checkRight('projecttask', ProjectTask::READMY); return;
 }
 
-$standalone = $scalar('source', ProjectTask::canView() ? 'project' : 'standalone') === 'standalone';
+$source = $scalar('source', 'all');
+if (!in_array($source, ['all', 'project', 'standalone'], true)) { $source = 'all'; }
+if ($source === 'all' && !ProjectTask::canView()) { $source = 'standalone'; }
+if ($source === 'all' && !StandaloneTask::canView()) { $source = 'project'; }
+$standalone = $source === 'standalone';
+$unified = $source === 'all';
 if ($standalone && !StandaloneTask::enabled()) { Html::displayNotFoundError(); return; }
 if ($standalone && !StandaloneTask::canView()) { Session::checkRight(StandaloneTask::$rightname, StandaloneTask::READMY); return; }
 if (!$standalone && !ProjectTask::canView()) { Session::checkRight('projecttask', ProjectTask::READMY); return; }
@@ -59,7 +66,7 @@ $base = rtrim((string) $CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/
 $boardUrl = static fn (array $args = []): string => $base . '?' . http_build_query(array_replace([
     'view' => 'board', 'group' => $group, 'filter' => $filter, 'q' => $q,
     'project' => $projectId, 'state' => $stateId, 'due' => $dueFilter, 'board_sort' => $sort,
-    'source' => $standalone ? 'standalone' : 'project',
+    'source' => $source,
 ], $args), '', '&', PHP_QUERY_RFC3986);
 
 $creating = $scalar('new') === '1' && (ProjectTask::canCreate() || StandaloneTask::canCreate());
@@ -189,8 +196,8 @@ if (!$standalone && StandaloneTask::enabled() && !StandaloneTask::canView()
         )) . '</div>';
 }
 echo '<nav class="mdo-tasks-view-tabs" aria-label="' . $esc($tr('Origine attività', 'Task source')) . '">';
-foreach (['project' => [ProjectTask::canView(), $tr('Progetto', 'Project')], 'standalone' => [StandaloneTask::canView(), $tr('Indipendenti', 'Independent')]] as $key => [$visible, $label]) {
-    if ($visible) { echo '<a class="btn btn-outline-secondary"' . (($standalone ? 'standalone' : 'project') === $key ? ' aria-current="true"' : '') . ' href="' . $esc($boardUrl(['source'=>$key,'view'=>$view,'project'=>0,'state'=>-1])) . '">' . $esc($label) . '</a>'; }
+foreach (['all' => [ProjectTask::canView() && StandaloneTask::canView(), $tr('Tutte', 'All')], 'project' => [ProjectTask::canView(), $tr('Progetto', 'Project')], 'standalone' => [StandaloneTask::canView(), $tr('Indipendenti', 'Independent')]] as $key => [$visible, $label]) {
+    if ($visible) { echo '<a class="btn ' . ($source === $key ? 'btn-primary' : 'btn-outline-secondary') . '"' . ($source === $key ? ' aria-current="page"' : '') . ' href="' . $esc($boardUrl(['source'=>$key,'view'=>$view,'project'=>0,'state'=>-1])) . '">' . $esc($label) . '</a>'; }
 }
 echo '</nav>';
 echo '<nav class="mdo-tasks-view-tabs" aria-label="' . $esc($tr('Viste delle attività', 'Task views')) . '">';
@@ -198,7 +205,7 @@ echo '<a class="btn ' . ($view === 'list' ? 'btn-primary' : 'btn-outline-seconda
     . '<i class="ti ti-list me-1"></i>' . $esc($tr('Elenco', 'List')) . '</a>';
 echo '<a class="btn ' . ($view === 'board' ? 'btn-primary' : 'btn-outline-secondary') . '"' . ($view === 'board' ? ' aria-current="page"' : '') . ' href="' . $esc($boardUrl()) . '">'
     . '<i class="ti ti-layout-kanban me-1"></i>Kanban</a></nav>';
-if ($view === 'list') {
+if ($view === 'list' && !$unified) {
     echo '<p class="mdo-tasks-hint mdo-tasks-list-hint">' . $esc(
         !$standalone && ProjectTask::canCreate()
             ? $tr(
@@ -229,7 +236,10 @@ echo '<p class="mdo-tasks-hint">' . $esc($tr(
 )) . '</p>';
 
 try {
-    $loaded = $standalone ? StandaloneTask::loadBoard() : TaskBoard::load();
+    $loaded = $standalone ? StandaloneTask::loadBoard() : ($unified ? (function (): array {
+        $a = TaskBoard::load(); $b = StandaloneTask::loadBoard();
+        return ['tasks' => array_merge($a['tasks'], $b['tasks']), 'truncated' => $a['truncated'] || $b['truncated'], 'scanned' => $a['scanned'] + $b['scanned']];
+    })() : TaskBoard::load());
 } catch (Throwable $error) {
     Toolbox::logInFile('php-errors', '[mdoverhaul Tasks] ' . $error->getMessage() . "\n");
     echo '<div class="alert alert-danger" role="alert">' . $esc($tr(
@@ -240,6 +250,11 @@ try {
     return;
 }
 $all = $loaded['tasks'];
+foreach ($all as &$record) {
+    $record['source'] = $record['source'] ?? 'project';
+    $record['stage'] = TaskStageService::stage($record);
+}
+unset($record);
 $scope = TaskBoard::filter($all, $q, 'all', $stateId, $projectId, $dueFilter);
 $stats = ['all' => count($scope), 'open' => 0, 'done' => 0, 'overdue' => 0];
 foreach ($scope as $task) {
@@ -349,34 +364,38 @@ if ($filtered === []) {
     return;
 }
 
-$columns = $group === 'progress' ? [
+$columns = ($unified || $standalone) ? [
+    'todo' => ['name' => 'To do', 'items' => []],
+    'doing' => ['name' => 'Doing', 'items' => []],
+    'done' => ['name' => 'Done', 'items' => []],
+] : ($group === 'progress' ? [
     'todo' => ['name' => '0%', 'items' => []],
     'doing' => ['name' => '1–99%', 'items' => []],
     'done' => ['name' => '100%', 'items' => []],
-] : [];
+] : []);
 foreach ($filtered as $task) {
-    $column = $group === 'state' ? 'state-' . $task['state_id'] :
-        ($task['percent_done'] === 0 ? 'todo' : ($task['percent_done'] >= 100 ? 'done' : 'doing'));
+    $column = ($unified || $standalone) ? $task['stage'] : ($group === 'state' ? 'state-' . $task['state_id'] :
+        ($task['percent_done'] === 0 ? 'todo' : ($task['percent_done'] >= 100 ? 'done' : 'doing')));
     if (!isset($columns[$column])) {
         $columns[$column] = ['name' => $states[$task['state_id']], 'items' => []];
     }
     $columns[$column]['items'][] = $task;
 }
 echo '<p class="mdo-tasks-hint" id="mdo-board-scroll">' . $esc($tr('Scorri orizzontalmente per vedere le colonne.', 'Scroll horizontally to see columns.')) . '</p>';
-echo '<div class="mdo-tasks-board" role="region" aria-label="Kanban" aria-describedby="mdo-board-scroll" tabindex="0">';
-foreach ($columns as $column) {
-    echo '<section class="mdo-tasks-column"><header><h2>' . $esc($column['name']) . '</h2><span>' . count($column['items']) . '</span></header>';
+echo '<div class="mdo-tasks-board" data-mdo-board role="region" aria-label="Kanban" aria-describedby="mdo-board-scroll" tabindex="0">';
+foreach ($columns as $columnKey => $column) {
+    echo '<section class="mdo-tasks-column" data-mdo-column="' . $esc((string)$columnKey) . '"><header><h2>' . $esc($column['name']) . '</h2><span>' . count($column['items']) . '</span></header>';
     echo '<div class="mdo-tasks-column-body">';
     if ($column['items'] === []) {
         echo '<p class="mdo-tasks-hint">' . $esc($tr('Nessuna attività', 'No tasks')) . '</p>';
     }
     foreach ($column['items'] as $task) {
-        echo '<article class="mdo-tasks-card" data-task-type="' . ($standalone ? 'standalone' : 'project') . '"><small>' . $esc($standalone ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc($taskForm($task['id'])) . '">'
+        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '"><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">
             . $esc($task['name'] ?: '—') . '</a>';
         if ($task['project_readable']) {
             echo '<a class="mdo-tasks-project" href="' . $esc($projectForm($task['project_id'])) . '">'
                 . $esc($task['project']) . '</a>';
-        } elseif (!$standalone) {
+        } elseif ($task['source'] === 'project') {
             echo '<span class="mdo-tasks-project">' . $esc($tr('Progetto non accessibile', 'Restricted project')) . '</span>';
         }
         if ($task['description'] !== '') {
@@ -391,7 +410,7 @@ foreach ($columns as $column) {
         if (TaskBoard::dateTimestamp($task['real_end']) !== null) {
             echo '<p class="mdo-tasks-date">' . $esc($tr('Fine effettiva', 'Actual end')) . ': ' . $esc($dueDate($task['real_end'])) . '</p>';
         }
-        if (!$standalone) {
+        if ($task['source'] === 'project') {
         echo '<div class="mdo-tasks-progress" role="progressbar" aria-label="' . $esc($tr('Avanzamento', 'Progress')) . '" aria-valuenow="'
             . (int) $task['percent_done'] . '" aria-valuemin="0" aria-valuemax="100"><span style="width:'
             . (int) $task['percent_done'] . '%"></span></div><small>' . (int) $task['percent_done'] . '%</small>';
