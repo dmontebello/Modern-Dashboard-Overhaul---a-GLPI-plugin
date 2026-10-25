@@ -90,3 +90,7 @@ GLPI 11.0.9: DBmysqlIterator::handleOrderClause itera i VALORI di ORDER, quindi 
 ## 0.8.1-dev.6 — GLPI Hooks
 
 Plugin TaskActivityTab aggiunge un collegamento al diario MDO nelle ProjectTask, conservando Note/Documenti nativi; TaskStageService usa ProjectTask::update e StandaloneTask::update secondo ACL. Il middleware GLPI deve validare CSRF sugli endpoint del plugin. Caricamento JS limitato a task_workspace. Search nativa non viene intercettata. NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+Il form task.form.php usa Dropdown::show(Project::class) nativo e CommonDBTM/ProjectTask pubblici; il ramo progetto conserva il core GLPI per team, parent e workflow avanzato. Il ramo indipendente usa il modello MDO e la propria ACL. Nessuna modifica al core.
