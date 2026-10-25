@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - feature/mdo-0.8.1-dev.7
+    paths-ignore:
+      - '**/*.md'
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,6 +22,7 @@ jobs:
           php tests/tasks_php.php
           php tests/standalone_php.php
           php tests/task_activity_php.php
+          php tests/task_creation_php.php
           php tests/task_creation_php.php
       - name: JavaScript syntax
         run: |
