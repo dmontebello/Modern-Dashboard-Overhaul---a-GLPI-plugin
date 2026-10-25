@@ -5,12 +5,10 @@ on:
     # Do not start CI for documentation-only commits.
     paths-ignore:
       - '**/*.md'
-      - 'docs/**'
   pull_request:
     branches: [Main]
     paths-ignore:
       - '**/*.md'
-      - 'docs/**'
   workflow_dispatch:
 permissions:
   contents: read
