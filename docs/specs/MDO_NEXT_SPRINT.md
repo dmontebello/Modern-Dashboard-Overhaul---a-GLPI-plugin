@@ -55,3 +55,14 @@ S1: corretta in codice l'integrazione `getSpecificValueToSelect('status')` con D
 ## Aggiornamento 0.8.1-dev.5
 
 Dai log reali del 25/10/2026: il Kanban ProjectTask fallisce per SQL ORDER BY DESC; GLPI 11 richiede stringhe ORDER che contengano sia colonna sia direzione. Dev.5 corregge le tre query candidate e aggiunge regressioni. L'accesso negato alla vista Standalone deriva dalla verifica dei diritti di lettura MDO, che partono da zero. Il nuovo messaggio admin spiega dove abilitare READMY/READALL senza bypassare i permessi. Next: collaudo della build dev.5, poi ricerca e UX.
+
+## Revisione scope dopo il collaudo del 25 ottobre 2026 — decisione aggiornata
+
+La pianificazione storica sopra (baseline dev.3, P2 ipotetica) rimane riferimento cronologico; **per la prossima implementazione prevale** [Tasks Workspace V2](TASKS_UNIFIED_WORKSPACE_V2.md).
+
+- **`0.8.1-dev.6`**: unisce l'ex dev.6 e l'ex dev.8: vista Tutte ProjectTask+StandaloneTask, origine selezionata visibile accanto ai risultati, navigazione progressiva, tre colonne Kanban sempre presenti, drag & drop con aggiornamento autorizzato, diario e allegati stile Notion, miglioramenti layout form standalone. Evitare sia UNION senza ACL sia nuove tabelle/diritti senza specifica/migrazione verificata.
+- **`0.8.1-dev.7`**: form unico con progetto facoltativo; il POST sceglie ProjectTask nativa o StandaloneTask in base al progetto, mai conversione implicita in modifica.
+- **Futuro, fuori scope immediato**: scheda iniziale di progetto strutturata (`Goals`, `In scope`, `Out of scope`); Stage/Status veramente indipendenti, worklog e altre integrazioni.
+- Il core GLPI 11.0.9 include già `Notepad` e `Document_Item` nelle ProjectTask; per StandaloneTask verificare rigorosamente ACL per singolo item di note, documenti e download prima dell'esposizione. Nessun dato sensibile o screenshot dello staging nel repository.
+
+**Stato: solo SPECIFICA, nessun commit di codice né nuova build.** Nuove versioni solo dopo test, documenti, GitHub Actions verde e successivo collaudo staging; Main rimane invariato.
