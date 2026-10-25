@@ -1,8 +1,8 @@
 # Modern Dashboard Overhaul
 
- > **Candidata Dev 0.8.1-dev.5:** [Note](docs/releases/0.8.1-dev.5.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
+ > **Candidata Dev 0.8.1-dev.6:** [Note](docs/releases/0.8.1-dev.5.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
 
-**Versione:** `0.8.1-dev.5` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
+**Versione:** `0.8.1-dev.6` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
 Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
@@ -135,3 +135,8 @@ Pacchetti Dev completi dopo CI positiva:
 [Latest](https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/MDO_Dev_Latest.zip).
 Ogni ZIP ha `.sha512`; SHA sorgente, build e hash sono anche nei record
 `docs/releases/<version>.build.json`. Lo ZIP 0.8.0 e Main restano invariati.
+
+
+## 0.8.1-dev.6 — Nuovo workspace Tasks
+
+Vista Tutte per attività di progetto e indipendenti, Kanban To do/Doing/Done modificabile con drag and drop o selettore tastiera, caricamento parziale delle viste del plugin, diario di aggiornamenti storico e allegati privati, layout del form standalone migliorato. I dati di ProjectTask restano nativi; i nuovi contenuti del diario MDO sono separati dalla scheda Note nativa. Richiede upgrade amministrativo schema 1→2 e backup DB+volumi. Test su GLPI reale **NON COLLAUDATO LIVE**: vedere [QA](QA.md), [release note](docs/releases/0.8.1-dev.6.md) e [stato](docs/dev/STATUS.md).
