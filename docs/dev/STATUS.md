@@ -170,3 +170,8 @@ La dev.6 comprende **tutto lo storico** delle annotazioni: ultime note visibili 
 **Rinviati alla 0.8.2:** brief strutturato dei progetti (Goals, In scope, Out of scope) e iProjects. La sola azione contestuale di conversione da un progetto è compresa nella dev.9, non costituisce anticipazione di iProjects.
 
 Specifiche: [Tasks Workspace V2](../specs/TASKS_UNIFIED_WORKSPACE_V2.md) e [Roadmap dev.8/dev.9/0.8.2](../specs/TASKS_CHECKLIST_CONVERSION_LINKS_ROADMAP.md). **Solo documentazione, non implementato**, ultima ZIP dev.5. Main invariato.
+
+
+## Stato implementazione 0.8.1-dev.6 — 25 ottobre 2026
+
+Su branch feature `feature/mdo-0.8.1-dev.6` / PR Draft #3: vista `Tutte`, lista/board, tre Stage, controlli server-side READ/UPDATE per DnD, selettore tastiera, navigazione parziale plugin, diario append-only con paginazione completa, allegati privati e migrazione schema 2, miglioramento layout standalone. **NON COLLAUDATO LIVE**. I test automatici vanno verificati nel gate CI effettivo e non dimostrano la corretta integrazione con GLPI 11.0.9. Blocchi principali: collaudo di middleware POST/CSRF, DB schema2 in MariaDB reale, upload/download e backup, entità e profili, regressioni responsive; lista unificata limitata a 1000 candidate per fonte. Main invariato. [Note release](../releases/0.8.1-dev.6.md), [stato dettagliato WIP](DEV6_IMPLEMENTATION_STATUS.md), [staging](STAGING_0_8_1.md). Next steps dopo dev.6: dev.7 form unico, dev.8 checklist, dev.9 conversione+link, 0.8.2 iProjects.
