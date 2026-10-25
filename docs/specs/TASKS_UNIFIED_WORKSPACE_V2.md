@@ -143,3 +143,8 @@ Questo documento registra **requisiti/architettura proposti**, non indica un'imp
 ## Aggiornamento consuntivo dopo dev.6
 
 La versione 0.8.1-dev.6 è stata sviluppata e pubblicata su Dev: funzionalità principali di questo documento per vista Tutte, Kanban DnD, navigazione MDO, diario storico/allegati e layout del form standalone sono IMPLEMENTATE ma NON COLLAUDATE LIVE. Il form unico resta previsto nella dev.7; checklist dev.8; conversione/elementi bidirezionali dev.9; iProjects 0.8.2. Limiti: aggregato All campionato, note MDO separate dalle native GLPI, protezione concorrenza non atomica. CI e provenienza: `docs/releases/0.8.1-dev.6.build.json` e `docs/dev/STATUS.md`. Non confondere implementazione CI con prova in staging.
+
+
+## Aggiornamento 0.8.1-dev.7
+
+Dev.7 implementato in codice su feature branch; il requisito form unico conserva native ProjectTask e standalone separate. NON COLLAUDATO LIVE.
