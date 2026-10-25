@@ -11,7 +11,9 @@ use RuntimeException;
 final class TaskSchema
 {
     public const TABLE = 'glpi_plugin_mdoverhaul_tasks';
-    public const VERSION = '1';
+    public const VERSION = '2';
+    public const NOTES = 'glpi_plugin_mdoverhaul_tasknotes';
+    public const FILES = 'glpi_plugin_mdoverhaul_taskfiles';
     private static ?bool $ready = null;
     private const FIELDS = [
         'entities_id' => ['fkey', 0], 'name' => ['string', ''], 'content' => ['mediumtext', null],
