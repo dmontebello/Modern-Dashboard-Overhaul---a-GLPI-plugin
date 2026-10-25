@@ -21,3 +21,9 @@ Alla **prossima modifica funzionale con incremento `dev.N`** aggiungere un picco
 **Motivo della pianificazione:** toccare ora tooling o workflow con il numero immutabile `0.8.1-dev.6` farebbe fallire il publisher (cambiamento non classificato come solo-documentale). Non forzare il rilascio, non ricostruire la ZIP pubblicata, non usare una versione `dev.7` riservata alla feature form unico soltanto per uno script. Il controllo avanzato è deliberatamente TODO, non già automatizzato.
 
 Non salvare nel repository report contenenti hostname, nomi utente, record, screenshot o credenziali dello staging GLPI.
+
+## Regola CI documentazione-only — 25 ottobre 2026
+
+Il workflow `.github/workflows/build-mdo.yml` ora usa `paths-ignore: ['**/*.md']` per gli eventi `push` su `Dev` e `Main` e per le PR verso `Main`: un cambiamento che riguarda **esclusivamente Markdown** non avvia build, test o publisher. Le modifiche miste (codice e documenti) continuano ad avviare la CI completa, includendo `check_dev_docs.py`. `workflow_dispatch` resta utilizzabile manualmente. File non Markdown (inclusi script, configurazioni YAML, manifest e dati strutturati) **non** sono automaticamente considerati documentazione e mantengono il trigger, per evitare di nascondere mutazioni funzionali.
+
+Un commit che cambia il workflow stesso e contiene `[skip ci]` non è prova di esecuzione dei nuovi filtri; per verificare il comportamento si dovrà osservare un successivo commit Markdown-only e un commit misto. Nessun nuovo archivio immutabile deve essere creato per questo adeguamento documentale/CI. Se i controlli branch protection richiedono un check su *ogni* PR, verificare che i check ignorati non diventino obblighi pendenti.
