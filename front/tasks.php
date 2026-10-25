@@ -195,7 +195,7 @@ if (!$standalone && StandaloneTask::enabled() && !StandaloneTask::canView()
             . 'grant read and create, save, then sign in again.'
         )) . '</div>';
 }
-echo '<nav class="mdo-tasks-view-tabs" aria-label="' . $esc($tr('Origine attività', 'Task source')) . '">';
+echo '<nav class="mdo-tasks-view-tabs mdo-tasks-source-tabs" aria-label="' . $esc($tr('Origine attività', 'Task source')) . '">';
 foreach (['all' => [ProjectTask::canView() && StandaloneTask::canView(), $tr('Tutte', 'All')], 'project' => [ProjectTask::canView(), $tr('Progetto', 'Project')], 'standalone' => [StandaloneTask::canView(), $tr('Indipendenti', 'Independent')]] as $key => [$visible, $label]) {
     if ($visible) { echo '<a class="btn ' . ($source === $key ? 'btn-primary' : 'btn-outline-secondary') . '"' . ($source === $key ? ' aria-current="page"' : '') . ' href="' . $esc($boardUrl(['source'=>$key,'view'=>$view,'project'=>0,'state'=>-1])) . '">' . $esc($label) . '</a>'; }
 }
