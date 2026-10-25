@@ -82,3 +82,20 @@
 .mdo-standalone-form fieldset {width:100%;flex:auto;min-width:0;}
 .mdo-standalone-form .mdo-tasks-create-actions { width:100%;justify-content:flex-end;align-self:stretch;flex:0 0 auto; }
 @media(max-width:560px){.mdo-standalone-form .mdo-tasks-create-actions {align-items:stretch;}}
+
+/* Activity journal, scoped to MDO routes. */
+.mdo-activity { max-width:1080px; margin-inline:auto; }
+.mdo-activity section { margin:20px 0; padding-top:14px; border-top:1px solid var(--mdo-task-border); }
+.mdo-activity h2 { overflow-wrap:anywhere; margin-block:14px; }
+.mdo-activity h3 { font-size:16px; margin-block:12px; }
+.mdo-activity-entry { border:1px solid var(--mdo-task-border);border-radius:10px;background:var(--mdo-task-surface);padding:14px;margin-block:12px; }
+.mdo-activity-meta { display:flex;gap:8px 16px;align-items:baseline;flex-wrap:wrap;color:var(--mdo-task-muted);font-size:12px; }
+.mdo-activity-meta strong { color:var(--tblr-body-color,#182433); }
+.mdo-activity-entry p { white-space:normal;overflow-wrap:anywhere;margin:8px 0 0; }
+.mdo-activity-form { display:flex!important;flex-direction:column!important;align-items:stretch!important;max-width:100%;gap:10px; }
+.mdo-activity-form textarea,.mdo-activity-form input {width:100%;max-width:100%;}
+.mdo-activity-form button {align-self:flex-end;}
+.mdo-activity-files {padding-left:22px;overflow-wrap:anywhere;}
+.mdo-tasks-journal {display:block;font-size:12px;margin:7px 0;text-decoration:underline;}
+.mdo-tasks-pages {display:flex;justify-content:flex-end;gap:10px;padding:12px;}
+@media(max-width:560px) {.mdo-activity-form button {align-self:stretch;}}
