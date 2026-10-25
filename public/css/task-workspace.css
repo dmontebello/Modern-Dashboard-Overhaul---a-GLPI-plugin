@@ -99,3 +99,12 @@
 .mdo-tasks-journal {display:block;font-size:12px;margin:7px 0;text-decoration:underline;}
 .mdo-tasks-pages {display:flex;justify-content:flex-end;gap:10px;padding:12px;}
 @media(max-width:560px) {.mdo-activity-form button {align-self:stretch;}}
+
+/* Dev.7 optional-project unified task creation. */
+.mdo-unified-create .mdo-unified-create-form {display:flex!important;flex-direction:column!important;align-items:stretch!important;width:100%;gap:10px;}
+.mdo-unified-create-form>label,.mdo-unified-create-form [data-mdo-standalone-fields]>label{font-size:13px;font-weight:650;display:block;margin-top:10px;}
+.mdo-unified-create-form>textarea,.mdo-unified-create-form>input,.mdo-unified-create-form select{width:100%;max-width:100%;min-width:0;}
+.mdo-unified-create-form .mdo-tasks-project-picker{width:100%;max-width:100%;}
+.mdo-unified-create-form [data-mdo-standalone-fields]{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;border-top:1px solid var(--mdo-task-border);padding-top:14px;width:100%;}
+.mdo-unified-create-form .mdo-tasks-create-actions{justify-content:flex-end;align-self:stretch;gap:14px;margin-top:12px;}
+@media(max-width:560px){.mdo-unified-create-form .mdo-tasks-create-actions{align-items:stretch;}}
