@@ -71,7 +71,7 @@ def run():
                     page = browser.new_page(viewport={"width": width, "height": 1000})
                     page.set_content(markup(count, theme))
                     check(page.evaluate("document.documentElement.scrollWidth <= innerWidth"), label + ": no page overflow")
-                    check(page.locator('.mdo-tasks-view-tabs [aria-current="page"]').inner_text() == "Kanban", label + ": active view")
+                    check(page.locator('.mdo-tasks-view-tabs:not(.mdo-tasks-source-tabs) [aria-current="page"]').inner_text() == "Kanban", label + ": active view")
                     check(page.locator(".mdo-tasks-card").count() == count, label + ": real PHP card count")
                     check(page.locator(".mdo-tasks-filters label").count() == 7, label + ": labelled filters")
                     panel = page.locator(".mdo-tasks-filter-panel summary")
@@ -131,7 +131,7 @@ def run():
         page.get_by_role("link", name="Reimposta", exact=True).click()
         check(page.locator(".mdo-tasks-card").count() == 100, "reset restores the visible dataset")
         page.get_by_role("link", name="Elenco", exact=True).click()
-        check(page.locator('.mdo-tasks-view-tabs [aria-current="page"]').inner_text() == "Elenco", "list navigation")
+        check(page.locator('.mdo-tasks-view-tabs:not(.mdo-tasks-source-tabs) [aria-current="page"]').inner_text() == "Elenco", "list navigation")
         page.get_by_role("link", name="Kanban", exact=True).click()
         check(page.locator(".mdo-tasks-card").count() == 100, "return to board")
         class CreationHandler(BaseHTTPRequestHandler):
