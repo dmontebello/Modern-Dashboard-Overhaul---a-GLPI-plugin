@@ -131,12 +131,12 @@ expect(!StandaloneTask::canView() && !StandaloneTask::canCreate() && taskPage(['
 expect(count(CommonDBTM::$storage[TaskSchema::TABLE])===2,'disabling preserves all independent data');
 expect(plugin_mdoverhaul_uninstall() && count(CommonDBTM::$storage[TaskSchema::TABLE])===2,'uninstall retains tasks for rollback/export');
 
-taskFixture(); $DB->hasTaskTable=false; $DB->schemaFields=[];
+taskFixture(); $DB->hasTaskTable=false; $DB->schemaFields=[]; $DB->extraTables=[];
 (new ReflectionProperty(TaskSchema::class,'ready'))->setValue(null,null);
 expect(TaskSchema::install(),'fresh schema install');
 $DB->profileRights[1][StandaloneTask::$rightname]=READ|CREATE;
 $rowsBefore=CommonDBTM::$storage;
-expect(TaskSchema::install() && $DB->creates===1 && $DB->alterations===0,'repeat install is idempotent and does not recreate table');
+expect(TaskSchema::install() && $DB->creates===3 && $DB->alterations===0,'repeat install is idempotent and does not recreate table');
 expect($DB->profileRights[1][StandaloneTask::$rightname]===(READ|CREATE) && $DB->profileRights[2][StandaloneTask::$rightname]===0,'existing grants retained; new profiles start denied');
 expect(count($DB->schemaKeys)===7 && CommonDBTM::$storage===$rowsBefore,'indices present; migration does not change task or core data');
 $DB->hasTaskTable=false; (new ReflectionProperty(TaskSchema::class,'ready'))->setValue(null,null);
