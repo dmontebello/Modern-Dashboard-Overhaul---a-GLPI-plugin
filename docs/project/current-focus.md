@@ -30,3 +30,8 @@
 ## Cosa lasciare alla prossima chat
 
 Aggiornare nel repository [backlog](../product/backlog.md), [implementation-state](../implementation-state.md), questa pagina, specifiche/decisioni, QA e release notes pertinenti. Annotare SHA esatto, CI, build, prova reale con esito e prossimo passo. Senza accesso scrittura fornire patch e dichiarare il limite.
+
+
+## Checkpoint dev.7 — 25 ottobre 2026
+
+MDO-TASK-007 è in sviluppo sul branch dedicato. Form unico senza scelta preliminare, mappatura ProjectTask/StandaloneTask e test dedicati; ancora da consolidare il run CI esatto, il publisher Dev e il collaudo reale. MDO-TASK-003–006 restano in collaudo operativo dev.6. Next milestone dev.8 checklist, senza anticipare conversione dev.9.
