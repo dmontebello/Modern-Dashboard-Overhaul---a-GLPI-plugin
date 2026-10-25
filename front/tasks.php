@@ -382,7 +382,7 @@ foreach ($filtered as $task) {
     $columns[$column]['items'][] = $task;
 }
 echo '<p class="mdo-tasks-hint" id="mdo-board-scroll">' . $esc($tr('Scorri orizzontalmente per vedere le colonne.', 'Scroll horizontally to see columns.')) . '</p>';
-echo '<div class="mdo-tasks-board" data-mdo-board role="region" aria-label="Kanban" aria-describedby="mdo-board-scroll" tabindex="0">';
+echo '<div class="mdo-tasks-board" data-mdo-board data-endpoint="' . $esc(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task-stage.php') . '" data-token="' . $esc(Session::getNewCSRFToken()) . '" role="region" aria-label="Kanban" aria-describedby="mdo-board-scroll" tabindex="0">';
 foreach ($columns as $columnKey => $column) {
     echo '<section class="mdo-tasks-column" data-mdo-column="' . $esc((string)$columnKey) . '"><header><h2>' . $esc($column['name']) . '</h2><span>' . count($column['items']) . '</span></header>';
     echo '<div class="mdo-tasks-column-body">';
@@ -390,7 +390,9 @@ foreach ($columns as $columnKey => $column) {
         echo '<p class="mdo-tasks-hint">' . $esc($tr('Nessuna attività', 'No tasks')) . '</p>';
     }
     foreach ($column['items'] as $task) {
-        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '"><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">
+        $item = TaskStageService::item($task['source'], (int) $task['id']);
+        $canMove = $item !== null && $item->can((int) $task['id'], UPDATE) && ($task['source'] !== 'project' || empty($item->fields['auto_percent_done']));
+        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">
             . $esc($task['name'] ?: '—') . '</a>';
         if ($task['project_readable']) {
             echo '<a class="mdo-tasks-project" href="' . $esc($projectForm($task['project_id'])) . '">'
@@ -415,9 +417,16 @@ foreach ($columns as $columnKey => $column) {
             . (int) $task['percent_done'] . '" aria-valuemin="0" aria-valuemax="100"><span style="width:'
             . (int) $task['percent_done'] . '%"></span></div><small>' . (int) $task['percent_done'] . '%</small>';
         }
+        if ($canMove && ($unified || $standalone || $group === 'progress')) {
+            echo '<label class="mdo-stage-control">' . $esc($tr('Sposta in', 'Move to')) . ' <select data-stage-choice aria-label="' . $esc($tr('Sposta attività', 'Move task')) . '">';
+            foreach (TaskStageService::labels() as $stageKey => $stageName) {
+                echo '<option value="' . $stageKey . '"' . ($task['stage'] === $stageKey ? ' selected' : '') . '>' . $esc($stageName) . '</option>';
+            }
+            echo '</select></label>';
+        }
         echo '</article>';
     }
     echo '</div></section>';
 }
-echo '</div></div>';
+echo '</div><p data-mdo-live class="visually-hidden" role="status" aria-live="polite"></p></div>';
 Html::footer();
