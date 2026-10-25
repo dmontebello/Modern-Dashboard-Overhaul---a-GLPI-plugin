@@ -53,7 +53,7 @@ final class TaskCreationService
                 'status' => $input['status'],
                 'users_id_assign' => $input['users_id_assign'],
                 'groups_id_assign' => $input['groups_id_assign'],
-                'due_date' => $input['due_date'],
+                'due_date' => $input['due_date'] ?? '',
             ];
             $source = 'standalone';
         }
