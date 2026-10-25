@@ -72,3 +72,8 @@ Il publisher continua a verificare source SHA, GitHub Actions run ID, SHA512, ma
 ## Aggiornamento 0.8.1-dev.5
 
 Corrente dev.5: versione in setup.php e pacchetto unico mdoverhaul. Nuova ZIP immutabile, sidecar SHA512 e build-info.json pubblicati dal job solo dopo pipeline verde. Una modifica di documentazione non cambia il pacchetto esistente; Main non aggiornato. Fix SQL e messaggio sui diritti non introducono migrazioni.
+
+
+## 0.8.1-dev.6 — prerelease Tasks con schema 2
+
+La candidata dev.6 aggiunge TaskActivity/TaskAttachment e richiede un bump tecnico unico `0.8.1-dev.6` con note e QA nella stessa versione. Su Dev la ZIP versionata resta immutabile, viene creata/pubblicata dal publisher solo dopo la pipeline completa e registrazione source SHA / build ID / sha512; su Main nessun merge automatico. Il backup coordinato deve includere GLPI_DOC_DIR/mdoverhaul oltre a DB e plugin. **NON COLLAUDATO LIVE** fino ai test amministrativi/staging.
