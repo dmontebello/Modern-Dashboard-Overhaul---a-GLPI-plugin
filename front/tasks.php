@@ -421,7 +421,7 @@ foreach ($columns as $columnKey => $column) {
     foreach ($column['items'] as $task) {
         $item = TaskStageService::item($task['source'], (int) $task['id']);
         $canMove = $item !== null && $item->can((int) $task['id'], UPDATE) && ($task['source'] !== 'project' || empty($item->fields['auto_percent_done']));
-        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">
+        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">' 
             . $esc($task['name'] ?: '—') . '</a>';
         if ($task['project_readable']) {
             echo '<a class="mdo-tasks-project" href="' . $esc($projectForm($task['project_id'])) . '">'
@@ -432,7 +432,7 @@ foreach ($columns as $columnKey => $column) {
         if ($task['description'] !== '') {
             echo '<p>' . $esc($task['description']) . '</p>';
         }
-        echo '<div class="mdo-tasks-card-meta"><span class="mdo-tasks-state">' . $esc($states[$task['state_id']]) . '</span>';
+        echo '<div class="mdo-tasks-card-meta"><span class="mdo-tasks-state">' . $esc((string)$task['state']) . '</span>';
         if (TaskBoard::isOverdue($task)) {
             echo '<span class="mdo-tasks-overdue">' . $esc($tr('Scaduta', 'Overdue')) . '</span>';
         }
