@@ -27,7 +27,7 @@ function plugin_init_mdoverhaul(): void
     if (class_exists(\Profile::class)) {
         Plugin::registerClass(\GlpiPlugin\Mdoverhaul\TaskProfile::class, ['addtabon' => \Profile::class]);
     }
-    if (class_exists(\ProjectTask::class)) {
+    if (class_exists(\ProjectTask::class) && method_exists(Plugin::class, 'registerClass')) {
         Plugin::registerClass(\GlpiPlugin\Mdoverhaul\TaskActivityTab::class, ['addtabon' => \ProjectTask::class]);
     }
     // The settings page remains available even when all optional modules are off.
