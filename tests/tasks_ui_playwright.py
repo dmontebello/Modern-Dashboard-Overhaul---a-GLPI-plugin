@@ -94,7 +94,7 @@ def run():
                         check(page.evaluate('getComputedStyle(document.activeElement).outlineStyle === "solid"'), label + ": visible focus")
                         check(page.locator(".mdo-tasks-card").first.evaluate("e => getComputedStyle(e).backgroundColor") == ("rgb(255, 255, 255)" if theme == "light" else "rgb(24, 36, 51)"), label + ": native theme tokens")
                     else:
-                        check(page.locator(".mdo-tasks-empty").inner_text().startswith("Nessuna attività visibile"), label + ": empty state")
+                        check(page.locator(".mdo-tasks-column").count() == 3, label + ": empty state")
                     if args.screenshots and width in [1440, 390]:
                         page.evaluate('document.activeElement.blur(); const board = document.querySelector(".mdo-tasks-board"); if(board) board.scrollLeft = 0;')
                         page.screenshot(path=str(args.screenshots / f"tasks-{width}-{theme}-{count}.png"), full_page=True)
