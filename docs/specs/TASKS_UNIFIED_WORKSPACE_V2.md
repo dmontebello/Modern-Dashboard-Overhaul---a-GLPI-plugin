@@ -59,7 +59,7 @@ Richiesta:
 
 ## 4-bis. Task in stile Notion — diario cronologico e allegati (scope dev.6)
 
-**UX attesa:** nella scheda attività mostrare un'intestazione con nome, tipo, Stage, progetto eventuale, assegnatari, scadenza; poi descrizione stabile, area **Aggiornamenti** e sezione **Allegati**. Una nuova nota non deve sostituire la descrizione: aggiunge un evento alla cronologia, con timestamp server, autore e contenuto. Le note precedenti rimangono visibili nell'ordine cronologico. Le azioni di modifica/rimozione di note richiedono diritti espliciti e audit; nessuna cancellazione silenziosa. Il caricamento asincrono non deve perdere una nota appena salvata.
+**UX attesa:** tutte le annotazioni storiche devono essere consultabili, non soltanto l'ultima: caricare le più recenti e offrire **Mostra precedenti** paginato fino alla prima nota accessibile, con ordine stabile, autore e data. Non eliminare né nascondere definitivamente le annotazioni vecchie. Nella scheda attività mostrare un'intestazione con nome, tipo, Stage, progetto eventuale, assegnatari, scadenza; poi descrizione stabile, area **Aggiornamenti** e sezione **Allegati**. Una nuova nota non deve sostituire la descrizione: aggiunge un evento alla cronologia, con timestamp server, autore e contenuto. Le note precedenti rimangono visibili nell'ordine cronologico. Le azioni di modifica/rimozione di note richiedono diritti espliciti e audit; nessuna cancellazione silenziosa. Il caricamento asincrono non deve perdere una nota appena salvata.
 
 **Riuso GLPI 11.0.9 verificato sul codice core:**
 - `ProjectTask` imposta `$usenotepad = true` e registra esplicitamente tab `Notepad::class` e `Document_Item::class` nel metodo `defineTabs`. Questi contenuti ESISTONO già: evitare copie in una seconda tabella MDO. Esporli tramite le UI native o attraverso adattatori autorizzati, mantenendo i form nativi.
@@ -106,9 +106,12 @@ Richiesta:
 - Riusare le stesse sezioni allegati/diario introdotte con dev.6 sulla scheda risultante; per la creazione i file potranno essere collegati dopo l'inserimento se il core richiede un ID persistito.
 - Test CSRF, ACL, entità, gruppo, Select2 AJAX, form ProjectTask effettivo, su staging.
 
-### Backlog futuro (non assegnato alla dev.6 o dev.7)
-- Scheda iniziale strutturata di progetto con `Goals`, `In scope`, `Out of scope` e relative responsabilità/versioni. Il modello `Project` possiede già `Notepad` e `Document_Item`, ma questi non sostituiscono automaticamente tre campi strutturati. Definire schema/UX/ACL quando sarà richiesta questa fase.
-- Stage indipendente dal vero Status, worklog/sessioni granulari, collegamenti a richieste/iniziative, import/sync Notion: specifiche e decisioni separate.
+### Roadmap successiva approvata
+- **`0.8.1-dev.8`**: checklist persistente spuntabile e riordinabile all'interno di ogni tipo di task, senza alterare automaticamente percentuale o stato GLPI.
+- **`0.8.1-dev.9`**: conversione esplicita e sicura da StandaloneTask a ProjectTask con migrazione di note, allegati, checklist e relazioni; azione anche dalla scheda progetto; collegamenti bidirezionali tra task e asset, contratti, licenze e altre task con ACL per entrambe le estremità.
+- **`0.8.2`**: scheda di progetto strutturata con `Goals`, `In scope`, `Out of scope`; rinviata esplicitamente dopo le versioni 0.8.1-dev.N.
+- Stage e Status indipendenti, worklog/sessioni granulari, collegamenti a richieste/iniziative, import/sync Notion: specifiche e decisioni separate.
+- Dettagli della roadmap e criteri di accettazione: [TASKS_CHECKLIST_CONVERSION_LINKS_ROADMAP.md](TASKS_CHECKLIST_CONVERSION_LINKS_ROADMAP.md).
 
 **Nessuna `0.8.1-dev.8` pianificata per il DnD**: quella funzione è inclusa nella dev.6 per decisione dell'utente del 25 ottobre 2026. La modifica di questa specifica è solo documentale: non costituisce nuova ZIP o implementazione del codice.
 
