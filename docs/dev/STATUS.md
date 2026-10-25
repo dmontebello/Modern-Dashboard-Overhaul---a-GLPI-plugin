@@ -160,3 +160,13 @@ L'utente richiede attività in stile Notion con **allegati** e **diario cronolog
 **Dev.7 resta** il form unico Nuova task con progetto facoltativo e scrittura del tipo corretto. **Futura fase distinta**: scheda iniziale Project con `Goals`, `In scope`, `Out of scope` (non modificare schema progetto adesso). Per Note e Documenti indipendenti, se il riuso nativo non può garantire ACL per singola task, documentare il blocco e richiedere una decisione sul modello/migrazione: mai attribuire permessi ampi per aggirarlo.
 
 Specifica aggiornata: [TASKS_UNIFIED_WORKSPACE_V2.md](../specs/TASKS_UNIFIED_WORKSPACE_V2.md). **IMPLEMENTAZIONE NON INIZIATA; nessuna nuova ZIP; codice/ultima candidata installabile dev.5, Main invariato.** Test e risultati reali da eseguire sulle future candidate, non anticipare PASS.
+
+## Roadmap Tasks estesa — decisione utente 25 ottobre 2026 (SOLO SPECIFICA)
+
+La dev.6 comprende **tutto lo storico** delle annotazioni: ultime note visibili subito e pulsante **Mostra precedenti** paginato fino alla prima, senza cancellazione, con autore/data e ACL per richiesta. La dev.6 conserva vista Tutte, Kanban DnD, allegati, caricamento fluido e correzioni form. La dev.7 resta il form di nuova task con progetto facoltativo.
+
+**Nuova dev.8:** checklist per ciascuna task, spuntabili, riordinabili, persistenti, con diritti e storia. **Nuova dev.9:** conversione vera StandaloneTask → ProjectTask, anche dalla scheda del progetto con scelta task indipendente accessibile e conferma, migrazione conservativa di contenuti/diario/allegati/checklist, mappatura audit e retry/rollback; link bidirezionali task↔asset, contratto, licenza e task (relazioni, non conversioni). Non modificare il core GLPI o usare permessi più ampi per bypassare il parent.
+
+**Rinviati alla 0.8.2:** brief strutturato dei progetti (Goals, In scope, Out of scope) e iProjects. La sola azione contestuale di conversione da un progetto è compresa nella dev.9, non costituisce anticipazione di iProjects.
+
+Specifiche: [Tasks Workspace V2](../specs/TASKS_UNIFIED_WORKSPACE_V2.md) e [Roadmap dev.8/dev.9/0.8.2](../specs/TASKS_CHECKLIST_CONVERSION_LINKS_ROADMAP.md). **Solo documentazione, non implementato**, ultima ZIP dev.5. Main invariato.
