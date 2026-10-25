@@ -87,4 +87,11 @@ t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('standalone',1,'doing','stale')[
     'stale Kanban drag rejected');
 $result=\GlpiPlugin\Mdoverhaul\TaskStageService::move('standalone',1,'doing',$version);
 t($result['ok'] && $result['stage']==='doing','independent stage persisted');
+$movedProject=\GlpiPlugin\Mdoverhaul\TaskStageService::move('project',1,'done','');
+t($movedProject['ok'] && $movedProject['stage']==='done','native ProjectTask stage updated');
+t(ProjectTask::$rows[1]['percent_done']===100 && ProjectTask::$rows[1]['projectstates_id']===2,
+    'project Stage does not override GLPI status');
+ProjectTask::$rows[1]['auto_percent_done']=1;
+t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('project',1,'todo','')['status']===409,
+    'automatic ProjectTask percent cannot be overridden');
 echo "$n task activity tests PASSED (isolated doubles, NON COLLAUDATO LIVE)\n";
