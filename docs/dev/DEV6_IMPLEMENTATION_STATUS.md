@@ -1,9 +1,9 @@
 # 0.8.1-dev.6 — stato implementazione sul branch di lavoro
 
-**Stato aggiornato 25/10/2026:** il codice comprende lista unificata, Kanban Stage, diario append-only, allegati, schema2, navigazione JS. Test PHP/JS e packaging sono stati eseguiti con esiti verdi in diversi run sperimentali; la suite browser responsive è in fase di riallineamento dopo l'aggiunta dei due tab attivi. Il gate definitivo del source SHA della candidata **non è ancora certificato**. **NON COLLAUDATO LIVE** e **nessun ZIP dev.6 pubblicabile** finché CI/documentazione e staging non sono verificati.
+**Checkpoint storico prima della pubblicazione:** il codice comprende lista unificata, Kanban Stage, diario append-only, allegati, schema2, navigazione JS. Test PHP/JS e packaging sono stati eseguiti con esiti verdi in diversi run sperimentali; la suite browser responsive è in fase di riallineamento dopo l'aggiunta dei due tab attivi. Il gate definitivo del source SHA della candidata **non è ancora certificato**. **NON COLLAUDATO LIVE**; questo era lo stato precedente alla CI finale, ora pubblicata come sotto.
 
 
-**Stato: WORK IN PROGRESS; NON COLLAUDATO LIVE; NESSUNA ZIP dev.6 pubblicabile.** Ultima release verificata rimane 0.8.1-dev.5. Il branch `feature/mdo-0.8.1-dev.6` è separato da `Dev` e `Main`.
+**Stato storico WIP:** NON COLLAUDATO LIVE; le voci di blocco sotto sono antecedenti alla pubblicazione Dev. Ultima release verificata rimane 0.8.1-dev.5. Il branch `feature/mdo-0.8.1-dev.6` è separato da `Dev` e `Main`.
 
 ## Implementato nel branch, NON ANCORA VERIFICATO
 
@@ -61,3 +61,8 @@ Le voci iniziali «nessuna suite eseguita», «diario/allegati non implementati�
 4. Quando CI è verde, pubblicazione ZIP versionata via Dev e checksum verificato; nessuna promozione Main.
 5. Eseguire staging e registrare PASS/FAIL LIVE, poi pianificare dev.7/dev.8/dev.9/0.8.2.
 
+
+
+## Stato finale 0.8.1-dev.6 pubblicata (25 ottobre 2026)
+
+La ZIP versionata è stata pubblicata e verificata sulla branch Dev, NON su Main. [GitHub Actions 40225944788](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40225944788) PASS complessivo, source commit `080532ab6c6e5774e5445ddd80dec0c938e43726`, ZIP immutabile, checksum SHA512 e metadata in `docs/releases/0.8.1-dev.6.build.json`. Test automatici 67 PHP, 69 Tasks, 62 Standalone, 44 Activity; UI Chromium 86 Dashboard, 175 Tasks, 560 Settings, 108 Standalone. Stato **NON COLLAUDATO LIVE**: backend MariaDB GLPI reale, POST CSRF, ACL multi-entità e download/upload reali richiedono staging. Il codice include note storiche e allegati privati, ma Notepad/Documenti nativi rimangono separati. Esito prima build ufficiale: errore gating documentale per cinque manuali senza numero versione; corretto con commit solo documentali e run finale PASS. Next steps: collaudo staged e raccolta difetti, poi dev.7 form unico, dev.8 checklist, dev.9 conversione/collegamenti, 0.8.2 progetti.
