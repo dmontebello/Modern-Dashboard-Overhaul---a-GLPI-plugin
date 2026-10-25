@@ -88,3 +88,7 @@ Da dev.4 a dev.5: nessuna nuova tabella, nessun cambio schema o diritto. Corrett
 ## Note tecniche 0.8.1-dev.6 (2026-10-25)
 
 0.8.1-dev.6: prima dell'installazione su staging GLPI fare backup coerente di database, plugin, configurazione e volumi, compreso GLPI_DOC_DIR/mdoverhaul. Verificare ZIP+SHA512 e build-info del source testato dal CI. Eseguire upgrade amministrativo del plugin per migrare schema task da 1 a 2 e creare le tabelle tasknotes/taskfiles. Non installare file del feature branch direttamente su produzione, non fare downgrade della sola cartella plugin senza restore DB e volume. Documentare test profili, note, download e DnD: NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — Form unico Nuova task
+
+La creazione con progetto usa ProjectTask nativa e senza progetto StandaloneTask; nessuna migrazione rispetto allo schema 2 della dev.6. Fare snapshot coordinato DB, plugin e GLPI_DOC_DIR prima della prova. Verificare ZIP immutabile, SHA512 e build-info.json dalla branch Dev. Collaudare permessi per tipo/entità, CSRF e POST con Select2 su staging GLPI. Non promuovere Main senza esiti LIVE.
