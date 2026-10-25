@@ -148,3 +148,7 @@ Versione 0.8.1-dev.3: il controller Tasks consulta ProjectTask e Project nativi,
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 In 0.8.1-dev.4 il campo Status di StandaloneTask restituisce il markup tramite Dropdown::showFromArray(display=false) richiesto da Search GLPI, senza sostituire ricerca nativa. Persistenza standalone schema 1 invariata; native ProjectTask e RSS/Charts invariati. Publisher confronta sorgente e documentazione.
+
+## Aggiornamento 0.8.1-dev.5
+
+GLPI 11 DBmysqlIterator::handleOrderClause accetta stringhe o liste di espressioni ORDER; nel vecchio array associativo ['table.id'=>'DESC'] ignorava la chiave e generava ORDER BY DESC. Usare ['table.id DESC']. Modificati i soli tre adattatori bounded-read per TaskBoard e StandaloneTask. Le task di progetto restano native ProjectTask; la board non scrive dati. Un avviso solo per amministratori con config:UPDATE segnala READMY/READALL Standalone mancanti.

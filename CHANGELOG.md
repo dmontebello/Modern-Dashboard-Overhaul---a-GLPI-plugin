@@ -1,5 +1,12 @@
 # Changelog — Modern Dashboard Overhaul
 
+## 0.8.1-dev.5 — Kanban SQL e profili Standalone (2026-10-25)
+
+- **Fix da log reali:** l'ORDER associativo delle tre query candidate generava `ORDER BY \`DESC\`` e MySQL 1054 sul GLPI 11.0.9 dell'utente. Ora usa `['table.id DESC']`.
+- Lo workspace Tasks mostra a chi ha diritto amministrativo un'indicazione sui diritti READMY/READALL di Standalone mancanti, senza dare privilegi e mantenendo la 403 nativa sugli URL non autorizzati.
+- Double SQL e test PHP corretti per riprodurre il bug; nessuna modifica a dati, schema, plugin nativo o Main. Il fix resta **NON COLLAUDATO LIVE** dopo aggiornamento.
+- [Release notes](docs/releases/0.8.1-dev.5.md).
+
 ## 0.8.1-dev.4 — Tasks Search nativa e CI immutabile (2026-10-25)
 
 - Il filtro Stato di StandaloneTask restituisce ora l'HTML del Dropdown nativo con display=false, anziché stamparlo fuori dalla ricerca.

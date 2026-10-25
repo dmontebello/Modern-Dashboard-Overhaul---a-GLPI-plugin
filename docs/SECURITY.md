@@ -81,3 +81,7 @@ In 0.8.1-dev.3 la verifica ProjectTask::can(-1,CREATE, input) continua ad applic
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 0.8.1-dev.4: nessun cambiamento ai permessi. Lo status filter di StandaloneTask usa display=false per evitare output diretto fuori dal controllo nativo. La whitelist del publisher accetta solo modifiche documentali specifiche e output generati; non può mascherare modifiche di codice senza aumento versione. ACL live ancora non collaudate.
+
+## Aggiornamento 0.8.1-dev.5
+
+Dev.5 mantiene gli ACL GLPI. StandaloneTask::canView richiede READMY o READALL anche per Super-Admin, con schema e flags attivi. L'utente senza diritti riceve ancora la pagina 403. Soltanto chi possiede config:UPDATE vede un avviso non sensibile nel workspace di progetto; non sono introdotti grant automatici o informazioni di task non autorizzate. Le tre ORDER sono letterali e non usano input utente.

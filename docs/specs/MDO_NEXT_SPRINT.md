@@ -51,3 +51,7 @@ Usare soltanto il plugin `mdoverhaul` e le API native GLPI. La persistenza stand
 ## Checkpoint realizzazione 0.8.1-dev.4 (25 ottobre 2026)
 
 S1: corretta in codice l'integrazione `getSpecificValueToSelect('status')` con Dropdown::showFromArray(display=false) così la Search nativa riceve stringa HTML, non intero random. Test double GLPI aggiornato e regressione PHP. Publisher Dev: ora riconosce commit solamente documentali dopo la release già pubblicata, conservando l'immutabilità senza segnare la pipeline FAIL; un commit di codice senza versione resta errore. I test e la pubblicazione GitHub Actions devono essere verificati prima di chiamarli superati. Nessun'altra issue grafica o ACL live può essere segnata risolta da questa candidata.
+
+## Aggiornamento 0.8.1-dev.5
+
+Dai log reali del 25/10/2026: il Kanban ProjectTask fallisce per SQL ORDER BY DESC; GLPI 11 richiede stringhe ORDER che contengano sia colonna sia direzione. Dev.5 corregge le tre query candidate e aggiunge regressioni. L'accesso negato alla vista Standalone deriva dalla verifica dei diritti di lettura MDO, che partono da zero. Il nuovo messaggio admin spiega dove abilitare READMY/READALL senza bypassare i permessi. Next: collaudo della build dev.5, poi ricerca e UX.

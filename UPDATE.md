@@ -80,3 +80,7 @@ Versione Dev 0.8.1-dev.3: correzione del redirect alla form ProjectTask, senza m
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 Aggiornamento 0.8.1-dev.4: nessuna migrazione aggiuntiva rispetto alla dev.3, resta lo schema standalone 1. Corretto il rendering del filtro Stato nella Search nativa GLPI; publisher Dev consente aggiornamenti solo documentali senza cambiare ZIP immutable. Prima dell'upgrade staging: backup DB/plugin/volumi, SHA512 e controllo build-info.json.
+
+## Aggiornamento 0.8.1-dev.5
+
+Da dev.4 a dev.5: nessuna nuova tabella, nessun cambio schema o diritto. Corretto il formato ORDER nelle tre query e aggiunte istruzioni di configurazione per il profilo standalone. Prima dell'upgrade effettuare backup; non reinstallare o cancellare dati. Validare pacchetto SHA512, source SHA e versione reale nel container; verificare Kanban e ACL in staging.

@@ -25,3 +25,7 @@ If this repository does not contain the stated specification at that path, stop 
 - Current follow-up after user successfully installed MDO 0.8.1-dev.3: [Next sprint (staging/Tasks/UI)](docs/specs/MDO_NEXT_SPRINT.md). Do not assume every ProjectTask/StandaloneTask/ACL test passed merely because the installation works. Start with targeted live evidence, then implement minimal fixes on Dev (next code candidate 0.8.1-dev.4).
 
 - As of version `0.8.1-dev.4` the current technical changes are the native StandaloneTask Search Status selector (return HTML, don't echo) and Dev publisher's documentation-only immutable archive gate; see `docs/releases/0.8.1-dev.4.md`. Keep Core GLPI/ProjectTask intact. Staging Search/ACL and dashboard visual issues remain pending.
+
+## Aggiornamento 0.8.1-dev.5
+
+Per MDO 0.8.1-dev.5: GLPI 11 DBmysqlIterator si aspetta ORDER come lista di stringhe contenenti colonna + direzione, es. ['table.id DESC']; la mappa associativa produce ORDER BY DESC e MySQL 1054 (registrato dal GLPI dell'utente). Non ripristinare il formato errato. I profili standalone partono senza permessi, anche SuperAdmin: READMY/READALL devono essere configurati, mai aggirare ACL. Stato e test nelle note dev.5; Main invariato.

@@ -1,8 +1,8 @@
 # Modern Dashboard Overhaul
 
- > **Candidata Dev 0.8.1-dev.4:** [Note](docs/releases/0.8.1-dev.4.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
+ > **Candidata Dev 0.8.1-dev.5:** [Note](docs/releases/0.8.1-dev.5.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
 
-**Versione:** `0.8.1-dev.4` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
+**Versione:** `0.8.1-dev.5` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
 Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
@@ -24,10 +24,10 @@ La versione **di sviluppo** è scaricabile direttamente dal branch [`Dev`](https
 
 ```bash
 mkdir -p /tmp/mdo-dev && cd /tmp/mdo-dev
-curl -fL --retry 3 -O "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.1-dev.4.zip"
-curl -fL --retry 3 -O "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.1-dev.4.zip.sha512"
-sha512sum -c Modern_Dashboard_Overhaul_0.8.1-dev.4.zip.sha512
-unzip -t Modern_Dashboard_Overhaul_0.8.1-dev.4.zip
+curl -fL --retry 3 -O "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.1-dev.5.zip"
+curl -fL --retry 3 -O "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.1-dev.5.zip.sha512"
+sha512sum -c Modern_Dashboard_Overhaul_0.8.1-dev.5.zip.sha512
+unzip -t Modern_Dashboard_Overhaul_0.8.1-dev.5.zip
 ```
 
 **Non installare insieme** le varianti Dev e Main nella medesima istanza GLPI: sono entrambe il singolo plugin `mdoverhaul`. Usare Dev soltanto su staging, lasciando `Main` invariato fino ad approvazione, PR e merge.

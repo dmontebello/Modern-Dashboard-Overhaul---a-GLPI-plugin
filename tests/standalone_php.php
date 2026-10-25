@@ -85,7 +85,10 @@ expect(StandaloneTask::getSpecificValueToSelect('other', 'unused')==='',
 expect($options[1]['itemtype']===StandaloneTask::class && StandaloneTask::getTable()===TaskSchema::TABLE,'native Search explicitly identifies the custom-table itemtype');
 $criteria=plugin_mdoverhaul_addDefaultWhere(StandaloneTask::class);
 expect($criteria===StandaloneTask::getVisibilityCriteria()['WHERE'] && plugin_mdoverhaul_addDefaultWhere(ProjectTask::class)===[],'public native Search hook applies own ACL only to standalone type');
+$DB->queries=[];
 expect(StandaloneTask::loadBoard()['tasks']===[],'board counts and rows exclude unauthorised actors');
+expect(($DB->queries[0]['ORDER'] ?? null) === [TaskSchema::TABLE . '.id DESC'],
+    'standalone board uses valid GLPI ORDER expression rather than associative map');
 Session::$user=2;
 expect(count(StandaloneTask::loadBoard()['tasks'])===1,'assigned actor board uses same visibility criteria');
 expect($DB->creates===0,'workspace and CRUD never run install/upgrade DDL');

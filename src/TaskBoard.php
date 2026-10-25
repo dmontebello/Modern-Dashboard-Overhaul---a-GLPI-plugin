@@ -36,7 +36,7 @@ final class TaskBoard
                 'glpi_projecttasks.is_deleted' => 0,
                 'glpi_projecttasks.is_template' => 0,
             ] + getEntitiesRestrictCriteria('glpi_projecttasks', '', '', 'auto'),
-            'ORDER' => ['glpi_projecttasks.id' => 'DESC'],
+            'ORDER' => ['glpi_projecttasks.id DESC'],
             'LIMIT' => self::MAX_CANDIDATES + 1,
         ]);
 
@@ -114,7 +114,7 @@ final class TaskBoard
             'FROM' => 'glpi_projects',
             'WHERE' => ['glpi_projects.is_deleted' => 0, 'glpi_projects.is_template' => 0]
                 + getEntitiesRestrictCriteria('glpi_projects', '', '', 'auto'),
-            'ORDER' => ['glpi_projects.id' => 'DESC'],
+            'ORDER' => ['glpi_projects.id DESC'],
             'LIMIT' => self::MAX_CANDIDATES + 1,
         ]);
         $scanned = 0;

@@ -1,8 +1,8 @@
 # MDO Dev — stato operativo e handoff
 
-> **Corrente: 0.8.1-dev.4.** Search Status nativa e gate di pubblicazione Dev; **NON COLLAUDATO LIVE**.
+> **Corrente: 0.8.1-dev.5.** Search Status nativa e gate di pubblicazione Dev; **NON COLLAUDATO LIVE**.
 > La cronologia seguente mantiene le valutazioni precedenti. Note correnti in
-> [0.8.1-dev.4](../releases/0.8.1-dev.4.md), collaudo in [staging](STAGING_0_8_1.md).
+> [0.8.1-dev.5](../releases/0.8.1-dev.5.md), collaudo in [staging](STAGING_0_8_1.md).
 
 Data valutazione: 2026-10-24. Stato: REGRESSIONI GLPI LIVE APERTE. Questo documento descrive cosa è osservato, non ciò che è stato risolto.
 Documenti da leggere: [specifica 0.8.1](../specs/MDO_0_8_1_DEV_WORKPLAN.md), [versioning](VERSIONING_POLICY.md).
@@ -138,3 +138,7 @@ Dopo il download e la verifica ZIP della 0.8.1-dev.3, l'utente aveva eseguito so
 | UI-DASHBOARD | Nessun nuovo CSS/JS in dev.4 | Fixture precedenti | **NON COLLAUDATO LIVE** | Screenshot riquadro mini Ticket, toolbar, chart legenda, dark settings |
 
 **Stato consegna:** commit su Dev eseguiti, CI e pubblicazione candidate da verificare; dati/versione installata dall'utente restano `0.8.1-dev.3` finché non esegue upgrade della nuova ZIP. Changelog e note [dev.4](../releases/0.8.1-dev.4.md) documentano fix, file, test, SHA512, Rollback e Prossimi. Main `0.8.0` intatto.
+
+## Aggiornamento 0.8.1-dev.5
+
+Live 25 ottobre 2026: Kanban ProjectTask in errore con MySQL 1054, query generata ORDER BY `DESC`. Fix dev.5 nel formato ORDER di tre query read-only. La route standalone restituisce accesso negato: in MDO READMY/READALL sono diritti espliciti del profilo, inizialmente non assegnati anche a Super-Admin. Nessun bypass automatico; aggiunto avviso solo per admin. Il log dimostra invece che Continua del progetto 1 ha fatto HTTP 302 e aperto il form ProjectTask con 200. Salvare una task non risulta ancora provato. Correzioni dev.5: NON COLLAUDATO LIVE. Test CI e pubblicazione ancora da verificare; Main invariato. Next: installazione staging, board, profili, ricerca, UI dashboard.

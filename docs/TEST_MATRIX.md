@@ -1,6 +1,6 @@
 # Matrice di test verso Modern Dashboard Overhaul 1.0 (baseline 0.6.0)
 
-> **Corrente 0.8.1-dev.4:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
+> **Corrente 0.8.1-dev.5:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 > Revisione per **0.7.0**: vedere [note di release](RELEASE_NOTES_IT.md) e [QA](../QA.md) per le variazioni di prestazioni e sicurezza.
 
@@ -107,3 +107,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 0.8.1-dev.4: controlli automatizzati per markup Search Stato returned/not echoed e selected value; per publisher documentazione-only (skip positivo senza sovrascrittura) e modifica codice senza bump (fail). Test su GLPI vero NON COLLAUDATO LIVE: ricerca AJAX/status/saved search, READMY/READALL, profili/entità, creazione form standalone.
+
+## Aggiornamento 0.8.1-dev.5
+
+Regressione SQL: TaskBoard::load, TaskBoard::creationProjects e StandaloneTask::loadBoard ordinano per 'table.id DESC' nella lista ORDER prevista da GLPI 11. Il double rifiuta lo schema associativo che produceva ORDER BY DESC. Controllare nel live il Kanban vuoto e popolato. Regressione ACL: modulo Standalone attivo ma senza READMY/READALL mostra solo avviso ad admin, non tab e non dati; accesso diretto resta vietato. Test live post-fix ancora mancanti.

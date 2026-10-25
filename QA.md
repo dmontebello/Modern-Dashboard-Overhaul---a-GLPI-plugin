@@ -1,4 +1,4 @@
-# QA — Modern Dashboard Overhaul 0.8.1-dev.4 (Dev)
+# QA — Modern Dashboard Overhaul 0.8.1-dev.5 (Dev)
 
 Stato corrente: NON COLLAUDATO LIVE. Gli esiti e ambienti precedenti sotto restano storici.
 
@@ -131,3 +131,7 @@ Bug ProjectTask: GLPI 11.0.9 implementa Html::redirect() lanciando RedirectExcep
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 0.8.1-dev.4: test previsto per Dropdown::showFromArray(display=false), restituzione HTML e selezione Stato; regressioni su publisher solo documenti rispetto a modifiche sorgente senza bump; CI da verificare su SHA effettivo. NON COLLAUDATO LIVE: ricerca AJAX, Search/ACL e CRUD standalone, mini Ticket, toolbar, legenda e Settings sul GLPI reale.
+
+## Aggiornamento 0.8.1-dev.5
+
+Bug verificato prima del fix: log GLPI 11.0.9 con MySQL 1054 ORDER BY DESC sul Kanban ProjectTask e screenshot di accesso Standalone negato. Nella dev.5 sono corretti tre ORDER e aggiunti test sulla sintassi DB e sul testo amministrativo. Permessi non modificati: READMY/READALL vanno conferiti dal profilo. I risultati della CI non sono anticipati come PASS; il collaudo GLPI reale dopo il fix rimane NON ESEGUITO.

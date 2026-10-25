@@ -122,3 +122,7 @@ La candidata 0.8.1-dev.3 conserva gli otto switch della dev.2: task_workspace co
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 La candidata 0.8.1-dev.4 mantiene gli otto flag. StandaloneTask richiede task_workspace + tasks_standalone attivi, schema 1 pronto e diritti profilo (READMY/READALL per visualizzare, CREATE per creare e UPDATE/DELETE per modificare/cestinare). Lo Stato della ricerca usa il Dropdown nativo in modalità stringa.
+
+## Aggiornamento 0.8.1-dev.5
+
+In MDO 0.8.1-dev.5 l'opzione tasks_standalone non attribuisce automaticamente diritti ai profili: dopo upgrade/schema pronto, abilitare task_workspace e tasks_standalone, poi aprire Amministrazione > Profili > profilo corrente > scheda MDO attività indipendenti. Concedere READMY o READALL per vedere, CREATE per creare, UPDATE per modificare. Salvare ed effettuare logout/login. Persino Super-Admin ha inizialmente zero diritti MDO Standalone. Nessun bypass nel plugin.

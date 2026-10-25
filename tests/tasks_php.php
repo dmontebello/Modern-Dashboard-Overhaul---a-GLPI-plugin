@@ -21,6 +21,8 @@ verify(count($board['tasks']) === 3, 'active entity isolation before per-item AC
 verify($board['tasks'][0]['state_id'] === 2 && $board['tasks'][0]['state'] === 'Bloccato', 'native ProjectState key and table');
 verify($board['scanned'] === 3 && !$board['truncated'], 'no cross-entity candidates or counts');
 verify(count($DB->queries) === 1 && $DB->queries[0]['SELECT'] === ['glpi_projecttasks.*'], 'single bounded candidate hydration query');
+verify(($DB->queries[0]['ORDER'] ?? null) === ['glpi_projecttasks.id DESC'],
+    'GLPI 11 SQL iterator needs ordered string expression, not field=>DESC map');
 Session::$projectAll = false;
 $board = TaskBoard::load();
 verify(array_column($board['tasks'], 'id') === [4, 1], 'actor profile excludes another user task');
@@ -40,6 +42,8 @@ taskFixture();
 Session::$projectAll = false;
 Project::$rows[3]['team_users'] = [1];
 verify(array_keys(TaskBoard::creationProjects()['projects']) === [1, 3], 'native project team hydration preserves creation choices');
+verify((end($DB->queries)['ORDER'] ?? null) === ['glpi_projects.id DESC'],
+    'project chooser query uses GLPI 11 valid ORDER expression');
 taskFixture();
 ProjectTask::$rows[1]['hook_denied'] = true;
 ProjectTask::$rows[3]['is_template'] = 1;
@@ -163,6 +167,20 @@ verify(str_contains($html, 'Fine effettiva') && !str_contains($html, 'mdo-tasks-
 verify(str_contains(taskPage(['view' => 'board', 'q' => 'nonexistent']), 'Nessun risultato'), 'empty search state');
 ProjectTask::$rows = [];
 verify(str_contains(taskPage(['view' => 'board']), 'Nessuna attività visibile'), 'empty dataset state');
+// Missing standalone rights must not expose the tab or task data; only an admin
+// with config:UPDATE receives a clear profile-setup explanation.
+taskFixture();
+$flags = array_map(static fn(bool $v): string => $v ? '1' : '0', Settings::get());
+$flags['tasks_standalone'] = '1';
+Settings::save($flags);
+$html = taskPage(['view'=>'list']);
+verify(str_contains($html, 'READMY / READALL')
+    && !preg_match('~<a[^>]*>Indipendenti</a>~', $html),
+    'admin sees setup instructions but not unauthorized independent tab');
+Session::$config = false;
+verify(!str_contains(taskPage(['view'=>'list']), 'READMY / READALL'),
+    'non-admin does not see administrative profile setup instructions');
+taskFixture();
 Session::$language = 'en_GB';
 verify(str_contains(taskPage(['view' => 'board']), 'No visible tasks'), 'empty state follows GLPI language');
 taskFixture();

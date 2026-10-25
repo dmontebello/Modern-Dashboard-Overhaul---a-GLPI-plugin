@@ -196,7 +196,7 @@ final class StandaloneTask extends CommonDBTM implements ExtraVisibilityCriteria
         $table = self::getTable();
         $rows = $DB->request(['SELECT'=>[$table.'.*'],'FROM'=>$table,
             'WHERE'=>['AND'=>[self::getVisibilityCriteria()['WHERE'],[$table.'.is_deleted'=>0]]],
-            'ORDER'=>[$table.'.id'=>'DESC'],'LIMIT'=>TaskBoard::MAX_CANDIDATES+1]);
+            'ORDER'=>[$table.'.id DESC'],'LIMIT'=>TaskBoard::MAX_CANDIDATES+1]);
         foreach ($rows as $row) {
             if ($result['scanned'] >= TaskBoard::MAX_CANDIDATES) { $result['truncated']=true; break; }
             $result['scanned']++;

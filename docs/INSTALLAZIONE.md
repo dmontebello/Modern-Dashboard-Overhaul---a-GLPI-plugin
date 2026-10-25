@@ -134,3 +134,7 @@ Collaudo 0.8.1-dev.3: usare solo ZIP Dev versionato dopo GitHub Actions verde; v
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 0.8.1-dev.4: prelevare ZIP specifica da Dev soltanto dopo gate verde, verificare .sha512, estrarre (unzip -t fa solo il test, non installa), mantenere backup e upgrade normale del plugin sullo staging. Verificare versione, source SHA e Search filtro Stato. Nessun upgrade schema rispetto alla dev.3.
+
+## Aggiornamento 0.8.1-dev.5
+
+Aggiornamento 0.8.1-dev.5 solo su staging: backup coordinato DB/plugin/volumi, ZIP Dev con SHA512, estrazione vera (unzip -t verifica soltanto), sostituzione della cartella mdoverhaul, verifica versione installata nel container e nei Settings. Nessuna nuova migrazione oltre lo schema standalone 1. Prove successive: Kanban senza SQL 1054 e diritti Standalone dal profilo.

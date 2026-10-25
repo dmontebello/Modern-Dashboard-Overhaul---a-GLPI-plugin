@@ -81,3 +81,7 @@ Integrazione GLPI 11.0.9, 0.8.1-dev.3: Html::redirect() lancia RedirectException
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 API GLPI 11.0.9: Dropdown::showFromArray default display=true fa echo HTML e ritorna random integer; quando chiamato da StandaloneTask::getSpecificValueToSelect per Search deve essere display=false e restituisce HTML. La form nativa GLPI continua a usare i suoi Dropdown con echo senza cambiamenti. Publisher documenti-only preserva ZIP immutable.
+
+## Aggiornamento 0.8.1-dev.5
+
+GLPI 11.0.9: DBmysqlIterator::handleOrderClause itera i VALORI di ORDER, quindi ['glpi_projecttasks.id'=>'DESC'] produce ORDER BY `DESC` (MySQL 1054). In dev.5 si usa ['glpi_projecttasks.id DESC'] e lo stesso criterio per Project e StandaloneTask. Le classi native e il comportamento Search restano invariati.

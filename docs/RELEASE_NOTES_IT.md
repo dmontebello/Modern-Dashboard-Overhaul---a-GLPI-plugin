@@ -57,3 +57,7 @@ Nota 0.8.1-dev.3 (Dev): corretta la ricarica della schermata di scelta progetto 
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 0.8.1-dev.4 Dev: corretta compatibilità del filtro Stato delle attività indipendenti con ricerca GLPI, con test contro output prematuro. Sistemata la pipeline Dev per commit soltanto documentali, mantenendo ZIP versionate immutabili. Nessun DB/ACL change. NON COLLAUDATO LIVE: ricerca Stato, profili ed entità.
+
+## Aggiornamento 0.8.1-dev.5
+
+Candidata Dev 0.8.1-dev.5: fix dell'ORDER nelle query ProjectTask, Project e StandaloneTask. Il precedente formato associativo causava MySQL 1054 (ORDER BY DESC) in GLPI 11. Aggiunto un avviso per l'admin con Tasks indipendenti attive ma prive di READMY/READALL sul profilo corrente. Nessun diritto viene concesso automaticamente e la 403 nativa resta valida. Nessuna migrazione DB; staging ancora da collaudare.

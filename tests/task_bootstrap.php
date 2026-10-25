@@ -36,7 +36,11 @@ final class Session
     public static function checkRight(string $key, int $right): void { if ($key === 'config' && self::$config) { return; } throw new RuntimeException('read denied'); }
     public static function getNewCSRFToken(): string { self::$tokens['isolated-test-token']=true; return 'isolated-test-token'; }
     public static function getLoginUserID(): int { return self::$user; }
-    public static function haveRight($name,$right): bool { return $name==='plugin_mdoverhaul_standalonetask' && (self::$standaloneRights & $right)===$right; }
+    public static function haveRight($name,$right): bool
+    {
+        if ($name === 'config') { return self::$config && $right === UPDATE; }
+        return $name==='plugin_mdoverhaul_standalonetask' && (self::$standaloneRights & $right)===$right;
+    }
     public static function haveRightsOr($name,array $rights): bool { foreach($rights as $right) { if(self::haveRight($name,$right)) { return true; } } return false; }
     public static function addMessageAfterRedirect(...$args): void {}
     public static function checkCSRF(array $input): void
@@ -198,6 +202,17 @@ final class TaskFakeDB
     {
         $this->queries[] = $query;
         if ($this->fail) { throw new RuntimeException('private DB failure'); }
+        // GLPI 11 DBmysqlIterator uses ORDER array VALUES, not keys.
+        // Associative ['table.id' => 'DESC'] yields SQL ORDER BY `DESC` (live MySQL 1054).
+        if (isset($query['ORDER'])) {
+            $clauses = is_array($query['ORDER']) ? array_values($query['ORDER']) : [$query['ORDER']];
+            foreach ($clauses as $clause) {
+                if (!is_string($clause)
+                    || !preg_match('/^[a-z_][a-z0-9_]*\.[a-z_][a-z0-9_]* (ASC|DESC)$/D', $clause)) {
+                    throw new RuntimeException('Invalid GLPI 11 ORDER clause: table.column DESC required');
+                }
+            }
+        }
         $table = $query['FROM'];
         $rows = match($table) { 'glpi_projecttasks'=>ProjectTask::$rows,'glpi_projects'=>Project::$rows,default=>CommonDBTM::$storage[$table]??[] };
         $rows = array_filter($rows, static function (array $row) use ($query, $table): bool {
@@ -247,6 +262,7 @@ function taskFixture(): void
     Session::$projectRead = Session::$projectAll = Session::$taskRead = Session::$create = Session::$central = true;
     Session::$language = 'it_IT';
     Session::$now = null;
+    Session::$config = true;
     Plugin::$active = true;
     Html::$redirect = null;
     Html::$throwOnRedirect = false;

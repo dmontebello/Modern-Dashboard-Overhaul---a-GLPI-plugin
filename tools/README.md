@@ -149,3 +149,7 @@ Tooling candidato 0.8.1-dev.3: eseguire php tests/tasks_php.php per verificare a
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 Tooling 0.8.1-dev.4: php tests/standalone_php.php verifica la modalità return-only della Dropdown GLPI. python3 -B tests/packaging_test.py riproduce con git fixture docs-only vs code changed; gate versioned archive unchanged. GitHub Actions e checksum restano fonti per PASS effettivi. Nessun deploy eseguito da questi script.
+
+## Aggiornamento 0.8.1-dev.5
+
+Regression di dev.5: php tests/tasks_php.php e php tests/standalone_php.php verificano il formato ORDER delle tre query MDO. Il double TaskFakeDB::request rifiuta l'associativo che causava il vero MySQL 1054. I test e il packaging restano isolati, non sostituiscono una prova su GLPI 11 reale. Installare la ZIP soltanto dopo CI verde e verifica sha512sum -c.

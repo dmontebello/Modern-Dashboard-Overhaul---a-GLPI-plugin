@@ -173,6 +173,21 @@ if ($creating) {
     Html::footer();
     return;
 }
+// GLPI profile ACL remains mandatory. Admin-only guidance when independent
+// tasks are enabled but the current profile has no read rights; do not reveal
+// task rows and do not weaken the native 403 for direct standalone URLs.
+if (!$standalone && StandaloneTask::enabled() && !StandaloneTask::canView()
+    && Session::haveRight('config', UPDATE)) {
+    echo '<div class="alert alert-warning mdo-tasks-permission-hint" role="status">'
+        . $esc($tr(
+            'Attività indipendenti attive, ma il profilo non ha READMY / READALL. '
+            . 'Apri Amministrazione → Profili → profilo corrente → MDO · Attività indipendenti, '
+            . 'assegna lettura e creazione, salva e accedi nuovamente.',
+            'Independent tasks are enabled, but this profile lacks READMY / READALL. '
+            . 'Open Administration → Profiles → current profile → MDO · Independent tasks, '
+            . 'grant read and create, save, then sign in again.'
+        )) . '</div>';
+}
 echo '<nav class="mdo-tasks-view-tabs" aria-label="' . $esc($tr('Origine attività', 'Task source')) . '">';
 foreach (['project' => [ProjectTask::canView(), $tr('Progetto', 'Project')], 'standalone' => [StandaloneTask::canView(), $tr('Indipendenti', 'Independent')]] as $key => [$visible, $label]) {
     if ($visible) { echo '<a class="btn btn-outline-secondary"' . (($standalone ? 'standalone' : 'project') === $key ? ' aria-current="true"' : '') . ' href="' . $esc($boardUrl(['source'=>$key,'view'=>$view,'project'=>0,'state'=>-1])) . '">' . $esc($label) . '</a>'; }

@@ -68,3 +68,7 @@ Fix mirato RedirectException GLPI 11. Nuova versione Dev univoca in setup.php e 
 ## Corrente: 0.8.1-dev.4 — 25 ottobre 2026
 
 Il publisher continua a verificare source SHA, GitHub Actions run ID, SHA512, manifest e singola radice mdoverhaul/. Le ZIP versionate sono immutabili; per un commit successivo che cambia **solo** documentazione whitelist o file generati, il job termina con PASS senza riscrivere `0.8.1-dev.N.zip` o `MDO_Dev_Latest.zip`. Sono rifiutate modifiche PHP/JS/CSS, workflow, test o tooling senza incremento del prerelease (regressione Python obbligatoria). Ogni build funzionale continua ad aumentare `dev.N`. Sorgente ZIP e documentazione sul branch possono così avere SHA diversi senza false dichiarazioni.
+
+## Aggiornamento 0.8.1-dev.5
+
+Corrente dev.5: versione in setup.php e pacchetto unico mdoverhaul. Nuova ZIP immutabile, sidecar SHA512 e build-info.json pubblicati dal job solo dopo pipeline verde. Una modifica di documentazione non cambia il pacchetto esistente; Main non aggiornato. Fix SQL e messaggio sui diritti non introducono migrazioni.

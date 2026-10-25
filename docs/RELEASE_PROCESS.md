@@ -120,3 +120,7 @@ Per Dev 0.8.1-dev.3: bump prerelease in setup.php, nuova regressione redirect, n
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 0.8.1-dev.4 conserva ZIP dev.N immutabili. Se successivamente cambia solo la documentazione/manifest generato dal publisher, il job GitHub Actions completa con PASS e lascia ZIP/Latest intatti; altrimenti, se sorgenti PHP/CSS/JS/tool cambiano senza incremento prerelease, la pubblicazione resta bloccata. Main non si aggiorna automaticamente.
+
+## Aggiornamento 0.8.1-dev.5
+
+Nuova versione 0.8.1-dev.5 per modifiche PHP al Kanban. Le prove prima del fix comprendono un vero MySQL 1054 nel GLPI dell'utente e un Access Denied Standalone. La CI verifica sintassi, regressioni, note e ZIP unica; il publisher crea checksum e metadata solo dopo esito positivo. Dopo l'installazione la board deve essere collaudata di nuovo. Non promuovere a Main.

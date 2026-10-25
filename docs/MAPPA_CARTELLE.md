@@ -99,3 +99,7 @@ Mappa 0.8.1-dev.3: front/tasks.php corregge il redirect al form GLPI; tests/task
 ## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
 
 0.8.1-dev.4 file chiave: src/StandaloneTask.php (native Search status markup), tests/task_bootstrap.php (Dropdown mock fedele), tests/standalone_php.php (regressione), tools/maintainer/publish_dev.py (gate immutable docs-only), tests/packaging_test.py (git fixture). Note in docs/releases/0.8.1-dev.4.md.
+
+## Aggiornamento 0.8.1-dev.5
+
+Dev.5 modifica src/TaskBoard.php, src/StandaloneTask.php (ORDER SQL), front/tasks.php (solo avviso ACL admin), tests/task_bootstrap.php, tests/tasks_php.php, tests/standalone_php.php (regressioni), setup.php, note docs/releases/0.8.1-dev.5.md e documentazione correlata. Nessun file core GLPI, nuova tabella, volume o plugin separato.
