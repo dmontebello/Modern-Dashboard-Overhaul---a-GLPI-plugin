@@ -38,6 +38,7 @@ jobs:
         run: |
           python3 tests/ui_playwright.py
           python3 tests/tasks_ui_playwright.py
+          python3 tests/task_creation_ui_playwright.py
           python3 tests/settings_ui_playwright.py
           python3 tests/standalone_ui_playwright.py
       - name: Build exact tested source
