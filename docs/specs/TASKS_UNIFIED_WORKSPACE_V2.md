@@ -1,6 +1,6 @@
 # MDO — Tasks Workspace unificato e UX nativa (proposta esecutiva per Codex)
 
-**Stato: SPECIFICA / NON IMPLEMENTATO.** Feedback di collaudo del 25 ottobre 2026; revisione scope: dev.6 comprende la precedente dev.8 (Kanban scrivibile) e le funzionalità tipo Notion per diario/allegati. Nessuno di questi requisiti aggiuntivi è già stato implementato.  
+**Stato: dev.6 IMPLEMENTATA SU Dev con CI PASS, NON COLLAUDATA LIVE; dev.7 e roadmap successive ancora specifiche.** Feedback di collaudo del 25 ottobre 2026; revisione scope: dev.6 comprende la precedente dev.8 (Kanban scrivibile) e le funzionalità tipo Notion per diario/allegati. Nessuno di questi requisiti aggiuntivi è già stato implementato.  
 Repository: `dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin` — **lavorare solo su `Dev`, non su `Main`**.  
 Baseline osservata: Dev `4b681e21830d3f828695ea5fbf0f800e77b99ae8`, ZIP installabile `0.8.1-dev.5` (sorgente testato `60fb656aad0400a31788bf68760edf390961f166`). Codex **deve rifare `git fetch origin` e leggere il nuovo HEAD** prima di intervenire.  
 Riferimenti obbligatori: `AGENTS.md`, `docs/dev/STATUS.md`, `docs/dev/STAGING_0_8_1.md`, `docs/dev/VERSIONING_POLICY.md`, `docs/specs/MDO_NEXT_SPRINT.md`, `docs/specs/TASKS_OPEN_DECISIONS.md`.
@@ -138,3 +138,8 @@ Richiesta:
 - `tests/tasks_php.php`, `tests/standalone_php.php`, `tests/tasks_ui_playwright.py`, `tests/standalone_ui_playwright.py`: estendere in modo verificabile.
 
 Questo documento registra **requisiti/architettura proposti**, non indica un'implementazione già esistente. Il codice e lo ZIP restano `0.8.1-dev.5` fino a una nuova build con CI verde. La nuova candidata dev.6 è volontariamente più ampia per decisione dell'utente: Codex deve segnare rigorosamente ciò che è implementato, verificato, bloccato e non collaudato.
+
+
+## Aggiornamento consuntivo dopo dev.6
+
+La versione 0.8.1-dev.6 è stata sviluppata e pubblicata su Dev: funzionalità principali di questo documento per vista Tutte, Kanban DnD, navigazione MDO, diario storico/allegati e layout del form standalone sono IMPLEMENTATE ma NON COLLAUDATE LIVE. Il form unico resta previsto nella dev.7; checklist dev.8; conversione/elementi bidirezionali dev.9; iProjects 0.8.2. Limiti: aggregato All campionato, note MDO separate dalle native GLPI, protezione concorrenza non atomica. CI e provenienza: `docs/releases/0.8.1-dev.6.build.json` e `docs/dev/STATUS.md`. Non confondere implementazione CI con prova in staging.
