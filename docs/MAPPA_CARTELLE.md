@@ -91,3 +91,7 @@ Nuovi tests/common_db_double.php, standalone_php.php, render_standalone.php e
 standalone_ui_playwright.py sono esclusivamente test dichiarati, non runtime GLPI.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+Mappa 0.8.1-dev.3: front/tasks.php corregge il redirect al form GLPI; tests/task_bootstrap.php aggiunge SimulatedGLPIRedirect; tests/tasks_php.php aggiunge la regressione. Le note del candidato sono in docs/releases/0.8.1-dev.3.md; nessun modulo nuovo o file core modificato.

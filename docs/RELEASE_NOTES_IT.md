@@ -49,3 +49,7 @@ sono certificati risolti sullo staging dell'utente. Installazione/schema e risch
 sono descritti nelle note complete della candidata corrente.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+Nota 0.8.1-dev.3 (Dev): corretta la ricarica della schermata di scelta progetto dopo Continua, causata dal catch(Throwable) della RedirectException emessa da Html::redirect in GLPI 11. Test PHP aggiunto per riprodurre l'eccezione. NON COLLAUDATO LIVE: il flusso Select2->form->Salva deve essere riprovato su staging.

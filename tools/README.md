@@ -141,3 +141,7 @@ repository. Lo script crea dump con umask 077 e checksum, non avvia upgrade.
 Backup/restore DB reali non eseguiti da Codex.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](../docs/releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+Tooling candidato 0.8.1-dev.3: eseguire php tests/tasks_php.php per verificare anche il redirect-eccezione GLPI 11, poi test unit/standalone/browser e il gate documentazione/pacchetto; pubblicazione ZIP Dev e SHA512 solo dopo CI verde. Non usare lo ZIP 0.8.1-dev.2 per testare questo fix.

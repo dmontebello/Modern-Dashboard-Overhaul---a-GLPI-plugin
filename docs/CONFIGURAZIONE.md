@@ -114,3 +114,7 @@ non richiede progetto; progetto usa esclusivamente form e ACL ProjectTask GLPI.
 Elenco e Kanban separano i tipi e i relativi filtri. Nessun DnD globale di scrittura.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+La candidata 0.8.1-dev.3 conserva gli otto switch della dev.2: task_workspace controlla il menu Tasks, tasks_standalone abilita le autonome solo con migrazione e diritti profilo predisposti. Il fix del redirect delle ProjectTask non richiede ulteriori opzioni e non modifica le configurazioni salvate.

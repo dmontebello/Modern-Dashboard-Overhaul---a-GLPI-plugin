@@ -73,3 +73,7 @@ POST Profile nativi, nessun endpoint custom per concedersi diritti. Snapshot e
 dump contengono dati privati: mantenerli fuori da plugin/repository/pubblicazioni.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+In 0.8.1-dev.3 la verifica ProjectTask::can(-1,CREATE, input) continua ad applicare i diritti nativi sul Project selezionato. Html::redirect viene spostato fuori dal catch(Throwable) perché il router GLPI 11 segnala tramite RedirectException un redirect valido; questo non rimuove né aggira alcun controllo ACL. Cross-entity e READMY/READALL richiedono collaudo live.

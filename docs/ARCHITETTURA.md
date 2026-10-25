@@ -140,3 +140,7 @@ I gruppi assegnati possono essere ricorsivi, la singola task non è ricorsiva:
 la sua entità è fissa. Il suo stato minimo è un unico asse, non Stage+Status.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+Versione 0.8.1-dev.3: il controller Tasks consulta ProjectTask e Project nativi, poi esegue Html::redirect FUORI dal try/catch. In GLPI 11 la RedirectException è parte intenzionale del protocollo del router, non un errore applicativo da sopprimere. Nessuna alterazione a StandaloneTask, dashboard, RSS o schema.

@@ -126,3 +126,7 @@ Se l'upgrade è incompleto la feature non è disponibile; non forzare il flag.
 Gli altri moduli mantengono dati e impostazioni. Nessun deploy Main automatico.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+Collaudo 0.8.1-dev.3: usare solo ZIP Dev versionato dopo GitHub Actions verde; verificare SHA512, build-info.json e versione Settings; backup prima dell'upgrade su GLPI 11.0.9 staging. Provare Nuova task -> Task di progetto -> selezione -> Continua -> form nativo -> Salva. Non testata su produzione.

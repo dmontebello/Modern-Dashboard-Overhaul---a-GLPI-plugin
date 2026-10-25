@@ -112,3 +112,7 @@ l'utente non collauda staging e approva. Il nuovo schema richiede backup prima
 che l'operatore esegua l'upgrade GLPI. Candidato Dev non equivale a release stabile.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+Per Dev 0.8.1-dev.3: bump prerelease in setup.php, nuova regressione redirect, note di versione e documenti contestuali aggiornati nello stesso ciclo. Il publisher GitHub Actions deve pubblicare Modern_Dashboard_Overhaul_0.8.1-dev.3.zip e MDO_Dev_Latest.zip solo dopo test verdi, con SHA512 e build-info.json. Main resta invariato.

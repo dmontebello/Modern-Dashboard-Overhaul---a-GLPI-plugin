@@ -73,3 +73,7 @@ Collaudare Search/AJAX/export e API native del nuovo oggetto: non sono stati
 eseguiti su GLPI 11.0.9 reale in questo ambiente.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
+
+Integrazione GLPI 11.0.9, 0.8.1-dev.3: Html::redirect() lancia RedirectException, che deve raggiungere il router. La form vera si trova in /front/projecttask.form.php e il GET projects_id serve soltanto ad aprirla; il POST Salva nativo crea la ProjectTask. Le task autonome restano nel distinto itemtype StandaloneTask.
