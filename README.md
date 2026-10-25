@@ -1,6 +1,9 @@
 # Modern Dashboard Overhaul
 
- > **Candidata Dev 0.8.1-dev.6:** [Note](docs/releases/0.8.1-dev.5.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
+> **NUOVE CHAT CTO / DEVELOPER / CODEX:** punto di ingresso operativo **[START HERE — MDO](docs/project/start-here.md)**. Consultare [focus corrente](docs/project/current-focus.md), [backlog con stati](docs/product/backlog.md), [roadmap](docs/roadmap.md), [decisioni](docs/product/decisions.md) e [stato implementato](docs/implementation-state.md). Lo sviluppo è su `Dev`; `Main` rimane la release pubblicata. Verificare sempre GitHub e CI sullo SHA attuale.
+
+
+ > **Candidata Dev 0.8.1-dev.6:** [Note](docs/releases/0.8.1-dev.6.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
 
 **Versione:** `0.8.1-dev.6` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
