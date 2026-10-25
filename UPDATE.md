@@ -84,3 +84,7 @@ Aggiornamento 0.8.1-dev.4: nessuna migrazione aggiuntiva rispetto alla dev.3, re
 ## Aggiornamento 0.8.1-dev.5
 
 Da dev.4 a dev.5: nessuna nuova tabella, nessun cambio schema o diritto. Corretto il formato ORDER nelle tre query e aggiunte istruzioni di configurazione per il profilo standalone. Prima dell'upgrade effettuare backup; non reinstallare o cancellare dati. Validare pacchetto SHA512, source SHA e versione reale nel container; verificare Kanban e ACL in staging.
+
+## Note tecniche 0.8.1-dev.6 (2026-10-25)
+
+0.8.1-dev.6: prima dell'installazione su staging GLPI fare backup coerente di database, plugin, configurazione e volumi, compreso GLPI_DOC_DIR/mdoverhaul. Verificare ZIP+SHA512 e build-info del source testato dal CI. Eseguire upgrade amministrativo del plugin per migrare schema task da 1 a 2 e creare le tabelle tasknotes/taskfiles. Non installare file del feature branch direttamente su produzione, non fare downgrade della sola cartella plugin senza restore DB e volume. Documentare test profili, note, download e DnD: NON COLLAUDATO LIVE.
