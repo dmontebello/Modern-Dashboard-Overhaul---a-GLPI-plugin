@@ -124,3 +124,8 @@ Per Dev 0.8.1-dev.3: bump prerelease in setup.php, nuova regressione redirect, n
 ## Aggiornamento 0.8.1-dev.5
 
 Nuova versione 0.8.1-dev.5 per modifiche PHP al Kanban. Le prove prima del fix comprendono un vero MySQL 1054 nel GLPI dell'utente e un Access Denied Standalone. La CI verifica sintassi, regressioni, note e ZIP unica; il publisher crea checksum e metadata solo dopo esito positivo. Dopo l'installazione la board deve essere collaudata di nuovo. Non promuovere a Main.
+
+
+## 0.8.1-dev.6 — Aggiornamento documentale
+
+MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggiornamento ACL, storico completo delle annotazioni e allegati MDO privati; schema 2 e relative verifiche di sicurezza. Vedere docs/releases/0.8.1-dev.6.md, QA.md e docs/dev/STATUS.md per test, rischi, rollback e prossimi passi. NON COLLAUDATO LIVE.
