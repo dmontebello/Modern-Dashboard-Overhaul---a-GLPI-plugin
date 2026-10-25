@@ -85,3 +85,8 @@ In 0.8.1-dev.3 la verifica ProjectTask::can(-1,CREATE, input) continua ad applic
 ## Aggiornamento 0.8.1-dev.5
 
 Dev.5 mantiene gli ACL GLPI. StandaloneTask::canView richiede READMY o READALL anche per Super-Admin, con schema e flags attivi. L'utente senza diritti riceve ancora la pagina 403. Soltanto chi possiede config:UPDATE vede un avviso non sensibile nel workspace di progetto; non sono introdotti grant automatici o informazioni di task non autorizzate. Le tre ORDER sono letterali e non usano input utente.
+
+
+## 0.8.1-dev.6 — Sicurezza Tasks
+
+Endpoint stage: ACL READ+UPDATE per item, entità, CSRF middleware GLPI e date_mod anti-stale. Diario/allegati: READ/UPDATE del parent su ogni GET/POST/download, storage privato sotto GLPI_DOC_DIR, token file casuale, download forzato e upload limitato a 15MiB. Rischi da testare: concorrenza non atomica, antivirus esterno, middleware CSRF, isolamento entità e download reali. NON COLLAUDATO LIVE.
