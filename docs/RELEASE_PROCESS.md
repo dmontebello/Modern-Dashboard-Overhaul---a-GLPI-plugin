@@ -129,3 +129,7 @@ Nuova versione 0.8.1-dev.5 per modifiche PHP al Kanban. Le prove prima del fix c
 ## 0.8.1-dev.6 — Aggiornamento documentale
 
 MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggiornamento ACL, storico completo delle annotazioni e allegati MDO privati; schema 2 e relative verifiche di sicurezza. Vedere docs/releases/0.8.1-dev.6.md, QA.md e docs/dev/STATUS.md per test, rischi, rollback e prossimi passi. NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+Per dev.7 la ZIP include form unico e test: verificare version 0.8.1-dev.7, changelog, QA, note, release manifest/build-info e checksum; la pubblicazione su Dev è condizionata a PHP/Playwright e ai gate esistenti, Main invariato.
