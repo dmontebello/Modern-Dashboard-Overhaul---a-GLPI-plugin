@@ -1,4 +1,4 @@
-# Revisione staging GLPI 11.0.9 — 0.8.1-dev.2
+# Revisione staging GLPI 11.0.9 — 0.8.1-dev.3
 
 **NON COLLAUDATO LIVE.** L'utente ha confermato che lo staging non è raggiungibile
 da questo ambiente e svolgerà il collaudo dopo la pubblicazione su Dev.
@@ -21,9 +21,9 @@ I risultati automatici e i loro limiti sono in [QA](../../QA.md).
    Lo script non salva plugin/volumi e non avvia upgrade. Verificare SHA512 e
    provare il ripristino DB/volumi su una seconda copia prima di proseguire.
 3. Scaricare da **Dev** il pacchetto versionato
-   `Modern_Dashboard_Overhaul_0.8.1-dev.2.zip` e il suo `.sha512`. Verificare con
-   `sha512sum -c Modern_Dashboard_Overhaul_0.8.1-dev.2.zip.sha512`.
-   Confrontare il record [build](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/blob/Dev/docs/releases/0.8.1-dev.2.build.json) con lo SHA
+   `Modern_Dashboard_Overhaul_0.8.1-dev.3.zip` e il suo `.sha512`. Verificare con
+   `sha512sum -c Modern_Dashboard_Overhaul_0.8.1-dev.3.zip.sha512`.
+   Confrontare il record [build](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/blob/Dev/docs/releases/0.8.1-dev.3.build.json) con lo SHA
    sorgente e la relativa GitHub Actions verde. Lo SHA del publisher è distinto.
    `MDO_Dev_Latest.zip` è un alias mobile: conservare sempre la copia versionata.
 4. Estrarre in una directory di verifica: unica radice `mdoverhaul/`, nessun ZIP
@@ -49,7 +49,7 @@ I risultati automatici e i loro limiti sono in [QA](../../QA.md).
 5. In Settings abilitare `task_workspace`, poi `tasks_standalone` (opt-in).
    L'ottavo flag non cambia gli altri sette. Rifare logout/login per menu/diritti.
    Se lo schema non è pronto, l'opt-in deve essere rifiutato.
-6. Settings e gestore plugin devono mostrare `0.8.1-dev.2`; Settings deve mostrare
+6. Settings e gestore plugin devono mostrare `0.8.1-dev.3`; Settings deve mostrare
    canale Dev, source SHA, run CI e UTC uguali al record build. Negli strumenti
    rete del browser controllare URL/versione e contenuto effettivo degli asset,
    senza dedurre il cache refresh dal solo nome dello ZIP.
@@ -108,3 +108,7 @@ perde le modifiche successive allo snapshot. Non eseguire DROP automatici.
 Annotare i difetti osservati e l'esito reale in QA/registro Dev. I bug P0 e la
 migrazione rimangono **NON COLLAUDATO LIVE** fino a questa verifica. Promozione
 `Dev` → `Main` solo dopo collaudo e approvazione dell'utente, senza automatismi.
+
+## Prova prioritaria per 0.8.1-dev.3
+
+Il fix elimina il catch(Throwable) intorno al redirect nativo GLPI. Prima di testare controllare in Settings versione 0.8.1-dev.3 e source SHA; usare ZIP versionato e backup coordinato. Selezionare PROGETTO-TEST nel dropdown GLPI, premere Continua e verificare in barra URL `/front/projecttask.form.php?projects_id=ID`. Solo il successivo Salva nel form crea la task. Controllare progetto, elenco, Kanban e permessi. Con ID non valido/nessuna scelta deve apparire errore senza redirect. Annotare PASS/FAIL reali, non dedotti dai mock.

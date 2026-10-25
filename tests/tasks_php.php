@@ -71,6 +71,20 @@ verify(array_keys($choices['projects']) === [1], 'creation choices require proje
 taskPage(['new' => '1', 'kind'=>'project', 'project' => '1']);
 verify(Html::$redirect === '/glpi/front/projecttask.form.php?projects_id=1', 'explicit project redirects to native form with root path');
 taskFixture();
+Html::$throwOnRedirect = true;
+try {
+    taskPage(['new'=>'1', 'kind'=>'project', 'continue'=>'1', 'project'=>'1']);
+    verify(false, 'GLPI redirect must throw out of Tasks controller');
+} catch (SimulatedGLPIRedirect $e) {
+    verify($e->getMessage() === '/glpi/front/projecttask.form.php?projects_id=1'
+        && Html::$redirect === $e->getMessage(),
+        'GLPI 11 RedirectException propagates from native ProjectTask redirect');
+} finally {
+    Html::$throwOnRedirect = false;
+}
+verify(Toolbox::$errors === [], 'successful GLPI redirect is not logged as a validation failure');
+
+taskFixture();
 Session::$projectRead = false;
 taskPage(['new' => '1', 'kind'=>'project', 'project' => '1']);
 verify(Html::$redirect === '/glpi/front/projecttask.form.php?projects_id=1', 'native creation does not require an extra Project READ permission');

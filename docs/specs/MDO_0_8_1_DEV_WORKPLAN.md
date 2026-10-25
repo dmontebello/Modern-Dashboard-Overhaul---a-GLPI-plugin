@@ -107,3 +107,7 @@ Se Codex non può raggiungere il GLPI reale, completare codice, test e documenta
 3. Implementare P1 con migrazione e ACL, alzare almeno a 0.8.1-dev.2, ripetere CI/staging/registrazioni. Nessun deploy/merge in Main.
 4. Prima di ogni candidato aggiornare CHANGELOG, docs/releases/<version>.md, docs/dev/STATUS.md, README, QA e ogni documento interessato (installazione, configurazione, architettura, sicurezza, test). Riportare fix, file, commit, test effettivi, SHA512, rollback, blocchi e next steps, senza cancellare storico.
 5. Consegna: SHA commit, elenco file e motivazioni, differenze DB e sicurezza, PASS/FAIL/NON ESEGUITO per ogni test, URL ZIP versionato/Latest, checksum, procedura staging e rischi aperti.
+
+## Diagnosi verificata su GLPI 11.0.9 — 2026-10-25
+
+Html::redirect() in GLPI 11 lancia RedirectException per segnalare al router un redirect. Il codice MDO 0.8.1-dev.2 lo eseguiva dentro un catch(Throwable), quindi catturava la propria redirezione. Il double precedente ritornava normalmente, per questo la regressione sfuggiva alla CI. 0.8.1-dev.3 sposta Html::redirect() fuori dal catch ed estende la regressione PHP. Resta da collaudare live Select2, GET, form e Salva.

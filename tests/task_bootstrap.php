@@ -136,13 +136,19 @@ final class Plugin
     public static bool $active = true;
     public static function isPluginActive(string $name): bool { return self::$active; }
 }
+final class SimulatedGLPIRedirect extends RuntimeException {}
 final class Html
 {
     public static ?string $redirect = null;
+    public static bool $throwOnRedirect = false;
     public static function displayNotFoundError(): void { echo 'NOT_FOUND'; }
     public static function header(...$args): void {}
     public static function footer(): void {}
-    public static function redirect(string $url): void { self::$redirect = $url; }
+    public static function redirect(string $url): void
+    {
+        self::$redirect = $url;
+        if (self::$throwOnRedirect) { throw new SimulatedGLPIRedirect($url); }
+    }
     public static function convDateTime(string $date): string { return $date; }
 }
 final class Toolbox
@@ -234,6 +240,7 @@ function taskFixture(): void
     Session::$now = null;
     Plugin::$active = true;
     Html::$redirect = null;
+    Html::$throwOnRedirect = false;
     Search::$calls = [];
     Toolbox::$errors = [];
     Project::$rows = [

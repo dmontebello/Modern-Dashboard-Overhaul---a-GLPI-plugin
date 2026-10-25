@@ -1,6 +1,6 @@
 # Matrice di test verso Modern Dashboard Overhaul 1.0 (baseline 0.6.0)
 
-> **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
+> **Corrente 0.8.1-dev.3:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
 > Revisione per **0.7.0**: vedere [note di release](RELEASE_NOTES_IT.md) e [QA](../QA.md) per le variazioni di prestazioni e sicurezza.
 
@@ -98,3 +98,8 @@ di grant/dati con fixture DB. SQL MariaDB, upgrade/rollback e backup veri NON
 COLLAUDATO LIVE. Vedere STAGING_0_8_1 per prove GLPI obbligatorie prima di Main.
 
 Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
+
+## 0.8.1-dev.3 — test aggiuntivi per il redirect nativo GLPI 11
+
+- Automatico: Html::redirect che lancia SimulatedGLPIRedirect in corrispondenza di `?new=1&kind=project&continue=1&project=1`, senza intercettazione da parte del controller. Verifica URL `/front/projecttask.form.php?projects_id=1` e log vuoto.
+- Staging: **NON COLLAUDATO LIVE**, selezione AJAX reale con ID valido, Continua -> modulo nativo, Salva -> task visibile; controllare ID assente/manomesso e ACL multi-entità. ZIP dev.3/Latest da validare con SHA512.

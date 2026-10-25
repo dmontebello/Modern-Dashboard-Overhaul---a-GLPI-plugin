@@ -60,3 +60,7 @@ Il gate controlla anche la dichiarazione corrente di README contro setup.php;
 la presenza di una versione soltanto in una sezione storica non è sufficiente.
 Pacchetti versionati immutabili e vecchio 0.8.0 conservati, alias aggiornata solo
 dopo test e verifica HEAD; non confondere source commit e commit del publisher.
+
+## Corrente: 0.8.1-dev.3 — 2026-10-25
+
+Fix mirato RedirectException GLPI 11. Nuova versione Dev univoca in setup.php e note/docs aggiornate insieme al codice. Publisher: ZIP dev.3 e alias Latest soltanto dopo CI verde con SHA del sorgente testato; non confondere commit bot con commit codice. Main resta invariato, nessuna modifica al database rispetto a dev.2.

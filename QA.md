@@ -1,4 +1,4 @@
-# QA — Modern Dashboard Overhaul 0.8.1-dev.2 (Dev)
+# QA — Modern Dashboard Overhaul 0.8.1-dev.3 (Dev)
 
 Stato corrente: NON COLLAUDATO LIVE. Gli esiti e ambienti precedenti sotto restano storici.
 
@@ -123,3 +123,7 @@ stessi controller con stato persistente simulato, non il database/Select2 GLPI.
 Da collaudare: migrazione e backup/restore veri; scheda diritti Profile, login,
 Search/AJAX/export/API, User/Group dropdown, diritti effettivi, geometria GridStack,
 ECharts ticket_status, cache HTTP, DnD nativo e temi reali. Nessun bug live chiuso.
+
+## 0.8.1-dev.3 — diagnosi 25 ottobre 2026
+
+Bug ProjectTask: GLPI 11.0.9 implementa Html::redirect() lanciando RedirectException. MDO dev.2 catturava l'eccezione con catch(Throwable) e restava sulla schermata di scelta progetto. Fix: redirect fuori dal catch; nuova regressione nei test PHP che simula l'eccezione reale. CI e checksum da verificare dopo commit. **NON COLLAUDATO LIVE**: Select2, diritti, form e Salva richiedono staging. Le altre regressioni UI e migrazione/ACL standalone sono ancora da collaudare.

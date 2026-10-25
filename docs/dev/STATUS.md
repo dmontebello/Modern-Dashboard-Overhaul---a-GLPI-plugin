@@ -1,8 +1,8 @@
 # MDO Dev — stato operativo e handoff
 
-> **Corrente: 0.8.1-dev.2.** Implementato e testato con doubles; **NON COLLAUDATO LIVE**.
+> **Corrente: 0.8.1-dev.3.** Implementato e testato con doubles; **NON COLLAUDATO LIVE**.
 > La cronologia seguente mantiene le valutazioni precedenti. Note correnti in
-> [0.8.1-dev.2](../releases/0.8.1-dev.2.md), collaudo in [staging](STAGING_0_8_1.md).
+> [0.8.1-dev.3](../releases/0.8.1-dev.3.md), collaudo in [staging](STAGING_0_8_1.md).
 
 Data valutazione: 2026-10-24. Stato: REGRESSIONI GLPI LIVE APERTE. Questo documento descrive cosa è osservato, non ciò che è stato risolto.
 Documenti da leggere: [specifica 0.8.1](../specs/MDO_0_8_1_DEV_WORKPLAN.md), [versioning](VERSIONING_POLICY.md).
@@ -110,3 +110,7 @@ Verifiche locali P1 PASS: 26 PHP/7 Bash/2 JS sintassi; parser Python/YAML;
 67 moduli, 63 Tasks, 59 standalone PHP; 8 packaging; 86 dashboard, 175 Tasks,
 560 Settings e 108 standalone UI. Gate documenti e ZIP/manifest PASS.
 Build locale dirty dichiarata; source/build/checksum definitivo dal publisher CI.
+
+## Registro 0.8.1-dev.3 — 2026-10-25
+
+TASK-01: causa precisa individuata nei sorgenti di GLPI 11.0.9: Html::redirect() lancia RedirectException, che il vecchio front/tasks.php intercettava con catch(Throwable). Il fix esegue la verifica permessi nel try e il redirect FUORI dal catch. Test double esteso per simulare il lancio dell'eccezione. CI non ancora confermata al momento del commit; **NON COLLAUDATO LIVE**. Dopo CI verde collaudare progetto valido -> Continua -> form nativo -> Salva -> elenco/Kanban. Gli altri bug UI e le ACL standalone restano aperti. Schema standalone 1 invariato, rollback con snapshot staging, Main invariato.

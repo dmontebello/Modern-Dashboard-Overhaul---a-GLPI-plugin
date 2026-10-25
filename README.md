@@ -1,8 +1,8 @@
 # Modern Dashboard Overhaul
 
- > **Candidata Dev 0.8.1-dev.2:** [Note](docs/releases/0.8.1-dev.2.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
+ > **Candidata Dev 0.8.1-dev.3:** [Note](docs/releases/0.8.1-dev.3.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
 
-**Versione:** `0.8.1-dev.2` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
+**Versione:** `0.8.1-dev.3` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
 Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.

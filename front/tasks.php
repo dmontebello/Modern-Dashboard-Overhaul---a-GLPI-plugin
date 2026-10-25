@@ -69,15 +69,17 @@ if ($creating && $kind === 'standalone' && StandaloneTask::canCreate()) {
 }
 $creationError = false;
 if ($creating && $kind === 'project' && ProjectTask::canCreate() && $creationProjectId > 0) {
-    // Native ProjectTask requires a real project; never bypass its create rights.
+    // GLPI 11 Html::redirect() intentionally throws RedirectException.
+    // Catch only errors from project validation, never the redirect itself.
+    $canCreateInProject = false;
     try {
-        if (TaskBoard::canCreateInProject($creationProjectId)) {
-            Html::redirect(ProjectTask::getFormURL() . '?projects_id=' . $creationProjectId);
-            return;
-        }
+        $canCreateInProject = TaskBoard::canCreateInProject($creationProjectId);
     } catch (Throwable $error) {
-        Toolbox::logInFile('php-errors', '[mdoverhaul Tasks] ' . $error->getMessage() . "\n");
+        Toolbox::logInFile('php-errors', '[mdoverhaul Tasks project validation] ' . get_class($error) . "\n");
         $creationError = true;
+    }
+    if ($canCreateInProject) {
+        Html::redirect(ProjectTask::getFormURL() . '?projects_id=' . $creationProjectId);
     }
 }
 Html::header('Tasks', '', 'helpdesk', strtolower(TaskMenu::class));

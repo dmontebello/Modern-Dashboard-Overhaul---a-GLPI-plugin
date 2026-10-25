@@ -1,5 +1,12 @@
 # Changelog — Modern Dashboard Overhaul
 
+## 0.8.1-dev.3 — redirect GLPI nativo delle ProjectTask (2026-10-25)
+
+- Corretto il catch(Throwable) che intercettava l'eccezione lanciata da Html::redirect() in GLPI 11 e faceva ricaricare la scelta progetto.
+- Aggiunto test con double che lancia la stessa classe di errore semantico; nessuna modifica ai dati, schema, permessi o moduli Dashboard/RSS.
+- **NON COLLAUDATO LIVE**: occorre verificare Form ProjectTask/Select2 in staging e il Salva successivo. Main invariato.
+- [Note 0.8.1-dev.3](docs/releases/0.8.1-dev.3.md).
+
 ## 0.8.1-dev.2 — attività indipendenti (2026-10-24)
 
 - Nuovo oggetto CommonDBTM nel plugin, schema versione 1 e upgrade idempotente.
