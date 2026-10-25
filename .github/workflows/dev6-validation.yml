@@ -1,0 +1,41 @@
+name: Validate experimental Dev6 branch
+on:
+  push:
+    branches:
+      - feature/mdo-0.8.1-dev.6
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  php-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP syntax
+        run: |
+          find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+      - name: PHP model tests
+        run: |
+          php tests/unit_php.php
+          php tests/tasks_php.php
+          php tests/standalone_php.php
+          php tests/task_activity_php.php
+      - name: JavaScript syntax
+        run: |
+          node --check public/js/task-workspace.js
+          node --check public/js/task-activity.js
+          node --check public/js/dashboard-overhaul.js
+      - name: Python packaging tests
+        run: python3 -B tests/packaging_test.py
+      - name: Release documentation gate
+        run: python3 -B tools/maintainer/check_dev_docs.py
+      - name: Install Chromium for isolated UI fixtures
+        run: |
+          python3 -m pip install playwright==1.62.0
+          python3 -m playwright install --with-deps chromium
+      - name: Responsive browser fixtures
+        run: |
+          python3 tests/ui_playwright.py
+          python3 tests/tasks_ui_playwright.py
+          python3 tests/settings_ui_playwright.py
+          python3 tests/standalone_ui_playwright.py

@@ -85,6 +85,8 @@ final class ProjectTask
     private array $team = [];
     public function getFromResultSet(array $row): void { $this->fields = $row; }
     public function post_getFromDB(): void { $this->team = $this->fields['team_users'] ?? []; }
+    public function getFromDB(int $id): bool { $this->fields = self::$rows[$id] ?? []; $this->post_getFromDB(); return $this->fields !== []; }
+    public function update(array $values): bool { $id = (int)($values['id'] ?? 0); if (!$this->can($id, UPDATE)) return false; self::$rows[$id] = array_replace(self::$rows[$id], $values); $this->fields = self::$rows[$id]; return true; }
     public static function canView(): bool { return Session::$projectRead || Session::$taskRead; }
     public static function canCreate(): bool { return Session::$create; }
     public static function getFormURL(bool $full = true): string { return ($full ? '/glpi' : '') . '/front/projecttask.form.php'; }
@@ -148,6 +150,7 @@ final class Plugin
 {
     public static bool $active = true;
     public static function isPluginActive(string $name): bool { return self::$active; }
+    public static function registerClass(string $name, array $options): void {}
 }
 final class SimulatedGLPIRedirect extends RuntimeException {}
 final class Html
@@ -183,19 +186,26 @@ final class TaskFakeDB
     public array $queries = [];
     public bool $fail = false;
     public bool $hasTaskTable = true;
+    public array $extraTables = ['glpi_plugin_mdoverhaul_tasknotes'=>true,'glpi_plugin_mdoverhaul_taskfiles'=>true];
     public array $schemaFields = [];
     public array $schemaKeys = [];
     public array $profileRights = [];
     public int $creates = 0;
     public int $alterations = 0;
-    public function tableExists($table): bool { return $this->hasTaskTable; }
-    public function fieldExists($table,$field): bool { return isset($this->schemaFields[$field]); }
+    public function tableExists($table): bool { return $table === 'glpi_plugin_mdoverhaul_tasks' ? $this->hasTaskTable : !empty($this->extraTables[$table]); }
+    public function fieldExists($table,$field): bool { return isset($this->schemaFields[$field]) || ($table !== 'glpi_plugin_mdoverhaul_tasks' && in_array($field, ['id','source','items_id','users_id','content','date_creation','is_deleted','name','stored','mime','filesize'], true)); }
     public function doQuery($sql): bool
     {
-        if (!str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasks`')) { throw new RuntimeException('Unexpected schema SQL'); }
-        $this->hasTaskTable=true; $this->creates++;
+        if (!str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_')) { throw new RuntimeException('Unexpected schema SQL'); }
+        if (str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasks`')) { $this->hasTaskTable=true; }
+        elseif (str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasknotes`')) { $this->extraTables['glpi_plugin_mdoverhaul_tasknotes']=true; }
+        elseif (str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_taskfiles`')) { $this->extraTables['glpi_plugin_mdoverhaul_taskfiles']=true; }
+        else { throw new RuntimeException('Unexpected table'); }
+        $this->creates++;
         preg_match_all('/`([a-z_]+)` (?:int|varchar|mediumtext|timestamp|tinyint)/',$sql,$matches);
-        $this->schemaFields=array_fill_keys($matches[1],true);
+        if (str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasks`')) {
+            $this->schemaFields=array_fill_keys($matches[1],true);
+        }
         return true;
     }
     public function request(array $query): array
@@ -219,7 +229,7 @@ final class TaskFakeDB
             return self::matches($row,$query['WHERE'],$table);
         });
         krsort($rows);
-        return array_slice(array_values($rows), 0, $query['LIMIT']);
+        return array_slice(array_values($rows), (int)($query['START'] ?? 0), (int)($query['LIMIT'] ?? 1000));
     }
     public static function matches(array $row,array $where,string $table): bool
     {
@@ -230,7 +240,7 @@ final class TaskFakeDB
                     $one=false; foreach($value as $key=>$condition) { if(self::matches($row,is_int($key)?$condition:[$key=>$condition],$table)) { $one=true; } }
                     if (!$one) { return false; } continue;
                 }
-                $key = substr($field, strlen($table) + 1);
+                $key = str_starts_with($field, $table . '.') ? substr($field, strlen($table) + 1) : $field;
                 if (is_array($value) ? !in_array($row[$key] ?? 0, $value, true) : ($row[$key] ?? 0) != $value) { return false; }
             }
             return true;
@@ -249,7 +259,7 @@ function taskFixture(): void
     $DB = new TaskFakeDB();
     $DB->schemaFields=array_fill_keys(['id','entities_id','name','content','users_id_owner','users_id_assign','groups_id_assign','status','due_date','date_creation','date_mod','is_deleted'],true);
     (new ReflectionProperty(\GlpiPlugin\Mdoverhaul\TaskSchema::class,'ready'))->setValue(null,null);
-    Config::setConfigurationValues(\GlpiPlugin\Mdoverhaul\Settings::CONTEXT,['task_schema_version'=>'1']);
+    Config::setConfigurationValues(\GlpiPlugin\Mdoverhaul\Settings::CONTEXT,['task_schema_version'=>\GlpiPlugin\Mdoverhaul\TaskSchema::VERSION]);
     CommonDBTM::$storage=[];
     $CFG_GLPI = ['root_doc' => '/glpi'];
     Session::$user = 1;

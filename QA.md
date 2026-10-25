@@ -1,4 +1,4 @@
-# QA — Modern Dashboard Overhaul 0.8.1-dev.5 (Dev)
+# QA — Modern Dashboard Overhaul 0.8.1-dev.6 (Dev)
 
 Stato corrente: NON COLLAUDATO LIVE. Gli esiti e ambienti precedenti sotto restano storici.
 
@@ -141,3 +141,8 @@ Bug verificato prima del fix: log GLPI 11.0.9 con MySQL 1054 ORDER BY DESC sul K
 ## Consuntivo verificato 0.8.1-dev.5 — GitHub Actions 40189878021
 
 PASS: 67 PHP, 69 Tasks, 62 Standalone, 9 packaging, 86 UI dashboard, 175 UI Tasks, 560 UI Settings e 108 UI Standalone. Archivio, SHA512SUMS, sidecar, manifest e provenienza `60fb656aad0400a31788bf68760edf390961f166` PASS. ZIP checksum `f12a4c5b7a0c13daadc6ccff60a85b83a2e3a2dfa8571d26a6d9265d9a875b206eff10577fc3674e9e57abe24176bbe7ae1e0b4624d623ec466e7a3b97475ef5`. Primo CI fallito su test fixture, corretto e ripetuto: run finale verde. **NON COLLAUDATO LIVE dopo il fix**: nuova board Project/Standalone e configurazione dei diritti nell'istanza utente. Non attribuire a questi mock una validazione delle ACL in GLPI 11.0.9 reale.
+
+
+## QA 0.8.1-dev.6 — stato corrente
+
+Verifiche CI sperimentali PHP/JS e suite browser isolate nella workflow `dev6-validation.yml`: consultare esiti per source SHA nella PR Draft #3; non equivale a un collaudo GLPI reale. Nuovo test `tests/task_activity_php.php` controlla 25 note con paginazione, protezioni READMY, allegati, Stage e conflitti. **NON COLLAUDATO LIVE**: schema 2, scrittura/drag, note e allegati, profili diversi e upload/download nel container reale. Non promuovere Main senza prove e backup/restore.

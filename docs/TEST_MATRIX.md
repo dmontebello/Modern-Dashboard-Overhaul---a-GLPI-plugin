@@ -111,3 +111,8 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento 0.8.1-dev.5
 
 Regressione SQL: TaskBoard::load, TaskBoard::creationProjects e StandaloneTask::loadBoard ordinano per 'table.id DESC' nella lista ORDER prevista da GLPI 11. Il double rifiuta lo schema associativo che produceva ORDER BY DESC. Controllare nel live il Kanban vuoto e popolato. Regressione ACL: modulo Standalone attivo ma senza READMY/READALL mostra solo avviso ad admin, non tab e non dati; accesso diretto resta vietato. Test live post-fix ancora mancanti.
+
+
+## QA 0.8.1-dev.6
+
+Testare su GLPI reale ACL, Stage, storico note paginato, allegati privati, upgrade schema2, responsive e rollback. CI automatica non equivale al collaudo live. NON COLLAUDATO LIVE.

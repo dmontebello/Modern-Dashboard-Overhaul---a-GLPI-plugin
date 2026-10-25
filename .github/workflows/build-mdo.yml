@@ -21,6 +21,7 @@ jobs:
           php tests/unit_php.php
           php tests/tasks_php.php
           php tests/standalone_php.php
+          php tests/task_activity_php.php
           python3 -B tests/packaging_test.py
           python3 -B tools/maintainer/check_dev_docs.py
       - name: Install browser dependencies

@@ -1,5 +1,13 @@
 # Changelog — Modern Dashboard Overhaul
 
+## 0.8.1-dev.6 — Tasks unificate e diario (2026-10-25)
+
+- Vista Tutte (ProjectTask + StandaloneTask) con selettori di origine evidenziati, elenco combinato campionato e tre colonne Kanban persistenti. Drag/drop autorizzato e movimento via tastiera, Stage GLPI basato su percentuale e status native preservate.
+- Diario MDO append-only con 20 annotazioni per pagina e Mostra precedenti fino alla prima; allegati in storage privato GLPI con route di download protetta da ACL item, migrazione idempotente schema 2.
+- Navigazione parziale compatibile col plugin; Search GLPI nativa invariata, azioni form in fondo a destra; test e documentazione di sviluppo aggiornati. **NON COLLAUDATO LIVE**: versione da validare sul server prima di Main.
+- [Dettagli della candidata](docs/releases/0.8.1-dev.6.md).
+
+
 ## 0.8.1-dev.5 — Kanban SQL e profili Standalone (2026-10-25)
 
 - **Fix da log reali:** l'ORDER associativo delle tre query candidate generava `ORDER BY \`DESC\`` e MySQL 1054 sul GLPI 11.0.9 dell'utente. Ora usa `['table.id DESC']`.

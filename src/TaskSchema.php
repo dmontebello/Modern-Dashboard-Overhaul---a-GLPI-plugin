@@ -11,7 +11,9 @@ use RuntimeException;
 final class TaskSchema
 {
     public const TABLE = 'glpi_plugin_mdoverhaul_tasks';
-    public const VERSION = '1';
+    public const VERSION = '2';
+    public const NOTES = 'glpi_plugin_mdoverhaul_tasknotes';
+    public const FILES = 'glpi_plugin_mdoverhaul_taskfiles';
     private static ?bool $ready = null;
     private const FIELDS = [
         'entities_id' => ['fkey', 0], 'name' => ['string', ''], 'content' => ['mediumtext', null],
@@ -31,6 +33,12 @@ final class TaskSchema
         }
         foreach (array_merge(['id'], array_keys(self::FIELDS)) as $field) {
             if (!$DB->fieldExists(self::TABLE, $field)) { return self::$ready = false; }
+        }
+        foreach ([self::NOTES, self::FILES] as $linkedTable) {
+            if (!$DB->tableExists($linkedTable)) { return self::$ready = false; }
+            foreach (['id','source','items_id','users_id','date_creation','is_deleted'] as $required) {
+                if (!$DB->fieldExists($linkedTable,$required)) { return self::$ready = false; }
+            }
         }
         return self::$ready = true;
     }
@@ -69,6 +77,8 @@ final class TaskSchema
         }
         // New rights start at zero for every profile; existing grants are preserved.
         $migration->addRight(StandaloneTask::$rightname, 0, []);
+        require_once __DIR__ . '/TaskActivitySchema.php';
+        TaskActivitySchema::install();
         $migration->executeMigration();
         if (isset($GLPI_CACHE)) { $GLPI_CACHE->set('all_possible_rights', []); }
         Config::setConfigurationValues(Settings::CONTEXT, ['task_schema_version' => self::VERSION]);

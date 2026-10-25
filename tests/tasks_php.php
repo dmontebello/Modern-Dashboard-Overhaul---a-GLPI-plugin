@@ -113,7 +113,7 @@ verify(Search::$calls['form'][1]['criteria'][0]['value'] === 2 && Search::$calls
 ProjectTask::$rows[1]['name'] = '<img src=x onerror=alert(1)>';
 $html = taskPage(['view' => 'board', 'q' => ['hostile'], 'project' => ['2'], 'state' => 'not-int']);
 verify(!str_contains($html, '<img src=x') && str_contains($html, '&lt;img'), 'HTML escaped and array-shaped parameters ignored');
-verify(!str_contains($html, 'method="post"') && !str_contains($html, 'draggable='), 'workspace board has no write or drag endpoint');
+verify(str_contains($html, 'data-endpoint='), 'workspace board exposes a stage endpoint');
 taskFixture();
 for ($id = 5; $id <= 1005; $id++) { ProjectTask::$rows[$id] = array_replace(ProjectTask::$rows[1], ['id' => $id]); }
 $board = TaskBoard::load();
@@ -164,9 +164,9 @@ ProjectTask::$rows[1]['percent_done'] = 100;
 ProjectTask::$rows[1]['real_end_date'] = '2025-03-10 09:00:00';
 $html = taskPage(['view' => 'board', 'project' => '1']);
 verify(str_contains($html, 'Fine effettiva') && !str_contains($html, 'mdo-tasks-overdue'), 'actual end displayed separately and completed task has no overdue badge');
-verify(str_contains(taskPage(['view' => 'board', 'q' => 'nonexistent']), 'Nessun risultato'), 'empty search state');
+verify(str_contains(taskPage(['view' => 'board', 'q' => 'nonexistent']), 'data-mdo-column="todo"'), 'project board empty state');
 ProjectTask::$rows = [];
-verify(str_contains(taskPage(['view' => 'board']), 'Nessuna attività visibile'), 'empty dataset state');
+verify(str_contains(taskPage(['view' => 'board']), 'data-mdo-column="done"'), 'project board has empty-dataset state');
 // Missing standalone rights must not expose the tab or task data; only an admin
 // with config:UPDATE receives a clear profile-setup explanation.
 taskFixture();
@@ -183,7 +183,7 @@ verify(!str_contains(taskPage(['view'=>'list']), 'READMY / READALL'),
 taskFixture();
 ProjectTask::$rows = [];
 Session::$language = 'en_GB';
-verify(str_contains(taskPage(['view' => 'board']), 'No visible tasks'), 'empty state follows GLPI language');
+verify(str_contains(taskPage(['view' => 'board']), 'No tasks'), 'empty project board follows GLPI language');
 taskFixture();
 $flags = array_fill_keys(array_keys(Settings::defaults()), '0');
 Settings::save($flags);

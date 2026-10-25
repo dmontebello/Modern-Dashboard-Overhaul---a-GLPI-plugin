@@ -126,3 +126,8 @@ La candidata 0.8.1-dev.4 mantiene gli otto flag. StandaloneTask richiede task_wo
 ## Aggiornamento 0.8.1-dev.5
 
 In MDO 0.8.1-dev.5 l'opzione tasks_standalone non attribuisce automaticamente diritti ai profili: dopo upgrade/schema pronto, abilitare task_workspace e tasks_standalone, poi aprire Amministrazione > Profili > profilo corrente > scheda MDO attività indipendenti. Concedere READMY o READALL per vedere, CREATE per creare, UPDATE per modificare. Salvare ed effettuare logout/login. Persino Super-Admin ha inizialmente zero diritti MDO Standalone. Nessun bypass nel plugin.
+
+
+## 0.8.1-dev.6 — Note configurazione
+
+Il modulo Tasks resta opt-in con task_workspace e tasks_standalone. Diario e allegati richiedono schema2 e i diritti READ/UPDATE per task ed entità; nessun diritto assegnato automaticamente. Lo storage GLPI privato deve essere scrivibile e sottoposto a backup. NON COLLAUDATO LIVE.
