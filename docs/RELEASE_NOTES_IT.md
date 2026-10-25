@@ -61,3 +61,8 @@ Nota 0.8.1-dev.3 (Dev): corretta la ricarica della schermata di scelta progetto 
 ## Aggiornamento 0.8.1-dev.5
 
 Candidata Dev 0.8.1-dev.5: fix dell'ORDER nelle query ProjectTask, Project e StandaloneTask. Il precedente formato associativo causava MySQL 1054 (ORDER BY DESC) in GLPI 11. Aggiunto un avviso per l'admin con Tasks indipendenti attive ma prive di READMY/READALL sul profilo corrente. Nessun diritto viene concesso automaticamente e la 403 nativa resta valida. Nessuna migrazione DB; staging ancora da collaudare.
+
+
+## 0.8.1-dev.6 — Aggiornamento documentale
+
+MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggiornamento ACL, storico completo delle annotazioni e allegati MDO privati; schema 2 e relative verifiche di sicurezza. Vedere docs/releases/0.8.1-dev.6.md, QA.md e docs/dev/STATUS.md per test, rischi, rollback e prossimi passi. NON COLLAUDATO LIVE.
