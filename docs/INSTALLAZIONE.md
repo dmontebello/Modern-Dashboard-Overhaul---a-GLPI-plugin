@@ -138,3 +138,8 @@ Collaudo 0.8.1-dev.3: usare solo ZIP Dev versionato dopo GitHub Actions verde; v
 ## Aggiornamento 0.8.1-dev.5
 
 Aggiornamento 0.8.1-dev.5 solo su staging: backup coordinato DB/plugin/volumi, ZIP Dev con SHA512, estrazione vera (unzip -t verifica soltanto), sostituzione della cartella mdoverhaul, verifica versione installata nel container e nei Settings. Nessuna nuova migrazione oltre lo schema standalone 1. Prove successive: Kanban senza SQL 1054 e diritti Standalone dal profilo.
+
+
+## Upgrade 0.8.1-dev.6
+
+Dopo backup coordinato plugin, DB e volume GLPI_DOC_DIR/mdoverhaul, aggiornare con gestore plugin GLPI per schema2; verificare tasknotes e taskfiles, migrazione ripetibile, permessi, file e rollback. Nessun deploy in produzione senza staging PASS LIVE.
