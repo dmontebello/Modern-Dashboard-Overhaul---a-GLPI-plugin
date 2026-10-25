@@ -113,7 +113,7 @@ verify(Search::$calls['form'][1]['criteria'][0]['value'] === 2 && Search::$calls
 ProjectTask::$rows[1]['name'] = '<img src=x onerror=alert(1)>';
 $html = taskPage(['view' => 'board', 'q' => ['hostile'], 'project' => ['2'], 'state' => 'not-int']);
 verify(!str_contains($html, '<img src=x') && str_contains($html, '&lt;img'), 'HTML escaped and array-shaped parameters ignored');
-verify(!str_contains($html, 'method="post"') && !str_contains($html, 'draggable='), 'workspace board has no write or drag endpoint');
+verify(str_contains($html, 'data-endpoint='), 'workspace board exposes a stage endpoint');
 taskFixture();
 for ($id = 5; $id <= 1005; $id++) { ProjectTask::$rows[$id] = array_replace(ProjectTask::$rows[1], ['id' => $id]); }
 $board = TaskBoard::load();
