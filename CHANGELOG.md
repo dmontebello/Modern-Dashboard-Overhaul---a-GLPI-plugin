@@ -1,5 +1,11 @@
 # Changelog — Modern Dashboard Overhaul
 
+## 0.8.1-dev.7 — Form unico Nuova task (2026-10-25)
+
+- Un solo form GLPI-integrato per Task nuova, progetto facoltativo: salvataggio nativo ProjectTask o StandaloneTask senza conversioni o progetto nascosto; mapping campo scadenza distinto. Permessi item/entità, dati errati e CSRF protetti sul server.
+- Eliminate le due scelte preliminari dal pulsante principale, mantenuti i vecchi URL di creazione e le funzionalità native avanzate nel form core dopo il salvataggio. Test di regressione PHP dedicati; QA live ancora aperto. [Note dev.7](docs/releases/0.8.1-dev.7.md).
+
+
 ## 0.8.1-dev.6 — Tasks unificate e diario (2026-10-25)
 
 - Vista Tutte (ProjectTask + StandaloneTask) con selettori di origine evidenziati, elenco combinato campionato e tre colonne Kanban persistenti. Drag/drop autorizzato e movimento via tastiera, Stage GLPI basato su percentuale e status native preservate.
