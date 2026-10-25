@@ -153,3 +153,8 @@ Tooling 0.8.1-dev.4: php tests/standalone_php.php verifica la modalità return-o
 ## Aggiornamento 0.8.1-dev.5
 
 Regression di dev.5: php tests/tasks_php.php e php tests/standalone_php.php verificano il formato ORDER delle tre query MDO. Il double TaskFakeDB::request rifiuta l'associativo che causava il vero MySQL 1054. I test e il packaging restano isolati, non sostituiscono una prova su GLPI 11 reale. Installare la ZIP soltanto dopo CI verde e verifica sha512sum -c.
+
+
+## 0.8.1-dev.6
+
+Tasks: schema2, diario e allegati. ZIP solo con pipeline e SHA512 verificati; NON COLLAUDATO LIVE. Consultare docs/releases/0.8.1-dev.6.md.
