@@ -1,5 +1,12 @@
 # Changelog — Modern Dashboard Overhaul
 
+## 0.8.1-dev.4 — Tasks Search nativa e CI immutabile (2026-10-25)
+
+- Il filtro Stato di StandaloneTask restituisce ora l'HTML del Dropdown nativo con display=false, anziché stamparlo fuori dalla ricerca.
+- La pipeline mantiene immutabili ZIP versionate; salta soltanto i successivi commit esclusivamente documentali o rebuild del medesimo sorgente. Modificare codice senza bump è sempre bloccato.
+- Regressioni PHP e Python dedicate. Nessuna modifica DB/ACL, nessun secondo plugin, nessun intervento su Main. **NON COLLAUDATO LIVE**.
+- [Note della candidata](docs/releases/0.8.1-dev.4.md).
+
 ## 0.8.1-dev.3 — redirect GLPI nativo delle ProjectTask (2026-10-25)
 
 - Corretto il catch(Throwable) che intercettava l'eccezione lanciata da Html::redirect() in GLPI 11 e faceva ricaricare la scelta progetto.

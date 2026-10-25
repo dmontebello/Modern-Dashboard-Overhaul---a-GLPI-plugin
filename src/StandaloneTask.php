@@ -178,8 +178,14 @@ final class StandaloneTask extends CommonDBTM implements ExtraVisibilityCriteria
     }
     public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
     {
-        if ($field === 'status') { return \Dropdown::showFromArray($name, self::statuses(), ['value'=>$values] + $options); }
-        return '';
+        if ($field !== 'status') { return ''; }
+        // Native GLPI Search expects returned HTML. The dropdown's default
+        // display=true instead echoes the HTML and returns an integer rand.
+        return \Dropdown::showFromArray($name, self::statuses(), array_replace($options, [
+            'value' => $values,
+            'display' => false,
+            'aria_label' => self::text('Stato attività', 'Task status'),
+        ]));
     }
 
     public static function loadBoard(): array

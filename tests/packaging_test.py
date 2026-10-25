@@ -10,7 +10,7 @@ import unittest
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools/maintainer'))
-from publish_dev import verify
+from publish_dev import verify, documentation_only_since
 from versioning import documentation_errors, version, included
 
 
@@ -64,6 +64,22 @@ class PackagingTests(unittest.TestCase):
         self.build()
         self.archive.write_bytes(self.archive.read_bytes()+b'tamper')
         with self.assertRaises(ValueError): verify(self.root,self.archive,self.sha,'123')
+
+    def test_documentation_only_update_does_not_require_new_version(self):
+        (self.root / 'docs').mkdir()
+        (self.root / 'docs' / 'STATUS.md').write_text('Handoff revision')
+        (self.root / 'MDO_Dev_Latest.zip').write_bytes(b'old archive')
+        (self.root / 'SHA512SUMS').write_text('old manifest')
+        subprocess.run(['git', 'add', '.'], cwd=self.root, check=True)
+        subprocess.run(['git', 'commit', '-qm', 'docs: handoff'], cwd=self.root, check=True)
+        docs_sha = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=self.root, text=True).strip()
+        self.assertTrue(documentation_only_since(self.root, self.sha, docs_sha))
+        (self.root / 'file.txt').write_text('code actually changed')
+        subprocess.run(['git', 'add', 'file.txt'], cwd=self.root, check=True)
+        subprocess.run(['git', 'commit', '-qm', 'fix: source change'], cwd=self.root, check=True)
+        code_sha = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=self.root, text=True).strip()
+        self.assertFalse(documentation_only_since(self.root, self.sha, code_sha))
+        self.assertFalse(documentation_only_since(self.root, code_sha, code_sha))
 
     def test_missing_notes(self):
         self.assertTrue(documentation_errors(self.root))

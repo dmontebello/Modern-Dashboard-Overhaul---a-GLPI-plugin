@@ -1,8 +1,8 @@
 # Modern Dashboard Overhaul
 
- > **Candidata Dev 0.8.1-dev.3:** [Note](docs/releases/0.8.1-dev.3.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
+ > **Candidata Dev 0.8.1-dev.4:** [Note](docs/releases/0.8.1-dev.4.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
 
-**Versione:** `0.8.1-dev.3` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
+**Versione:** `0.8.1-dev.4` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
 Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
@@ -16,7 +16,7 @@ Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: re
 | **Dashboard Restyling** | Contatori più leggibili anche in schede piccole, tema chiaro/scuro comandato dal toggle nativo, grafici con testi migliorati, eliminazione dello spazio dei filtri vuoti e tab orizzontali delle dashboard. Mantiene il pulsante `+` originale e i permessi GLPI. **Non crea nuovi widget nativi.** |
 | **Widget RSS** | Un widget per ogni feed GLPI attivo e visibile all'utente, con preset **5/10/15/20** articoli (10 predefiniti), data/ora se fornite dalla fonte, titoli e link sicuri. Non richiede un feed di sicurezza: funziona anche con RSS generici. |
 
-Il plugin non introduce tabelle proprie, job cron, telemetria, password, download di font o scanner. Usa il parser/cache RSS di GLPI e salva le sette opzioni amministrative nella configurazione nativa `glpi_configs`.
+La release Main 0.8.0 non introduce tabelle proprie. Le candidate Dev da 0.8.1-dev.2 aggiungono la sola tabella `glpi_plugin_mdoverhaul_tasks` per attività indipendenti (migrazione amministrativa GLPI), con **otto** opzioni nella configurazione nativa `glpi_configs`; niente cron, telemetria o servizi aggiuntivi.
 
 ### Dev: ZIP completo aggiornato automaticamente
 
@@ -24,12 +24,10 @@ La versione **di sviluppo** è scaricabile direttamente dal branch [`Dev`](https
 
 ```bash
 mkdir -p /tmp/mdo-dev && cd /tmp/mdo-dev
-curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip \
-  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip"
-curl -fL --retry 3 -o Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512 \
-  "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512"
-sha512sum -c Modern_Dashboard_Overhaul_0.8.0_Pilot.zip.sha512
-unzip -t Modern_Dashboard_Overhaul_0.8.0_Pilot.zip
+curl -fL --retry 3 -O "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.1-dev.4.zip"
+curl -fL --retry 3 -O "https://raw.githubusercontent.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/Dev/Modern_Dashboard_Overhaul_0.8.1-dev.4.zip.sha512"
+sha512sum -c Modern_Dashboard_Overhaul_0.8.1-dev.4.zip.sha512
+unzip -t Modern_Dashboard_Overhaul_0.8.1-dev.4.zip
 ```
 
 **Non installare insieme** le varianti Dev e Main nella medesima istanza GLPI: sono entrambe il singolo plugin `mdoverhaul`. Usare Dev soltanto su staging, lasciando `Main` invariato fino ad approvazione, PR e merge.

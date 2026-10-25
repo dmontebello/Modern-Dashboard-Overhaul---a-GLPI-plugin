@@ -124,11 +124,20 @@ final class Dropdown
         echo '</select>';
         return true;
     }
-    public static function showFromArray(string $name, array $elements, array $options): void
+    public static function showFromArray(string $name, array $elements, array $options): string|int
     {
-        echo '<select name="' . htmlspecialchars($name) . '" aria-label="' . htmlspecialchars($options['aria_label']) . '"><option value="0">—</option>';
-        foreach ($elements as $id => $label) { echo '<option value="' . (int) $id . '">' . htmlspecialchars($label, ENT_QUOTES) . '</option>'; }
-        echo '</select>';
+        // GLPI 11: display=true echoes HTML and returns rand; false returns HTML.
+        $html = '<select name="' . htmlspecialchars($name, ENT_QUOTES) . '" aria-label="'
+            . htmlspecialchars((string) ($options['aria_label'] ?? $name), ENT_QUOTES) . '">';
+        foreach ($elements as $id => $label) {
+            $selected = (string) ($options['value'] ?? '') === (string) $id ? ' selected' : '';
+            $html .= '<option value="' . (int) $id . '"' . $selected . '>'
+                . htmlspecialchars((string) $label, ENT_QUOTES) . '</option>';
+        }
+        $html .= '</select>';
+        if (($options['display'] ?? true) === false) { return $html; }
+        echo $html;
+        return 1;
     }
 }
 final class Plugin

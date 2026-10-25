@@ -11,7 +11,7 @@ import stat
 from datetime import datetime
 from zipfile import ZipFile
 
-from versioning import included, version
+from versioning import SEMVER, included, version
 
 
 def git(root, *args):
@@ -57,6 +57,29 @@ def verify(root, archive, source_sha, run_id):
     return info, digest, manifest
 
 
+def documentation_only_since(root, previous_source_sha, current_sha):
+    """Ignore publisher outputs; refuse any source or tooling changes without bump."""
+    if not all(re.fullmatch(r'[a-f0-9]{40}', sha) for sha in (previous_source_sha, current_sha)):
+        return False
+    ancestor = subprocess.run(['git', 'merge-base', '--is-ancestor', previous_source_sha, current_sha],
+                              cwd=root, capture_output=True, check=False)
+    if ancestor.returncode != 0:
+        return False
+    changed = git(root, 'diff', '--name-only', '--no-renames', previous_source_sha, current_sha).splitlines()
+    if not changed:
+        return False
+    def allowed(path):
+        generated = (path == 'SHA512SUMS'
+            or re.fullmatch(r'MDO_Dev_Latest\.zip(?:\.sha512)?', path)
+            or re.fullmatch(r'Modern_Dashboard_Overhaul_' + SEMVER + r'\.zip(?:\.sha512)?', path)
+            or re.fullmatch(r'docs/releases/' + SEMVER + r'\.build\.json', path))
+        docs = ((path.startswith('docs/') and path.endswith('.md'))
+            or path in {'AGENTS.md', 'README.md', 'CHANGELOG.md', 'QA.md', 'UPDATE.md',
+                        'tools/README.md', '.github/BRANCHES.md'})
+        return bool(generated or docs)
+    return all(allowed(path) for path in changed)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('archive', type=Path)
@@ -81,7 +104,18 @@ def main():
     if tracked.returncode == 0:
         old = subprocess.check_output(['git', 'show', 'HEAD:' + archive.name], cwd=root)
         if hashlib.sha512(old).hexdigest() != digest:
-            raise ValueError('Immutable version already exists; increment Dev version')
+            record = root / f"docs/releases/{info['version']}.build.json"
+            try:
+                previous = json.loads(record.read_text(encoding='utf-8'))['source_commit']
+            except (OSError, KeyError, ValueError, TypeError):
+                previous = None
+            if previous == args.source_sha:
+                print('PASS: immutable ZIP already exists for the same source; no overwrite')
+                return
+            if isinstance(previous, str) and documentation_only_since(root, previous, args.source_sha):
+                print('PASS: documentation-only update; immutable ZIP and Latest unchanged')
+                return
+            raise ValueError('Immutable version already exists; increment Dev version for code changes')
     target = root / archive.name
     shutil.copyfile(archive, target)
     shutil.copyfile(Path(str(archive) + '.sha512'), Path(str(target) + '.sha512'))

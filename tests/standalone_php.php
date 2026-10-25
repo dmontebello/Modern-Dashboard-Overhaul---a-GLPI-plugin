@@ -73,6 +73,15 @@ expect($item->can(1,READ),'assigned group member has READMY visibility');
 $_SESSION['glpigroups']=[];
 expect(!$item->can(1,READ),'removing group membership removes visibility');
 $options=$item->rawSearchOptions();
+ob_start();
+$statusSelect=StandaloneTask::getSpecificValueToSelect('status', 'mdo_status_filter', 2);
+$unexpectedOutput=(string) ob_get_clean();
+expect($unexpectedOutput==='' && is_string($statusSelect)
+    && str_contains($statusSelect, 'name="mdo_status_filter"')
+    && str_contains($statusSelect, 'value="2" selected'),
+    'native Search status selector returns HTML without echo and preserves selected value');
+expect(StandaloneTask::getSpecificValueToSelect('other', 'unused')==='',
+    'unsupported native specific field returns empty markup');
 expect($options[1]['itemtype']===StandaloneTask::class && StandaloneTask::getTable()===TaskSchema::TABLE,'native Search explicitly identifies the custom-table itemtype');
 $criteria=plugin_mdoverhaul_addDefaultWhere(StandaloneTask::class);
 expect($criteria===StandaloneTask::getVisibilityCriteria()['WHERE'] && plugin_mdoverhaul_addDefaultWhere(ProjectTask::class)===[],'public native Search hook applies own ACL only to standalone type');
