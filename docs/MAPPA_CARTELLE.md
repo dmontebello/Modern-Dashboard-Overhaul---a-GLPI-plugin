@@ -103,3 +103,8 @@ Mappa 0.8.1-dev.3: front/tasks.php corregge il redirect al form GLPI; tests/task
 ## Aggiornamento 0.8.1-dev.5
 
 Dev.5 modifica src/TaskBoard.php, src/StandaloneTask.php (ORDER SQL), front/tasks.php (solo avviso ACL admin), tests/task_bootstrap.php, tests/tasks_php.php, tests/standalone_php.php (regressioni), setup.php, note docs/releases/0.8.1-dev.5.md e documentazione correlata. Nessun file core GLPI, nuova tabella, volume o plugin separato.
+
+
+## 0.8.1-dev.6 — Aggiornamento documentale
+
+MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggiornamento ACL, storico completo delle annotazioni e allegati MDO privati; schema 2 e relative verifiche di sicurezza. Vedere docs/releases/0.8.1-dev.6.md, QA.md e docs/dev/STATUS.md per test, rischi, rollback e prossimi passi. NON COLLAUDATO LIVE.
