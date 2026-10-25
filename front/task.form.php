@@ -72,7 +72,7 @@ if (ProjectTask::canCreate()) {
     try {
         ob_start();
         $rendered = Dropdown::show(Project::class, [
-            'name' => 'projects_id', 'value' => is_scalar($data['projects_id'] ?? 0) ? (int)$data['projects_id'] : 0,
+            'name' => 'projects_id', 'value' => is_scalar($data['projects_id'] ?? null) ? (int)$data['projects_id'] : 0,
             'display_emptychoice' => true, 'required' => false, 'aria_label' => $translate('Progetto facoltativo', 'Optional project'),
             'condition' => ['is_deleted' => 0, 'is_template' => 0], 'entity' => -1,
             'width' => '100%', 'addicon' => false,
