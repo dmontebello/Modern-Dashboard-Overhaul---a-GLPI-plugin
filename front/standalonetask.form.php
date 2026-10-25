@@ -62,6 +62,12 @@ echo '<div class="mdo-tasks container-xl"><div class="mdo-tasks-create">';
 echo '<h1>' . $esc(StandaloneTask::getTypeName()) . ($id > 0 ? ' #'.$id : '') . '</h1>';
 echo '<p>' . $esc($text('Questa attività non appartiene a un progetto.', 'This task has no project.')) . '</p>';
 if ($deleted) { echo '<p role="status">' . $esc($text('Attività nel cestino.', 'Task in trash.')) . '</p>'; }
+if ($id > 0) {
+    global $CFG_GLPI;
+    $journal = rtrim((string)$CFG_GLPI['root_doc'],'/') . '/plugins/mdoverhaul/front/task-activity.php?source=standalone&id=' . $id;
+    echo '<p><a class="btn btn-outline-primary" href="' . $esc($journal) . '">' .
+        $esc($text('Diario e allegati', 'Activity and files')) . '</a></p>';
+}
 echo '<form method="post" action="' . $esc(StandaloneTask::getFormURL()) . '" class="mdo-standalone-form">';
 echo '<input type="hidden" name="id" value="'.$id.'"><input type="hidden" name="_glpi_csrf_token" value="' . $esc(Session::getNewCSRFToken()) . '">';
 echo '<fieldset' . (!$canEdit || $deleted ? ' disabled' : '') . '>';
