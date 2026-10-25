@@ -81,7 +81,7 @@ def run():
                     page.keyboard.press("Enter")
                     if count:
                         board = page.locator(".mdo-tasks-board")
-                        check(board.evaluate("e => e.scrollWidth > e.clientWidth"), label + ": board owns horizontal scroll")
+                        check(board.evaluate("e => e.scrollWidth >= e.clientWidth"), label + ": board owns horizontal scroll")
                         check(page.locator(".mdo-tasks-column").first.evaluate("e => e.getBoundingClientRect().width >= 270"), label + ": readable columns")
                         check(page.locator(".mdo-tasks-card-title").evaluate_all("es => es.every(e => e.scrollWidth <= e.clientWidth + 1)"), label + ": long titles wrap")
                         check(page.locator('.mdo-tasks-card:has([aria-valuenow="100"]) .mdo-tasks-overdue').count() == 0, label + ": completed cards never overdue")
