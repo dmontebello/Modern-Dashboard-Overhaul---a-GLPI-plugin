@@ -432,6 +432,7 @@ foreach ($columns as $columnKey => $column) {
         if ($task['description'] !== '') {
             echo '<p>' . $esc($task['description']) . '</p>';
         }
+        echo '<a class="mdo-tasks-journal" href="' . $esc(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task-activity.php?source=' . rawurlencode($task['source']) . '&id=' . (int)$task['id']) . '">' . $esc($tr('Diario e allegati', 'Activity and files')) . '</a>';
         echo '<div class="mdo-tasks-card-meta"><span class="mdo-tasks-state">' . $esc((string)$task['state']) . '</span>';
         if (TaskBoard::isOverdue($task)) {
             echo '<span class="mdo-tasks-overdue">' . $esc($tr('Scaduta', 'Overdue')) . '</span>';
