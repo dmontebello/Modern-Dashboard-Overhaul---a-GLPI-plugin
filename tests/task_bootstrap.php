@@ -202,7 +202,9 @@ final class TaskFakeDB
         else { throw new RuntimeException('Unexpected table'); }
         $this->creates++;
         preg_match_all('/`([a-z_]+)` (?:int|varchar|mediumtext|timestamp|tinyint)/',$sql,$matches);
-        $this->schemaFields=array_fill_keys($matches[1],true);
+        if (str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasks`')) {
+            $this->schemaFields=array_fill_keys($matches[1],true);
+        }
         return true;
     }
     public function request(array $query): array
