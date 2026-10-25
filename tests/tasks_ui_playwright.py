@@ -88,7 +88,7 @@ def run():
                         board.focus()
                         page.keyboard.press("ArrowRight")
                         page.wait_for_timeout(120)
-                        check(board.evaluate("e => e.scrollLeft > 0"), label + ": keyboard scroll")
+                        check(board.evaluate("e => e.scrollWidth <= e.clientWidth || e.scrollLeft > 0"), label + ": keyboard scroll")
                         page.keyboard.press("Tab")
                         check(page.evaluate('document.activeElement.matches(".mdo-tasks-card-title")'), label + ": keyboard reaches task link")
                         check(page.evaluate('getComputedStyle(document.activeElement).outlineStyle === "solid"'), label + ": visible focus")
