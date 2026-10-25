@@ -85,6 +85,8 @@ final class ProjectTask
     private array $team = [];
     public function getFromResultSet(array $row): void { $this->fields = $row; }
     public function post_getFromDB(): void { $this->team = $this->fields['team_users'] ?? []; }
+    public function getFromDB(int $id): bool { $this->fields = self::$rows[$id] ?? []; $this->post_getFromDB(); return $this->fields !== []; }
+    public function update(array $values): bool { $id = (int)($values['id'] ?? 0); if (!$this->can($id, UPDATE)) return false; self::$rows[$id] = array_replace(self::$rows[$id], $values); $this->fields = self::$rows[$id]; return true; }
     public static function canView(): bool { return Session::$projectRead || Session::$taskRead; }
     public static function canCreate(): bool { return Session::$create; }
     public static function getFormURL(bool $full = true): string { return ($full ? '/glpi' : '') . '/front/projecttask.form.php'; }
