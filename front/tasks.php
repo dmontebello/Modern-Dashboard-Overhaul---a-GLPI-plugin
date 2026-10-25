@@ -355,7 +355,7 @@ if ($group === 'progress') {
 }
 echo '<p class="mdo-tasks-results" role="status">' . count($filtered) . ' ' . $esc($tr('attività mostrate', 'tasks shown'))
     . ($loaded['truncated'] ? ' · ' . $esc($tr('campione parziale', 'partial sample')) : '') . '</p>';
-if ($filtered === []) {
+if ($filtered === [] && $view !== 'board') {
     echo '<div class="mdo-tasks-empty" role="status"><h2>' . $esc($all === []
         ? $tr('Nessuna attività visibile', 'No visible tasks') : $tr('Nessun risultato', 'No results')) . '</h2><p>'
         . $esc($all === [] ? ($standalone ? $tr('Le attività indipendenti accessibili appariranno qui.', 'Accessible independent tasks will appear here.') : $tr('Le attività dei progetti accessibili appariranno qui.', 'Tasks from accessible projects will appear here.'))
@@ -364,6 +364,35 @@ if ($filtered === []) {
     return;
 }
 
+if ($unified && $view === 'list') {
+    $start = max(0, min(10000, (int)($scalar('start', '0'))));
+    $page = array_slice($filtered, $start, 30);
+    echo '<div class="mdo-tasks-native-search"><table class="table table-vcenter"><thead><tr><th>' .
+        $esc($tr('Attività', 'Task')) . '</th><th>' . $esc($tr('Tipo', 'Type')) .
+        '</th><th>' . $esc($tr('Fase', 'Stage')) . '</th><th>' . $esc($tr('Progetto', 'Project')) .
+        '</th></tr></thead><tbody>';
+    foreach ($page as $record) {
+        $url = ($record['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL())
+            . '?id=' . (int)$record['id'];
+        echo '<tr><td><a href="' . $esc($url) . '">' . $esc($record['name']) .
+            '</a></td><td>' . $esc($record['source'] === 'standalone' ? $tr('Indipendente', 'Independent') :
+                $tr('Progetto', 'Project')) . '</td><td>' . $esc(TaskStageService::labels()[$record['stage']]) .
+            '</td><td>' . $esc($record['project_readable'] ? $record['project'] : '') . '</td></tr>';
+    }
+    echo '</tbody></table></div><nav class="mdo-tasks-pages" aria-label="' . $esc($tr('Pagine', 'Pages')) . '">';
+    if ($start > 0) {
+        echo '<a class="btn btn-outline-secondary" href="' . $esc($boardUrl(['view'=>'list','start'=>max(0,$start-30)])) . '">' . $esc($tr('Precedenti', 'Previous')) . '</a>';
+    }
+    if ($start+30 < count($filtered)) {
+        echo '<a class="btn btn-outline-secondary" href="' . $esc($boardUrl(['view'=>'list','start'=>$start+30])) . '">' . $esc($tr('Successive', 'Next')) . '</a>';
+    }
+    echo '</nav><p class="mdo-tasks-hint">' . $esc($tr(
+        'Vista combinata limitata alle candidate accessibili; usa le viste Progetto e Indipendenti per la ricerca GLPI completa.',
+        'Combined view is limited to the visible candidate sample; use the native Project and Independent lists for complete GLPI search.'
+    )) . '</p></div>';
+    Html::footer();
+    return;
+}
 $columns = ($unified || $standalone) ? [
     'todo' => ['name' => 'To do', 'items' => []],
     'doing' => ['name' => 'Doing', 'items' => []],
