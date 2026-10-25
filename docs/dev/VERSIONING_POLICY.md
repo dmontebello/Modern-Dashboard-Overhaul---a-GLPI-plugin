@@ -77,3 +77,8 @@ Corrente dev.5: versione in setup.php e pacchetto unico mdoverhaul. Nuova ZIP im
 ## 0.8.1-dev.6 — prerelease Tasks con schema 2
 
 La candidata dev.6 aggiunge TaskActivity/TaskAttachment e richiede un bump tecnico unico `0.8.1-dev.6` con note e QA nella stessa versione. Su Dev la ZIP versionata resta immutabile, viene creata/pubblicata dal publisher solo dopo la pipeline completa e registrazione source SHA / build ID / sha512; su Main nessun merge automatico. Il backup coordinato deve includere GLPI_DOC_DIR/mdoverhaul oltre a DB e plugin. **NON COLLAUDATO LIVE** fino ai test amministrativi/staging.
+
+
+## Nuovo prerelease 0.8.1-dev.7
+
+Implementazione del form unico senza nuove migrazioni rispetto allo schema2. ZIP `Modern_Dashboard_Overhaul_0.8.1-dev.7.zip`, manifest e SHA512 dal publisher con source SHA testato e run ID; non sovrascrivere dev.6 né modificare Main. Nessuna CI per commit esclusivamente markdown, fermo il gate sulla prossima modifica di codice. NON COLLAUDATO LIVE.
