@@ -70,6 +70,10 @@ $boardUrl = static fn (array $args = []): string => $base . '?' . http_build_que
 ], $args), '', '&', PHP_QUERY_RFC3986);
 
 $creating = $scalar('new') === '1' && (ProjectTask::canCreate() || StandaloneTask::canCreate());
+if ($creating && $scalar('kind') === '') {
+    Html::redirect(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task.form.php');
+    return;
+}
 $kind = $scalar('kind');
 if ($creating && $kind === 'standalone' && StandaloneTask::canCreate()) {
     Html::redirect(StandaloneTask::getFormURL()); return;
@@ -102,7 +106,7 @@ if (Project::canView()) {
         . $esc($tr('Progetti', 'Projects')) . '</a>';
 }
 if (ProjectTask::canCreate() || StandaloneTask::canCreate()) {
-    echo '<a class="btn btn-outline-primary" href="' . $esc($base . '?new=1&source=' . ($standalone ? 'standalone' : 'project')) . '">'
+    echo '<a class="btn btn-outline-primary" href="' . $esc(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task.form.php') . '">'
         . '<i class="ti ti-plus me-1"></i>' . $esc($tr('Nuova task', 'New task')) . '</a>';
 }
 echo '</div></header>';
