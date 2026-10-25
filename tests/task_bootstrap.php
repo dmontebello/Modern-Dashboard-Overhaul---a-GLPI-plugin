@@ -229,7 +229,7 @@ final class TaskFakeDB
             return self::matches($row,$query['WHERE'],$table);
         });
         krsort($rows);
-        return array_slice(array_values($rows), 0, $query['LIMIT']);
+        return array_slice(array_values($rows), (int)($query['START'] ?? 0), (int)($query['LIMIT'] ?? 1000));
     }
     public static function matches(array $row,array $where,string $table): bool
     {
@@ -240,7 +240,7 @@ final class TaskFakeDB
                     $one=false; foreach($value as $key=>$condition) { if(self::matches($row,is_int($key)?$condition:[$key=>$condition],$table)) { $one=true; } }
                     if (!$one) { return false; } continue;
                 }
-                $key = substr($field, strlen($table) + 1);
+                $key = str_starts_with($field, $table . '.') ? substr($field, strlen($table) + 1) : $field;
                 if (is_array($value) ? !in_array($row[$key] ?? 0, $value, true) : ($row[$key] ?? 0) != $value) { return false; }
             }
             return true;
