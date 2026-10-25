@@ -108,3 +108,7 @@ Dev.5 modifica src/TaskBoard.php, src/StandaloneTask.php (ORDER SQL), front/task
 ## 0.8.1-dev.6 — Aggiornamento documentale
 
 MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggiornamento ACL, storico completo delle annotazioni e allegati MDO privati; schema 2 e relative verifiche di sicurezza. Vedere docs/releases/0.8.1-dev.6.md, QA.md e docs/dev/STATUS.md per test, rischi, rollback e prossimi passi. NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.7 — allineamento
+
+`src/TaskCreationService.php` (validazione/modello) e `front/task.form.php` (GET form e POST protetto), test `tests/task_creation_php.php`; coinvolti `front/tasks.php`, asset di stile Tasks e setup.php.
