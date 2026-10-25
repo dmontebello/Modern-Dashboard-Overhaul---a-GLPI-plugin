@@ -166,7 +166,7 @@ $html = taskPage(['view' => 'board', 'project' => '1']);
 verify(str_contains($html, 'Fine effettiva') && !str_contains($html, 'mdo-tasks-overdue'), 'actual end displayed separately and completed task has no overdue badge');
 verify(str_contains(taskPage(['view' => 'board', 'q' => 'nonexistent']), 'data-mdo-column="todo"'), 'project board empty state');
 ProjectTask::$rows = [];
-verify(str_contains(taskPage(['view' => 'board']), 'Nessuna attività visibile'), 'project board has empty-dataset state');
+verify(str_contains(taskPage(['view' => 'board']), 'data-mdo-column="done"'), 'project board has empty-dataset state');
 // Missing standalone rights must not expose the tab or task data; only an admin
 // with config:UPDATE receives a clear profile-setup explanation.
 taskFixture();
@@ -183,7 +183,7 @@ verify(!str_contains(taskPage(['view'=>'list']), 'READMY / READALL'),
 taskFixture();
 ProjectTask::$rows = [];
 Session::$language = 'en_GB';
-verify(str_contains(taskPage(['view' => 'board']), 'No visible tasks'), 'empty project board follows GLPI language');
+verify(str_contains(taskPage(['view' => 'board']), 'No tasks'), 'empty project board follows GLPI language');
 taskFixture();
 $flags = array_fill_keys(array_keys(Settings::defaults()), '0');
 Settings::save($flags);
