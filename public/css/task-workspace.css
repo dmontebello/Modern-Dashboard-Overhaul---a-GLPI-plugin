@@ -70,3 +70,15 @@
 .mdo-standalone-form :is(input,textarea,select,.select2-container) {max-width:100%;min-width:0;}
 [data-glpi-theme-dark="1"] .mdo-tasks {--mdo-task-muted:#bdcbdc;--mdo-task-surface:#1d2b3c;color:#f0f4fa;}
 .mdo-tasks .text-secondary {color:var(--mdo-task-muted)!important;}
+
+/* Dev.6 local-only workspace layout and editable Kanban. */
+.mdo-tasks-source-tabs { margin-top:12px; margin-bottom:2px; border-bottom:0; padding-bottom:4px; }
+.mdo-tasks-source-tabs a[aria-current=page] { background:var(--tblr-primary,#206bc4);color:#fff;border-color:var(--tblr-primary,#206bc4); }
+.mdo-tasks-board [data-can-move="1"] { cursor:grab; }
+.mdo-tasks-board [data-can-move="1"]:active { cursor:grabbing; }
+.mdo-stage-control { display:flex;flex-direction:column;gap:4px; margin-top:12px;font-size:12px; }
+.mdo-stage-control select { min-height:36px;width:100%; }
+.mdo-standalone-form { display:flex!important; flex-direction:column!important; align-items:stretch!important; width:100%; min-width:0; }
+.mdo-standalone-form fieldset {width:100%;flex:auto;min-width:0;}
+.mdo-standalone-form .mdo-tasks-create-actions { width:100%;justify-content:flex-end;align-self:stretch;flex:0 0 auto; }
+@media(max-width:560px){.mdo-standalone-form .mdo-tasks-create-actions {align-items:stretch;}}
