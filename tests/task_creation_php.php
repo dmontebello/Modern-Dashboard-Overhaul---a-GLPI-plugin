@@ -88,7 +88,7 @@ page7([],['_glpi_csrf_token'=>$token,'create'=>'1','name'=>'Browser independent'
 check7(str_contains((string)Html::$redirect,'standalonetask.form.php?id='),'POST independent redirects to own form');
 $previous=Html::$redirect;
 $token=Session::getNewCSRFToken();
-$error=page7([],['_glpi_csrf_token'=>$token,'create'=>'1','name'=>'Must fail','projects_id'=>'3']);
+$error=page7([],['_glpi_csrf_token'=>$token,'create'=>'1','name'=>'Must fail','projects_id'=>'2']);
 check7(str_contains($error,'role="alert"') && str_contains($error,'value="Must fail"')
     && Html::$redirect===$previous,'invalid selection retains typed values and does not redirect');
 taskFixture();
