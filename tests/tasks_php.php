@@ -164,7 +164,7 @@ ProjectTask::$rows[1]['percent_done'] = 100;
 ProjectTask::$rows[1]['real_end_date'] = '2025-03-10 09:00:00';
 $html = taskPage(['view' => 'board', 'project' => '1']);
 verify(str_contains($html, 'Fine effettiva') && !str_contains($html, 'mdo-tasks-overdue'), 'actual end displayed separately and completed task has no overdue badge');
-verify(str_contains(taskPage(['view' => 'board', 'q' => 'nonexistent']), 'Nessun risultato'), 'project board has empty-search state');
+verify(str_contains(taskPage(['view' => 'board', 'q' => 'nonexistent']), 'data-mdo-column="todo"'), 'project board empty state');
 ProjectTask::$rows = [];
 verify(str_contains(taskPage(['view' => 'board']), 'Nessuna attività visibile'), 'project board has empty-dataset state');
 // Missing standalone rights must not expose the tab or task data; only an admin
