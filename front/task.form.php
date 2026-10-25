@@ -62,7 +62,7 @@ echo '<label for="mdo-new-content">' . $esc(__('Description')) . '</label>';
 echo '<textarea class="form-control" id="mdo-new-content" name="content" maxlength="100000" rows="5">' .
     $esc(is_string($data['content'] ?? null) ? $data['content'] : '') . '</textarea>';
 echo '<label for="mdo-new-due">' . $esc($translate('Scadenza', 'Due date')) . '</label>';
-$due = is_string($data['due_date'] ?? '') ? $data['due_date'] : '';
+$due = is_string($data['due_date'] ?? null) ? $data['due_date'] : '';
 echo '<input class="form-control" id="mdo-new-due" type="datetime-local" name="due_date" value="' . $esc($due) . '">';
 if (ProjectTask::canCreate()) {
     echo '<label for="mdo-new-project">' . $esc($translate('Progetto (facoltativo)', 'Project (optional)')) . '</label>';
