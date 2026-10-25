@@ -1,0 +1,11 @@
+{
+  "version": "0.8.1-dev.3",
+  "channel": "Dev",
+  "source_commit": "4eec680af75cd17d429372180eb90c3a48355483",
+  "source_state": "clean",
+  "build_id": "40186390232",
+  "built_at": "2026-10-25T10:51:28Z",
+  "zip": "Modern_Dashboard_Overhaul_0.8.1-dev.3.zip",
+  "sha512": "fb7db26c93f1a8fc8bc882812b96cb52f4bfb562e1879032d3e43a0cc668830210e279f84bc0b0dabefd0bb9053f0f5785e515058390a76536f205fa89bd2ad2",
+  "actions_url": "https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40186390232"
+}
