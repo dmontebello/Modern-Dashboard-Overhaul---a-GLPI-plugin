@@ -36,6 +36,9 @@ final class TaskSchema
         }
         foreach ([self::NOTES, self::FILES] as $linkedTable) {
             if (!$DB->tableExists($linkedTable)) { return self::$ready = false; }
+            foreach (['id','source','items_id','users_id','date_creation','is_deleted'] as $required) {
+                if (!$DB->fieldExists($linkedTable,$required)) { return self::$ready = false; }
+            }
         }
         return self::$ready = true;
     }
