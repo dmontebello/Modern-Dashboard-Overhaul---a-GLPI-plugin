@@ -1,5 +1,8 @@
 # 0.8.1-dev.6 — stato implementazione sul branch di lavoro
 
+**Stato aggiornato 25/10/2026:** il codice comprende lista unificata, Kanban Stage, diario append-only, allegati, schema2, navigazione JS. Test PHP/JS e packaging sono stati eseguiti con esiti verdi in diversi run sperimentali; la suite browser responsive è in fase di riallineamento dopo l'aggiunta dei due tab attivi. Il gate definitivo del source SHA della candidata **non è ancora certificato**. **NON COLLAUDATO LIVE** e **nessun ZIP dev.6 pubblicabile** finché CI/documentazione e staging non sono verificati.
+
+
 **Stato: WORK IN PROGRESS; NON COLLAUDATO LIVE; NESSUNA ZIP dev.6 pubblicabile.** Ultima release verificata rimane 0.8.1-dev.5. Il branch `feature/mdo-0.8.1-dev.6` è separato da `Dev` e `Main`.
 
 ## Implementato nel branch, NON ANCORA VERIFICATO
@@ -36,3 +39,25 @@
 3. Concludere UI asincrona e aggregazione paginata; testare 0/1/100/1000+ task.
 4. Aggiornare numero a `0.8.1-dev.6`, tutte le note release, QA, README, security/schema/install/staging nello stesso commit codice, validare `check_dev_docs.py`, manifest e ZIP.
 5. Collaudo sul server GLPI dell'utente e verifica backup/rollback prima di considerare dev.6 disponibile.
+
+## Rettifiche dello stato WIP
+
+Le voci iniziali «nessuna suite eseguita», «diario/allegati non implementati» e «navigazione AJAX assente» qui sopra appartenevano a checkpoint precedenti. **Ora codice e test specifici esistono**: `src/TaskActivity.php`, `src/TaskAttachment.php`, `front/task-activity.php`, `public/js/task-activity.js`, `tests/task_activity_php.php`; la navigazione MDO è in `public/js/task-workspace.js`. Il package rimane sperimentale: file reali, middleware e storage non sono stati collaudati live.
+
+### Bug/fix emersi nei test
+
+- PHP Parse error nella concatenazione delle card: corretto.
+- Test precedente assumeva Kanban in sola lettura; aggiornato al POST autorizzato.
+- Suite UI presumeva un unico elemento aria-current, mentre ora origine+vista sono entrambi selezionati: aggiunta class separata `mdo-tasks-source-tabs`.
+- Asset JS inizialmente nel percorso sbagliato: spostati in `public/js`.
+- Doppio PHP per lo schema2 aggiornato con le due nuove tabelle; test di migrazione eseguiti isolatamente.
+- Nelle nuove funzioni MDO i file non vengono salvati nella cartella plugin, ma in storage GLPI privato.
+
+### Next steps
+
+1. Attendere pipeline finale su SHA preciso, correggere tutte le prove browser o PHP fallite senza disabilitarle.
+2. Eseguire schema1→2 e upload/download su **GLPI reale** con due entità e profili diversi, inclusa verifica dei file privati.
+3. Verificare navigazione senza refresh nelle sole viste MDO e Search nativa GLPI senza regressioni.
+4. Quando CI è verde, pubblicazione ZIP versionata via Dev e checksum verificato; nessuna promozione Main.
+5. Eseguire staging e registrare PASS/FAIL LIVE, poi pianificare dev.7/dev.8/dev.9/0.8.2.
+
