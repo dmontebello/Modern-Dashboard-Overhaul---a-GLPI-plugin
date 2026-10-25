@@ -12,7 +12,7 @@ final class TaskActivity
 
     private static function checked(string $source, int $id, int $right): ?object
     {
-        if (!TaskSchema::isReady() || $id < 1) { return null; }
+        if (!Settings::get()['task_workspace'] || !TaskSchema::isReady() || $id < 1) { return null; }
         $item = TaskStageService::item($source, $id);
         if ($item === null || !empty($item->fields['is_deleted'])) { return null; }
         return $item->can($id, $right) ? $item : null;
