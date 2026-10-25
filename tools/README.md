@@ -1,4 +1,4 @@
-# Controlli e backup - Modern Dashboard Overhaul 0.8.1-dev.2 - VM Linux
+# Controlli e backup - Modern Dashboard Overhaul 0.8.1-dev.4 - VM Linux
 
 > **Corrente 0.8.1-dev.2:** vedere la sezione aggiornata in fondo; le descrizioni precedenti restano riferimento storico delle versioni indicate.
 
@@ -145,3 +145,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](../docs/releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 Tooling candidato 0.8.1-dev.3: eseguire php tests/tasks_php.php per verificare anche il redirect-eccezione GLPI 11, poi test unit/standalone/browser e il gate documentazione/pacchetto; pubblicazione ZIP Dev e SHA512 solo dopo CI verde. Non usare lo ZIP 0.8.1-dev.2 per testare questo fix.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+Tooling 0.8.1-dev.4: php tests/standalone_php.php verifica la modalità return-only della Dropdown GLPI. python3 -B tests/packaging_test.py riproduce con git fixture docs-only vs code changed; gate versioned archive unchanged. GitHub Actions e checksum restano fonti per PASS effettivi. Nessun deploy eseguito da questi script.

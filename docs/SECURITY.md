@@ -77,3 +77,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 In 0.8.1-dev.3 la verifica ProjectTask::can(-1,CREATE, input) continua ad applicare i diritti nativi sul Project selezionato. Html::redirect viene spostato fuori dal catch(Throwable) perché il router GLPI 11 segnala tramite RedirectException un redirect valido; questo non rimuove né aggira alcun controllo ACL. Cross-entity e READMY/READALL richiedono collaudo live.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+0.8.1-dev.4: nessun cambiamento ai permessi. Lo status filter di StandaloneTask usa display=false per evitare output diretto fuori dal controllo nativo. La whitelist del publisher accetta solo modifiche documentali specifiche e output generati; non può mascherare modifiche di codice senza aumento versione. ACL live ancora non collaudate.

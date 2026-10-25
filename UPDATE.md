@@ -76,3 +76,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](docs/releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 Versione Dev 0.8.1-dev.3: correzione del redirect alla form ProjectTask, senza modifica di database/schema rispetto a dev.2. Conservare backup DB/plugin/volumi; verificare l'upgrade da gestore GLPI su staging. Dopo Continua su un Project valido deve aprirsi /front/projecttask.form.php?projects_id=N. Non sovrascrivere la Main/produzione.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+Aggiornamento 0.8.1-dev.4: nessuna migrazione aggiuntiva rispetto alla dev.3, resta lo schema standalone 1. Corretto il rendering del filtro Stato nella Search nativa GLPI; publisher Dev consente aggiornamenti solo documentali senza cambiare ZIP immutable. Prima dell'upgrade staging: backup DB/plugin/volumi, SHA512 e controllo build-info.json.

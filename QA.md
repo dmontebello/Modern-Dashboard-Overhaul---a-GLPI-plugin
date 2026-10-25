@@ -1,4 +1,4 @@
-# QA — Modern Dashboard Overhaul 0.8.1-dev.3 (Dev)
+# QA — Modern Dashboard Overhaul 0.8.1-dev.4 (Dev)
 
 Stato corrente: NON COLLAUDATO LIVE. Gli esiti e ambienti precedenti sotto restano storici.
 
@@ -127,3 +127,7 @@ ECharts ticket_status, cache HTTP, DnD nativo e temi reali. Nessun bug live chiu
 ## 0.8.1-dev.3 — diagnosi 25 ottobre 2026
 
 Bug ProjectTask: GLPI 11.0.9 implementa Html::redirect() lanciando RedirectException. MDO dev.2 catturava l'eccezione con catch(Throwable) e restava sulla schermata di scelta progetto. Fix: redirect fuori dal catch; nuova regressione nei test PHP che simula l'eccezione reale. CI e checksum da verificare dopo commit. **NON COLLAUDATO LIVE**: Select2, diritti, form e Salva richiedono staging. Le altre regressioni UI e migrazione/ACL standalone sono ancora da collaudare.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+0.8.1-dev.4: test previsto per Dropdown::showFromArray(display=false), restituzione HTML e selezione Stato; regressioni su publisher solo documenti rispetto a modifiche sorgente senza bump; CI da verificare su SHA effettivo. NON COLLAUDATO LIVE: ricerca AJAX, Search/ACL e CRUD standalone, mini Ticket, toolbar, legenda e Settings sul GLPI reale.

@@ -144,3 +144,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 Versione 0.8.1-dev.3: il controller Tasks consulta ProjectTask e Project nativi, poi esegue Html::redirect FUORI dal try/catch. In GLPI 11 la RedirectException è parte intenzionale del protocollo del router, non un errore applicativo da sopprimere. Nessuna alterazione a StandaloneTask, dashboard, RSS o schema.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+In 0.8.1-dev.4 il campo Status di StandaloneTask restituisce il markup tramite Dropdown::showFromArray(display=false) richiesto da Search GLPI, senza sostituire ricerca nativa. Persistenza standalone schema 1 invariata; native ProjectTask e RSS/Charts invariati. Publisher confronta sorgente e documentazione.

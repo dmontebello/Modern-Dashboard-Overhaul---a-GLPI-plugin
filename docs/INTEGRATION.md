@@ -77,3 +77,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 Integrazione GLPI 11.0.9, 0.8.1-dev.3: Html::redirect() lancia RedirectException, che deve raggiungere il router. La form vera si trova in /front/projecttask.form.php e il GET projects_id serve soltanto ad aprirla; il POST Salva nativo crea la ProjectTask. Le task autonome restano nel distinto itemtype StandaloneTask.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+API GLPI 11.0.9: Dropdown::showFromArray default display=true fa echo HTML e ritorna random integer; quando chiamato da StandaloneTask::getSpecificValueToSelect per Search deve essere display=false e restituisce HTML. La form nativa GLPI continua a usare i suoi Dropdown con echo senza cambiamenti. Publisher documenti-only preserva ZIP immutable.

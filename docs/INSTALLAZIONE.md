@@ -130,3 +130,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 Collaudo 0.8.1-dev.3: usare solo ZIP Dev versionato dopo GitHub Actions verde; verificare SHA512, build-info.json e versione Settings; backup prima dell'upgrade su GLPI 11.0.9 staging. Provare Nuova task -> Task di progetto -> selezione -> Continua -> form nativo -> Salva. Non testata su produzione.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+0.8.1-dev.4: prelevare ZIP specifica da Dev soltanto dopo gate verde, verificare .sha512, estrarre (unzip -t fa solo il test, non installa), mantenere backup e upgrade normale del plugin sullo staging. Verificare versione, source SHA e Search filtro Stato. Nessun upgrade schema rispetto alla dev.3.

@@ -53,3 +53,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 Nota 0.8.1-dev.3 (Dev): corretta la ricarica della schermata di scelta progetto dopo Continua, causata dal catch(Throwable) della RedirectException emessa da Html::redirect in GLPI 11. Test PHP aggiunto per riprodurre l'eccezione. NON COLLAUDATO LIVE: il flusso Select2->form->Salva deve essere riprovato su staging.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+0.8.1-dev.4 Dev: corretta compatibilità del filtro Stato delle attività indipendenti con ricerca GLPI, con test contro output prematuro. Sistemata la pipeline Dev per commit soltanto documentali, mantenendo ZIP versionate immutabili. Nessun DB/ACL change. NON COLLAUDATO LIVE: ricerca Stato, profili ed entità.

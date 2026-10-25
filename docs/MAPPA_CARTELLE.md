@@ -95,3 +95,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 Mappa 0.8.1-dev.3: front/tasks.php corregge il redirect al form GLPI; tests/task_bootstrap.php aggiunge SimulatedGLPIRedirect; tests/tasks_php.php aggiunge la regressione. Le note del candidato sono in docs/releases/0.8.1-dev.3.md; nessun modulo nuovo o file core modificato.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+0.8.1-dev.4 file chiave: src/StandaloneTask.php (native Search status markup), tests/task_bootstrap.php (Dropdown mock fedele), tests/standalone_php.php (regressione), tools/maintainer/publish_dev.py (gate immutable docs-only), tests/packaging_test.py (git fixture). Note in docs/releases/0.8.1-dev.4.md.

@@ -116,3 +116,7 @@ Stato: NON COLLAUDATO LIVE. [Note complete](releases/0.8.1-dev.2.md).
 ## Aggiornamento MDO 0.8.1-dev.3 (25 ottobre 2026)
 
 Per Dev 0.8.1-dev.3: bump prerelease in setup.php, nuova regressione redirect, note di versione e documenti contestuali aggiornati nello stesso ciclo. Il publisher GitHub Actions deve pubblicare Modern_Dashboard_Overhaul_0.8.1-dev.3.zip e MDO_Dev_Latest.zip solo dopo test verdi, con SHA512 e build-info.json. Main resta invariato.
+
+## Aggiornamento 0.8.1-dev.4 (25 ottobre 2026)
+
+0.8.1-dev.4 conserva ZIP dev.N immutabili. Se successivamente cambia solo la documentazione/manifest generato dal publisher, il job GitHub Actions completa con PASS e lascia ZIP/Latest intatti; altrimenti, se sorgenti PHP/CSS/JS/tool cambiano senza incremento prerelease, la pubblicazione resta bloccata. Main non si aggiorna automaticamente.
