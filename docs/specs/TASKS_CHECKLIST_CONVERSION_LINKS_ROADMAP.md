@@ -2,7 +2,7 @@
 
 **Stato: REQUISITI APPROVATI DALL'UTENTE / NON IMPLEMENTATI.** Decisione del 25 ottobre 2026, dopo la specifica `TASKS_UNIFIED_WORKSPACE_V2.md`. Questo è un documento di pianificazione: **non è un changelog né una dichiarazione di funzionalità implementate**.
 
-**Repository:** `dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin`. Operare soltanto su branch **`Dev`**, non su `Main`. L'ultima ZIP funzionale pubblicata prima di queste decisioni rimane `0.8.1-dev.5` (non installare/reclamare dev.6/7/8/9 finché non sono pubblicate dopo CI). Codex deve fare `git fetch origin`, consultare `AGENTS.md`, `docs/dev/STATUS.md`, `docs/dev/VERSIONING_POLICY.md`, `docs/specs/TASKS_UNIFIED_WORKSPACE_V2.md`, le note di release e il codice attuale prima di iniziare.
+**Repository:** `dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin`. Operare soltanto su branch **`Dev`**, non su `Main`. La candidata `0.8.1-dev.6` è ora pubblicata su Dev con CI PASS ma NON COLLAUDATA LIVE; dev.7/dev.8/dev.9 e 0.8.2 restano pianificate e non pubblicate. Codex deve fare `git fetch origin`, consultare `AGENTS.md`, `docs/dev/STATUS.md`, `docs/dev/VERSIONING_POLICY.md`, `docs/specs/TASKS_UNIFIED_WORKSPACE_V2.md`, le note di release e il codice attuale prima di iniziare.
 
 ## 1. Decisioni consolidate / sequenza di release
 
@@ -84,3 +84,8 @@ L'utente richiede **conversione/migrazione**, non un mero collegamento al proget
 - Per implementare nuove versioni **partire dal commit HEAD aggiornato di Dev** e aprire/chiudere i gate in ordine. PR `Dev` → `Main` solo dopo collaudo dell'utente e approvazione esplicita.
 
 **Collegamento alla specifica precedente:** [Tasks Workspace V2](TASKS_UNIFIED_WORKSPACE_V2.md). Questa roadmap integra e prevale sui rinvii generici "checklist, conversione, relazioni, progetto" presenti nelle note storiche.
+
+
+## Checkpoint 25 ottobre 2026 — Dev.6 pubblicata
+
+Build `0.8.1-dev.6` verificata da GitHub Actions #40225944788, source SHA `080532ab6c6e5774e5445ddd80dec0c938e43726`; ZIP e checksum sulla branch Dev, non Main. Dev.8 checklist, dev.9 conversione + link bidirezionali e 0.8.2 iProjects rimangono REQUISITI NON IMPLEMENTATI. Manca il collaudo live della dev.6. Documentazione ufficiale: `docs/dev/STATUS.md` e `docs/releases/0.8.1-dev.6.build.json`.
