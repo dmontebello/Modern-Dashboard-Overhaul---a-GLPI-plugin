@@ -79,4 +79,12 @@ $DB->insert(TaskSchema::FILES,['source'=>'standalone','items_id'=>1,'users_id'=>
 t(count(TaskAttachment::listing('standalone',1))===1,'authorised file metadata visible');
 Session::$user=2;
 t(TaskAttachment::get(1)===null && TaskAttachment::listing('standalone',1)===[],'attachment parent ACL enforced');
+Session::$user=1;
+Session::$standaloneRights=StandaloneTask::READMY|CREATE|UPDATE;
+$task->getFromDB(1);
+$version=(string)($task->fields['date_mod']??'');
+t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('standalone',1,'doing','stale')['status']===409,
+    'stale Kanban drag rejected');
+$result=\GlpiPlugin\Mdoverhaul\TaskStageService::move('standalone',1,'doing',$version);
+t($result['ok'] && $result['stage']==='doing','independent stage persisted');
 echo "$n task activity tests PASSED (isolated doubles, NON COLLAUDATO LIVE)\n";
