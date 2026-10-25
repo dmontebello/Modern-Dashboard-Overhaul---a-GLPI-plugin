@@ -152,3 +152,8 @@ In 0.8.1-dev.4 il campo Status di StandaloneTask restituisce il markup tramite D
 ## Aggiornamento 0.8.1-dev.5
 
 GLPI 11 DBmysqlIterator::handleOrderClause accetta stringhe o liste di espressioni ORDER; nel vecchio array associativo ['table.id'=>'DESC'] ignorava la chiave e generava ORDER BY DESC. Usare ['table.id DESC']. Modificati i soli tre adattatori bounded-read per TaskBoard e StandaloneTask. Le task di progetto restano native ProjectTask; la board non scrive dati. Un avviso solo per amministratori con config:UPDATE segnala READMY/READALL Standalone mancanti.
+
+
+## Architettura dev.6
+
+TaskStageService scrive via API GLPI; TaskActivity e TaskAttachment hanno ACL parent. Schema2 aggiunge tabelle MDO note/file; upload privato in GLPI_DOC_DIR/mdoverhaul. Vista all unisce due campioni autorizzati. NON COLLAUDATO LIVE.
