@@ -150,6 +150,7 @@ final class Plugin
 {
     public static bool $active = true;
     public static function isPluginActive(string $name): bool { return self::$active; }
+    public static function registerClass(string $name, array $options): void {}
 }
 final class SimulatedGLPIRedirect extends RuntimeException {}
 final class Html
