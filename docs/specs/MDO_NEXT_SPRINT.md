@@ -75,3 +75,8 @@ La pianificazione storica sopra (baseline dev.3, P2 ipotetica) rimane riferiment
 - **Dev.9**: conversione sicura StandaloneTask → ProjectTask, anche da scheda progetto, con migrazione dei dati e registro audit; relazioni bidirezionali con asset, contratti, licenze e altre task.
 - **0.8.2**: Goals / In scope / Out of scope strutturati nella scheda progetto; evoluzione iProjects successiva.
 - Vedere [specifica dev.8/dev.9/0.8.2](TASKS_CHECKLIST_CONVERSION_LINKS_ROADMAP.md) per semantica, ACL, migrazioni, test e rollback. Gli elenchi storici in questo documento sono sostituiti da queste decisioni per la roadmap futura. **Non implementato; Main invariato.**
+
+
+## Stato dopo la pubblicazione della 0.8.1-dev.6
+
+**IMPLEMENTATO SU Dev e CI PASS, NON COLLAUDATO LIVE:** vista unificata, Kanban drag/drop, diario storico e allegati MDO privati, layout standalone e navigazione parziale. Build #40225944788, checksum e source SHA in `docs/releases/0.8.1-dev.6.build.json`. **Aperto P0 di collaudo:** schema2/backup/restore, CSRF, permessi entità/READMY, file in GLPI_DOC_DIR, browser su GLPI reale; backlog non chiuso fino a esito staging. **Next sviluppo:** dev.7 form unico, dev.8 checklist, dev.9 conversione/task↔elementi, poi 0.8.2 brief progetti. Lo scope di ricerca All resta limitato a 1000 candidate per origine, oltre questo occorre paginazione backend completa.
