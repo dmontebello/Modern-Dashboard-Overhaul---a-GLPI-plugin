@@ -146,3 +146,8 @@ PASS: 67 PHP, 69 Tasks, 62 Standalone, 9 packaging, 86 UI dashboard, 175 UI Task
 ## QA 0.8.1-dev.6 — stato corrente
 
 Verifiche CI sperimentali PHP/JS e suite browser isolate nella workflow `dev6-validation.yml`: consultare esiti per source SHA nella PR Draft #3; non equivale a un collaudo GLPI reale. Nuovo test `tests/task_activity_php.php` controlla 25 note con paginazione, protezioni READMY, allegati, Stage e conflitti. **NON COLLAUDATO LIVE**: schema 2, scrittura/drag, note e allegati, profili diversi e upload/download nel container reale. Non promuovere Main senza prove e backup/restore.
+
+
+## CI finale 0.8.1-dev.6 — fonte verificata
+
+GitHub Actions #40225944788: bundle PASS, publish_dev_zip PASS sul source SHA `080532ab6c6e5774e5445ddd80dec0c938e43726`. PHP: 67 unit, 69 Tasks, 62 Standalone, 44 Task Activity. Chromium: 86 Dashboard, 175 Tasks, 560 Settings, 108 Standalone. Passati sintassi, verifiche documentazione, packaging, checksum e provenienza. Doppio/mocks e Chromium fixture NON EQUIVALGONO al collaudo server GLPI. Restano NON COLLAUDATI LIVE: upgrade schema1→2, backup DB+file, csrf delle nuove route, DnD concorrenza, upload e download, entità e profili. ZIP e checksum in docs/releases/0.8.1-dev.6.build.json; Main invariato.
