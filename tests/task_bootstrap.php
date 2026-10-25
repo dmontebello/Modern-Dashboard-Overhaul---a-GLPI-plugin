@@ -192,7 +192,7 @@ final class TaskFakeDB
     public int $creates = 0;
     public int $alterations = 0;
     public function tableExists($table): bool { return $table === 'glpi_plugin_mdoverhaul_tasks' ? $this->hasTaskTable : !empty($this->extraTables[$table]); }
-    public function fieldExists($table,$field): bool { return isset($this->schemaFields[$field]); }
+    public function fieldExists($table,$field): bool { return isset($this->schemaFields[$field]) || ($table !== 'glpi_plugin_mdoverhaul_tasks' && in_array($field, ['id','source','items_id','users_id','content','date_creation','is_deleted','name','stored','mime','filesize'], true)); }
     public function doQuery($sql): bool
     {
         if (!str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasks`')) { throw new RuntimeException('Unexpected schema SQL'); }
