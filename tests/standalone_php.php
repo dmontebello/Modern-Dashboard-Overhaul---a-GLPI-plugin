@@ -104,7 +104,7 @@ taskPage(['source'=>'standalone']);
 expect(Search::$calls['list'][0]===StandaloneTask::class,'independent list uses native Search for its own itemtype');
 Session::$user=1; Session::$standaloneRights=StandaloneTask::READMY|CREATE|UPDATE|DELETE;
 $html=taskPage(['source'=>'standalone','new'=>'1']);
-expect(str_contains($html,'Task indipendente') && !str_contains($html,'name="project"'),'independent choice has no mandatory project');
+expect(Html::$redirect === '/glpi/plugins/mdoverhaul/front/task.form.php', 'standalone new-task entry forwards to optional-project form');
 $html=formRequest(['id'=>'1']);
 expect(!str_contains($html,'<script>hostile()') && str_contains($html,'name="status"'),'GLPI-integrated edit form escapes content and renders allowed fields');
 try { formRequest([],['add'=>'1','name'=>'CSRF missing','entities_id'=>1]); expect(false,'CSRF'); }
