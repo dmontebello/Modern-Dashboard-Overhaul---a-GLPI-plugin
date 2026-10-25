@@ -34,6 +34,9 @@ final class TaskSchema
         foreach (array_merge(['id'], array_keys(self::FIELDS)) as $field) {
             if (!$DB->fieldExists(self::TABLE, $field)) { return self::$ready = false; }
         }
+        foreach ([self::NOTES, self::FILES] as $linkedTable) {
+            if (!$DB->tableExists($linkedTable)) { return self::$ready = false; }
+        }
         return self::$ready = true;
     }
 
