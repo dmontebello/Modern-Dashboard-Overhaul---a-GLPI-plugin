@@ -195,8 +195,12 @@ final class TaskFakeDB
     public function fieldExists($table,$field): bool { return isset($this->schemaFields[$field]) || ($table !== 'glpi_plugin_mdoverhaul_tasks' && in_array($field, ['id','source','items_id','users_id','content','date_creation','is_deleted','name','stored','mime','filesize'], true)); }
     public function doQuery($sql): bool
     {
-        if (!str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasks`')) { throw new RuntimeException('Unexpected schema SQL'); }
-        $this->hasTaskTable=true; $this->creates++;
+        if (!str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_')) { throw new RuntimeException('Unexpected schema SQL'); }
+        if (str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasks`')) { $this->hasTaskTable=true; }
+        elseif (str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_tasknotes`')) { $this->extraTables['glpi_plugin_mdoverhaul_tasknotes']=true; }
+        elseif (str_starts_with($sql,'CREATE TABLE `glpi_plugin_mdoverhaul_taskfiles`')) { $this->extraTables['glpi_plugin_mdoverhaul_taskfiles']=true; }
+        else { throw new RuntimeException('Unexpected table'); }
+        $this->creates++;
         preg_match_all('/`([a-z_]+)` (?:int|varchar|mediumtext|timestamp|tinyint)/',$sql,$matches);
         $this->schemaFields=array_fill_keys($matches[1],true);
         return true;
