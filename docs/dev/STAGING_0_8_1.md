@@ -1,4 +1,4 @@
-# Revisione staging GLPI 11.0.9 — 0.8.1-dev.3
+# Revisione staging GLPI 11.0.9 — 0.8.1-dev.4
 
 **NON COLLAUDATO LIVE.** L'utente ha confermato che lo staging non è raggiungibile
 da questo ambiente e svolgerà il collaudo dopo la pubblicazione su Dev.
@@ -21,9 +21,9 @@ I risultati automatici e i loro limiti sono in [QA](../../QA.md).
    Lo script non salva plugin/volumi e non avvia upgrade. Verificare SHA512 e
    provare il ripristino DB/volumi su una seconda copia prima di proseguire.
 3. Scaricare da **Dev** il pacchetto versionato
-   `Modern_Dashboard_Overhaul_0.8.1-dev.3.zip` e il suo `.sha512`. Verificare con
-   `sha512sum -c Modern_Dashboard_Overhaul_0.8.1-dev.3.zip.sha512`.
-   Confrontare il record [build](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/blob/Dev/docs/releases/0.8.1-dev.3.build.json) con lo SHA
+   `Modern_Dashboard_Overhaul_0.8.1-dev.4.zip` e il suo `.sha512`. Verificare con
+   `sha512sum -c Modern_Dashboard_Overhaul_0.8.1-dev.4.zip.sha512`.
+   Confrontare il record [build](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/blob/Dev/docs/releases/0.8.1-dev.4.build.json) con lo SHA
    sorgente e la relativa GitHub Actions verde. Lo SHA del publisher è distinto.
    `MDO_Dev_Latest.zip` è un alias mobile: conservare sempre la copia versionata.
 4. Estrarre in una directory di verifica: unica radice `mdoverhaul/`, nessun ZIP
@@ -49,7 +49,7 @@ I risultati automatici e i loro limiti sono in [QA](../../QA.md).
 5. In Settings abilitare `task_workspace`, poi `tasks_standalone` (opt-in).
    L'ottavo flag non cambia gli altri sette. Rifare logout/login per menu/diritti.
    Se lo schema non è pronto, l'opt-in deve essere rifiutato.
-6. Settings e gestore plugin devono mostrare `0.8.1-dev.3`; Settings deve mostrare
+6. Settings e gestore plugin devono mostrare `0.8.1-dev.4`; Settings deve mostrare
    canale Dev, source SHA, run CI e UTC uguali al record build. Negli strumenti
    rete del browser controllare URL/versione e contenuto effettivo degli asset,
    senza dedurre il cache refresh dal solo nome dello ZIP.
@@ -123,3 +123,9 @@ L'utente riferisce che l'aggiornamento ora funziona, dopo aver distinto `unzip -
 4. Ripetere il confronto screenshot sui bug mini Ticket, dashboard Assistenza, legenda, settings dark e spaziature Tasks.
 
 Registrare ogni esito in [STATUS](STATUS.md). Next sprint: [MDO_NEXT_SPRINT](../specs/MDO_NEXT_SPRINT.md).
+
+## Focus 0.8.1-dev.4 — filtro Status/Search nativa
+
+Su GLPI 11.0.9 staging, con Tasks Standalone attive e profilo READMY/READALL, crea tre task: Da fare, In corso, Completata. Apri Assistenza → Tasks → Indipendenti → Elenco → Ricerca avanzata → Stato; verifica il dropdown senza output fuori dal suo contenitore, le tre scelte, l'ordinamento, AJAX/ricerche salvate/export, e ripeti con profili in entità differenti. Se il filtro resta vuoto, annota il DOM e i log.
+
+Conserva il backup completo prima di caricare la ZIP `dev.4`; non ci sono nuove migrazioni dopo schema 1. Riesegui le prove ProjectTask e le regressioni grafiche già note. Riporta PASS/FAIL LIVE nel STATUS; screenshot e dati privati non vanno in un repo pubblico.

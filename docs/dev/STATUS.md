@@ -1,8 +1,8 @@
 # MDO Dev — stato operativo e handoff
 
-> **Corrente: 0.8.1-dev.3.** Implementato e testato con doubles; **NON COLLAUDATO LIVE**.
+> **Corrente: 0.8.1-dev.4.** Search Status nativa e gate di pubblicazione Dev; **NON COLLAUDATO LIVE**.
 > La cronologia seguente mantiene le valutazioni precedenti. Note correnti in
-> [0.8.1-dev.3](../releases/0.8.1-dev.3.md), collaudo in [staging](STAGING_0_8_1.md).
+> [0.8.1-dev.4](../releases/0.8.1-dev.4.md), collaudo in [staging](STAGING_0_8_1.md).
 
 Data valutazione: 2026-10-24. Stato: REGRESSIONI GLPI LIVE APERTE. Questo documento descrive cosa è osservato, non ciò che è stato risolto.
 Documenti da leggere: [specifica 0.8.1](../specs/MDO_0_8_1_DEV_WORKPLAN.md), [versioning](VERSIONING_POLICY.md).
@@ -124,3 +124,17 @@ Dopo il download e la verifica ZIP della 0.8.1-dev.3, l'utente aveva eseguito so
 | 2026-10-25 | 0.8.1-dev.3 | «Funziona» dopo corretta installazione/estrazione | ACL StandaloneTask e ProjectTask, migrazione database, tutte le anomalie dashboard, Search AJAX | [Sprint stabilizzazione e UX](../specs/MDO_NEXT_SPRINT.md) + [collaudo staging](STAGING_0_8_1.md) |
 
 **Prossima candidata funzionale:** 0.8.1-dev.4 soltanto quando sono presenti modifiche di codice con test e documentazione coerenti. La versione attuale resta 0.8.1-dev.3; Main resta 0.8.0.
+
+## Registro 0.8.1-dev.4 — 25 ottobre 2026
+
+**Scope:** hardening della Search nativa di StandaloneTask e publisher immutabile Dev. Nessuna nuova tabella, modifica ACL, aggiornamento core GLPI o alterazione di Dashboard/RSS.
+
+| ID | Fix candidato | Test previsti/effettivi | Live GLPI | Next steps |
+| --- | --- | --- | --- | --- |
+| STANDALONE-SEARCH-01 | `getSpecificValueToSelect('status')`: `Dropdown::showFromArray(display=false)` restituisce HTML invece di eseguirne echo immediato | Regression PHP + suite completa in CI; risultati da leggere nel run | **NON COLLAUDATO LIVE** | Search avanzata Status, salvataggio ricerche, AJAX/export, ACL READMY/READALL |
+| DEV-PUBLISH-01 | Commit solo documentali e publisher-generated conservano versione ZIP immutable senza job FAIL. Il codice senza bump resta bloccato | Test Python con repo Git fittizia, pipeline; risultati da leggere nel run | Non applicabile | Verificare ZIP dev.4, checksum, run, SHA sorgente |
+| TASKS-PROJECT | `Continua` della dev.3 invariato e nativo ProjectTask | Test preesistenti | L'utente ha detto «Funziona» dopo upgrade; non esiste una matrice completa | Confermare su GLPI form, salvataggio, utenti/team/entità |
+| TASKS-STANDALONE | Stessa tabella/schema 1, flags e ACL della dev.2 | Tests doubles preesistenti | **NON COLLAUDATO LIVE** | CRUD e restore, due entità e profili |
+| UI-DASHBOARD | Nessun nuovo CSS/JS in dev.4 | Fixture precedenti | **NON COLLAUDATO LIVE** | Screenshot riquadro mini Ticket, toolbar, chart legenda, dark settings |
+
+**Stato consegna:** commit su Dev eseguiti, CI e pubblicazione candidate da verificare; dati/versione installata dall'utente restano `0.8.1-dev.3` finché non esegue upgrade della nuova ZIP. Changelog e note [dev.4](../releases/0.8.1-dev.4.md) documentano fix, file, test, SHA512, Rollback e Prossimi. Main `0.8.0` intatto.

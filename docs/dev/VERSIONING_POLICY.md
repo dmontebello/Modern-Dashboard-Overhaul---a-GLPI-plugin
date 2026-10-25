@@ -64,3 +64,7 @@ dopo test e verifica HEAD; non confondere source commit e commit del publisher.
 ## Corrente: 0.8.1-dev.3 — 2026-10-25
 
 Fix mirato RedirectException GLPI 11. Nuova versione Dev univoca in setup.php e note/docs aggiornate insieme al codice. Publisher: ZIP dev.3 e alias Latest soltanto dopo CI verde con SHA del sorgente testato; non confondere commit bot con commit codice. Main resta invariato, nessuna modifica al database rispetto a dev.2.
+
+## Corrente: 0.8.1-dev.4 — 25 ottobre 2026
+
+Il publisher continua a verificare source SHA, GitHub Actions run ID, SHA512, manifest e singola radice mdoverhaul/. Le ZIP versionate sono immutabili; per un commit successivo che cambia **solo** documentazione whitelist o file generati, il job termina con PASS senza riscrivere `0.8.1-dev.N.zip` o `MDO_Dev_Latest.zip`. Sono rifiutate modifiche PHP/JS/CSS, workflow, test o tooling senza incremento del prerelease (regressione Python obbligatoria). Ogni build funzionale continua ad aumentare `dev.N`. Sorgente ZIP e documentazione sul branch possono così avere SHA diversi senza false dichiarazioni.

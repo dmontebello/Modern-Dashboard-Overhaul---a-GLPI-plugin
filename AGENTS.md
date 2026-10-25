@@ -23,3 +23,5 @@ If this repository does not contain the stated specification at that path, stop 
 - Mock/fixture success is not proof of the reported GLPI 11.0.9 UI regressions. Keep issues open until verified on actual staging. Never merge Main automatically.
 
 - Current follow-up after user successfully installed MDO 0.8.1-dev.3: [Next sprint (staging/Tasks/UI)](docs/specs/MDO_NEXT_SPRINT.md). Do not assume every ProjectTask/StandaloneTask/ACL test passed merely because the installation works. Start with targeted live evidence, then implement minimal fixes on Dev (next code candidate 0.8.1-dev.4).
+
+- As of version `0.8.1-dev.4` the current technical changes are the native StandaloneTask Search Status selector (return HTML, don't echo) and Dev publisher's documentation-only immutable archive gate; see `docs/releases/0.8.1-dev.4.md`. Keep Core GLPI/ProjectTask intact. Staging Search/ACL and dashboard visual issues remain pending.

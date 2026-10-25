@@ -47,3 +47,7 @@ Usare soltanto il plugin `mdoverhaul` e le API native GLPI. La persistenza stand
 4. Per ogni versione aggiornare **nello stesso commit** `CHANGELOG.md`, `docs/releases/<version>.md`, `docs/dev/STATUS.md`, `QA.md`, matrix test, README e documentazione config/install/security se pertinente. Indicare file, fix, test effettivi, prove NON eseguite, rischi, backup/rollback e next steps.
 5. Testare PHP, JS, Playwright, lint, ZIP unica `mdoverhaul/`, SHA512SUMS e checksum .zip.sha512; verificare Actions verde prima di pubblicare alias `MDO_Dev_Latest.zip`. Non aggiornare Main o la macchina dell'utente.
 6. Dopo ogni fix ottenere un collaudo GLPI reale; i test in fixture non chiudono le regressioni. Nessuna PR Dev→Main senza approvazione.
+
+## Checkpoint realizzazione 0.8.1-dev.4 (25 ottobre 2026)
+
+S1: corretta in codice l'integrazione `getSpecificValueToSelect('status')` con Dropdown::showFromArray(display=false) così la Search nativa riceve stringa HTML, non intero random. Test double GLPI aggiornato e regressione PHP. Publisher Dev: ora riconosce commit solamente documentali dopo la release già pubblicata, conservando l'immutabilità senza segnare la pipeline FAIL; un commit di codice senza versione resta errore. I test e la pubblicazione GitHub Actions devono essere verificati prima di chiamarli superati. Nessun'altra issue grafica o ACL live può essere segnata risolta da questa candidata.
