@@ -137,3 +137,7 @@ Bug ProjectTask: GLPI 11.0.9 implementa Html::redirect() lanciando RedirectExcep
 Bug verificato prima del fix: log GLPI 11.0.9 con MySQL 1054 ORDER BY DESC sul Kanban ProjectTask e screenshot di accesso Standalone negato. Nella dev.5 sono corretti tre ORDER e aggiunti test sulla sintassi DB e sul testo amministrativo. Permessi non modificati: READMY/READALL vanno conferiti dal profilo. I risultati della CI non sono anticipati come PASS; il collaudo GLPI reale dopo il fix rimane NON ESEGUITO.
 
 **CI #40189803646 (primo run dev.5): FAIL del test Tasks sulla board vuota in inglese per fixture reinizializzata dai nuovi casi ACL; gli assert SQL e ACL aggiunti risultavano già PASS. Il test è stato corretto ripristinando l'insieme vuoto subito prima dell'assert; secondo run ancora da verificare. Nessuna ZIP dev.5 pubblicata dal run fallito.**
+
+## Consuntivo verificato 0.8.1-dev.5 — GitHub Actions 40189878021
+
+PASS: 67 PHP, 69 Tasks, 62 Standalone, 9 packaging, 86 UI dashboard, 175 UI Tasks, 560 UI Settings e 108 UI Standalone. Archivio, SHA512SUMS, sidecar, manifest e provenienza `60fb656aad0400a31788bf68760edf390961f166` PASS. ZIP checksum `f12a4c5b7a0c13daadc6ccff60a85b83a2e3a2dfa8571d26a6d9265d9a875b206eff10577fc3674e9e57abe24176bbe7ae1e0b4624d623ec466e7a3b97475ef5`. Primo CI fallito su test fixture, corretto e ripetuto: run finale verde. **NON COLLAUDATO LIVE dopo il fix**: nuova board Project/Standalone e configurazione dei diritti nell'istanza utente. Non attribuire a questi mock una validazione delle ACL in GLPI 11.0.9 reale.

@@ -133,3 +133,7 @@ Conserva il backup completo prima di caricare la ZIP `dev.4`; non ci sono nuove 
 ## Aggiornamento 0.8.1-dev.5
 
 Dopo backup coordinato e installazione dello ZIP dev.5, controllare il Kanban Progetto con zero e piu task, e verificare che non appaiano nuovi errori SQL 1054. Per usare Standalone: abilitare i due flag MDO, verificare schema e assegnare READMY oppure READALL e CREATE nella scheda MDO del profilo GLPI; salvare e fare logout/login. Provare quindi la route standalone, elenco, board e creazione senza Project. Non usare l'errore di accesso come motivo per allargare automaticamente i permessi. Verificare che il form ProjectTask resti nativo e che il salvataggio funzioni. Screenshot e prove private non vanno pubblicati nel repo.
+
+## Provenienza release 0.8.1-dev.5 verificata
+
+Sorgente testato `60fb656aad0400a31788bf68760edf390961f166`; GitHub Actions #40189878021 PASS; checksum SHA512 ZIP `f12a4c5b7a0c13daadc6ccff60a85b83a2e3a2dfa8571d26a6d9265d9a875b206eff10577fc3674e9e57abe24176bbe7ae1e0b4624d623ec466e7a3b97475ef5`. Alias Latest corrispondente alla ZIP versionata. Il commit publisher `bda3d9352d3c8fef8c7131df8a9ce9280db3658b` è diverso dal sorgente testato. La CI non sostituisce l'upgrade con backup e il collaudo GLPI sul server dell'utente.
