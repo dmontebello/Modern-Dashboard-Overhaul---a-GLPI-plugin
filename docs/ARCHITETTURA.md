@@ -157,3 +157,8 @@ GLPI 11 DBmysqlIterator::handleOrderClause accetta stringhe o liste di espressio
 ## Architettura dev.6
 
 TaskStageService scrive via API GLPI; TaskActivity e TaskAttachment hanno ACL parent. Schema2 aggiunge tabelle MDO note/file; upload privato in GLPI_DOC_DIR/mdoverhaul. Vista all unisce due campioni autorizzati. NON COLLAUDATO LIVE.
+
+
+## 0.8.1-dev.6 — Aggiornamento documentale
+
+MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggiornamento ACL, storico completo delle annotazioni e allegati MDO privati; schema 2 e relative verifiche di sicurezza. Vedere docs/releases/0.8.1-dev.6.md, QA.md e docs/dev/STATUS.md per test, rischi, rollback e prossimi passi. NON COLLAUDATO LIVE.
