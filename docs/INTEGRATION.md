@@ -85,3 +85,8 @@ API GLPI 11.0.9: Dropdown::showFromArray default display=true fa echo HTML e rit
 ## Aggiornamento 0.8.1-dev.5
 
 GLPI 11.0.9: DBmysqlIterator::handleOrderClause itera i VALORI di ORDER, quindi ['glpi_projecttasks.id'=>'DESC'] produce ORDER BY `DESC` (MySQL 1054). In dev.5 si usa ['glpi_projecttasks.id DESC'] e lo stesso criterio per Project e StandaloneTask. Le classi native e il comportamento Search restano invariati.
+
+
+## 0.8.1-dev.6 — GLPI Hooks
+
+Plugin TaskActivityTab aggiunge un collegamento al diario MDO nelle ProjectTask, conservando Note/Documenti nativi; TaskStageService usa ProjectTask::update e StandaloneTask::update secondo ACL. Il middleware GLPI deve validare CSRF sugli endpoint del plugin. Caricamento JS limitato a task_workspace. Search nativa non viene intercettata. NON COLLAUDATO LIVE.
