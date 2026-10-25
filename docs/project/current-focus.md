@@ -1,0 +1,32 @@
+# MDO — Focus corrente (snapshot 25 ottobre 2026)
+
+**I valori sotto sono stati verificati prima del commit di governance; ricontrollare GitHub live.** Gli stati degli item sono **solo** nel [backlog](../product/backlog.md).
+
+| Fonte | Verifica |
+|---|---|
+| `Main` | `0dd4debe1b68088190132c0dfcca9c3bae068099`, 0.8.0 Pilot |
+| `Dev` all'audit | `3f1a5b398d92a2b064ddcb6cc15c44eb2ae85889`, codice e ZIP 0.8.1-dev.6; dopo questo documento HEAD cambierà |
+| Dev.6 sorgente testato | `080532ab6c6e5774e5445ddd80dec0c938e43726` |
+| Build dev.6 | [Actions #40225944788 SUCCESS](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40225944788); [metadata e checksum](../releases/0.8.1-dev.6.build.json) |
+| Collaudo GLPI | Codice/CI presenti, **schema2, ACL, POST, upload/download, DnD e backup/rollback non collaudati live** |
+| PR | [#3](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/pull/3) integrata in Dev; la sua descrizione WIP originaria va letta come snapshot precedente al run finale |
+
+## Prima azione prioritaria
+
+**P0: collaudo mirato della 0.8.1-dev.6 su copia GLPI 11.0.9**, con snapshot coordinato database + plugin + `GLPI_DOC_DIR/mdoverhaul`, upgrade amministrativo schema1→2 e prove reali di permessi (READMY/READALL, più profili, due entità, altre entità negate), POST Stage (CSRF e concorrenza), Kanban, diario completo, file privati e restore. Procedure nella [matrice staging](../dev/STAGING_0_8_1.md) e nella [release note](../releases/0.8.1-dev.6.md). Non eseguire su produzione senza autorizzazione e backup.
+
+**P0: regressioni** TASK-01 (creazione ProjectTask fino a Salva), SQL 1054 Kanban, filtro Search Standalone, Settings dark, layout mini Ticket, toolbar dashboard e legenda. Il generico riscontro storico «Funziona» non copre tutti i casi; annotare PASS/FAIL/NON ESEGUITO per [item](../product/backlog.md).
+
+**Prossimo sviluppo autorizzato:** dev.7 form unico nuova task con Project facoltativo; seguono dev.8 checklist, dev.9 conversione e link bidirezionali, poi 0.8.2 brief progetto. Consultare [Tasks V2](../specs/TASKS_UNIFIED_WORKSPACE_V2.md) e [roadmap dettagliata](../specs/TASKS_CHECKLIST_CONVERSION_LINKS_ROADMAP.md). Dev.6 ancora in collaudo, non promuovere `Main` sulla sola CI.
+
+## Rischi/decisioni aperti
+
+- Vista Tutte limitata a **1000 candidate per origine**: filtri e totali parziali; performance/ACL da misurare.
+- Stage operativo ProjectTask deriva dalla percentuale nativa; Stage/Status Notion realmente indipendenti e worklogs sono [scelte aperte](../product/open-decisions.md).
+- MDO note/allegati e note/documenti nativi ProjectTask non sono un sistema unico; preservare gli uni e gli altri.
+- I vecchi file `docs/dev/STATUS.md`, `docs/RELEASE_PROCESS.md`, `UPDATE.md` contengono sezioni storiche: non usarne le prime righe come fonte del candidato attuale.
+- [Controlli documentali](documentation-checks.md): attuale CI valida documenti release ma non ancora ID/link/stati del backlog. Il publisher immutabile richiede un bump quando si tocca tooling/workflow.
+
+## Cosa lasciare alla prossima chat
+
+Aggiornare nel repository [backlog](../product/backlog.md), [implementation-state](../implementation-state.md), questa pagina, specifiche/decisioni, QA e release notes pertinenti. Annotare SHA esatto, CI, build, prova reale con esito e prossimo passo. Senza accesso scrittura fornire patch e dichiarare il limite.

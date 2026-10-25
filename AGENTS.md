@@ -1,31 +1,25 @@
-# Repository guidance for Codex — MDO
+# MDO — Istruzioni permanenti per chat Developer/Codex
 
-**Read first for work requested 2026-10-24:** [MDO 0.8.1 Dev Codex specification](docs/specs/MDO_0_8_1_DEV_WORKPLAN.md), [Dev status](docs/dev/STATUS.md), [Dev version policy](docs/dev/VERSIONING_POLICY.md). Historical context: [Tasks P0/P1 specification](docs/specs/TASKS_P0_P1.md).
-**Branch policy:** [Development and release workflow](.github/BRANCHES.md).
+**Prima di ogni lavoro** apri [START HERE](docs/project/start-here.md), [focus](docs/project/current-focus.md), [accordo](docs/project/working-agreement.md), [backlog](docs/product/backlog.md), [roadmap](docs/roadmap.md), [decisioni](docs/product/decisions.md), [stato tecnico](docs/implementation-state.md), [workflow](docs/project/developer-workflow.md) e la specifica della voce corrente. **Controlla live `origin/Dev`, `origin/Main`, PR/issue e CI sullo SHA esatto**: nessun vecchio SHA o numero di candidata qui è «corrente» per definizione.
 
-- Implement Tasks and Kanban features **inside** the existing GLPI 11 plugin `mdoverhaul`; do not create a second plugin or patch GLPI core.
-- Work on `Dev`, not `Main`. `Main` is the reviewed publication/production branch.
-- Re-fetch `origin/Dev` before working. Do not assume an old commit is current HEAD.
-- Prioritize P0 then P1; preserve Dashboard/RSS/Settings and legacy RSS card IDs.
-- Treat GLPI ACL/entity/project checks as required, never replace them with browser-only filtering.
-- Do not store credentials, Notion data exports or private details in this public repository.
-- Do not merge, deploy or generate a production release without review and approval.
-- Report actual tests run, blockers, and unresolved data-model decisions.
+## Autonomia e responsabilità
 
-If this repository does not contain the stated specification at that path, stop and report the missing file instead of guessing the scope.
+- Su `Dev` puoi portare avanti senza GO CTO rituale feature/fix/UX definiti, prioritizzati e coerenti con le decisioni; non inventare regole aziendali, livelli di autorizzazione, policy di conservazione o semantiche di Stage/Status.
+- Ogni feedback del collaudo crea/aggiorna un item **MDO-...** nel [backlog unico](docs/product/backlog.md) e, dove serve, una specifica/decisione. Codice, test, documenti e stato avanzano **nello stesso incarico** e vengono realmente pubblicati su GitHub. Una chat senza accesso scrittura fornisce patch, non dichiara aggiornamenti inesistenti.
+- Stati solo nel backlog: TODO / IN SVILUPPO / IN COLLAUDO OPERATIVO / CHIUSA / BLOCCATA / RINVIATA. Codice/CI/pacchetto/staging/produzione sono livelli di **evidenza tecnica separati**. PASS fixture non equivale a LIVE; installazione «funziona» non certifica tutti i flussi.
+- Revisioni indipendenti architettura, prestazioni e cybersecurity [periodiche](docs/project/review-playbook.md), non gate umano a ogni commit. Vulnerabilità critiche aperte bloccano la promozione.
+- Nuove decisioni sostanziali → [open decisions](docs/product/open-decisions.md), con opzioni e dipendenze. Parte tecnica indipendente può avanzare.
 
-## Required Dev documentation and gates
+## Vincoli GLPI/MDO
 
-- Before coding, read the CURRENT 0.8.1 Dev specification, status and version policy; fetch the actual origin/Dev HEAD, not a memorized hash.
-- TaskProject stays native ProjectTask/Project. True independent Tasks must not use a hidden Project or orphan ProjectTask. Implement a new, GLPI-integrated plugin model with ACL and safe schema migration.
-- Each installable Dev candidate must have a visible prerelease version (starting at 0.8.1-dev.1) and identifiable tested source SHA, CI run ID, UTC build time. Never ship a 0.8.1 code base under a file labelled 0.8.0.
-- **For each candidate in the same commit as the code**, update CHANGELOG.md, docs/releases/<version>.md, docs/dev/STATUS.md, README/QA and all impacted install/config/security/architecture docs. Record fixes, exact tests run, mocked vs LIVE GLPI status, code SHA, ZIP checksum, risks, rollback, outstanding work and next steps. Keep history intact.
-- Mock/fixture success is not proof of the reported GLPI 11.0.9 UI regressions. Keep issues open until verified on actual staging. Never merge Main automatically.
+- Un solo plugin `mdoverhaul`: Dashboard, RSS, Tasks, Kanban, Settings. Target GLPI 11.0.x. Nessuna modifica core, nessuna installazione di secondo plugin, nessun progetto GLPI nascosto per task senza progetto.
+- `ProjectTask` rimane nativa GLPI; `StandaloneTask` è modello plugin con schema e ACL autonome. Per ciascun item e risposta: GLPI sessione, READMY/READALL, team/gruppi, entità, CSRF per scritture; evitare leak in board, paginazione, file e contatori.
+- Preservare configurazioni e identificativi RSS `arensecurity_*`, dashboard/serie/filtri native. Nessuna tabella o regola di business nuova senza specifica, migrazione idempotente, test e backup/rollback.
+- Gli allegati MDO stanno nel volume privato `GLPI_DOC_DIR/mdoverhaul`; snapshot coordinati DB+plugin+storage prima di upgrade. Non scrivere dati utente nel repository pubblico.
+- Sviluppo su `Dev`, `Main` canale di pubblicazione. Non fare force push, non modificare `Main` nel lavoro ordinario, non eseguire deploy. `dev.N` immutabili, build source SHA, run CI, sidecar SHA512; incrementare prerelease per codice/tooling, non forzare una ZIP esistente. Seguire [versioning](docs/dev/VERSIONING_POLICY.md), [release process](docs/RELEASE_PROCESS.md) e [branch policy](.github/BRANCHES.md).
 
-- Current follow-up after user successfully installed MDO 0.8.1-dev.3: [Next sprint (staging/Tasks/UI)](docs/specs/MDO_NEXT_SPRINT.md). Do not assume every ProjectTask/StandaloneTask/ACL test passed merely because the installation works. Start with targeted live evidence, then implement minimal fixes on Dev (next code candidate 0.8.1-dev.4).
+## Consegna obbligatoria
 
-- As of version `0.8.1-dev.4` the current technical changes are the native StandaloneTask Search Status selector (return HTML, don't echo) and Dev publisher's documentation-only immutable archive gate; see `docs/releases/0.8.1-dev.4.md`. Keep Core GLPI/ProjectTask intact. Staging Search/ACL and dashboard visual issues remain pending.
+Prima del push riallinea `CHANGELOG.md`, `QA.md`, `README.md`, note `docs/releases/`, documenti d'impatto, `docs/product/backlog.md`, `docs/implementation-state.md` e `docs/project/current-focus.md`. Esegui lint PHP/JS/Bash/Python, suite e Playwright applicabili, packaging e verifica SHA512; ricontrolla CI remota *per ogni job* sul commit esatto e documenta FAIL/NON ESEGUITO. Per migrazioni e browser usa staging GLPI e registrane esito concreto. Nessuna promozione a `Main` soltanto perché CI è verde.
 
-## Aggiornamento 0.8.1-dev.5
-
-Per MDO 0.8.1-dev.5: GLPI 11 DBmysqlIterator si aspetta ORDER come lista di stringhe contenenti colonna + direzione, es. ['table.id DESC']; la mappa associativa produce ORDER BY DESC e MySQL 1054 (registrato dal GLPI dell'utente). Non ripristinare il formato errato. I profili standalone partono senza permessi, anche SuperAdmin: READMY/READALL devono essere configurati, mai aggirare ACL. Stato e test nelle note dev.5; Main invariato.
+**Niente segreti, dati personali, URL interni o screenshot di GLPI reale nel repository pubblico.** Se HEAD remoto cambia, preserva il lavoro altrui, no force push; riconcilia prima di scrivere.
