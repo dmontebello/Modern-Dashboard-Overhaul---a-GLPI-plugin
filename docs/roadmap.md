@@ -7,7 +7,7 @@
 | 0.8.0 Pilot (`Main`) | Dashboard, RSS, Tasks ProjectTask, skin Kanban | MDO-TASK-001, MDO-UI-001 |
 | 0.8.1-dev.1–dev.5 (`Dev`) | Provenienza build, redirect, fix SQL/Search, StandaloneTask e ACL/schema1 | MDO-TASK-002, MDO-TECH-001, MDO-TECH-002, MDO-UI-002 |
 | 0.8.1-dev.6 (`Dev`, CI PASS, LIVE aperto) | Vista Tutte, Kanban DnD, diary note storiche, allegati MDO privati, schema2 | MDO-TASK-003, MDO-TASK-004, MDO-TASK-005, MDO-TASK-006, MDO-TECH-003 |
-| 0.8.1-dev.7 | Creazione task unica, progetto facoltativo | MDO-TASK-007 |
+| 0.8.1-dev.7 | Creazione task unica, progetto facoltativo (sviluppo; vedere backlog) | MDO-TASK-007 |
 | 0.8.1-dev.8 | Checklist persistente e riordinabile nella task | MDO-TASK-008 |
 | 0.8.1-dev.9 | Conversione Standalone→ProjectTask + relazioni bidirezionali asset/contract/license/task | MDO-TASK-009, MDO-TASK-010 |
 | 0.8.2 | Brief di progetto strutturato (Goals/In scope/Out of scope), poi evoluzione iProjects | MDO-PROJ-001 |
