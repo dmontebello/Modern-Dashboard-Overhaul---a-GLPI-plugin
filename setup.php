@@ -14,6 +14,10 @@ require_once __DIR__ . '/src/TaskBoard.php';
 require_once __DIR__ . '/src/TaskSchema.php';
 require_once __DIR__ . '/src/StandaloneTask.php';
 require_once __DIR__ . '/src/TaskProfile.php';
+require_once __DIR__ . '/src/TaskStageService.php';
+require_once __DIR__ . '/src/TaskActivity.php';
+require_once __DIR__ . '/src/TaskAttachment.php';
+require_once __DIR__ . '/src/TaskActivityTab.php';
 
 function plugin_init_mdoverhaul(): void
 {
@@ -22,6 +26,9 @@ function plugin_init_mdoverhaul(): void
     $PLUGIN_HOOKS['csrf_compliant']['mdoverhaul'] = true;
     if (class_exists(\Profile::class)) {
         Plugin::registerClass(\GlpiPlugin\Mdoverhaul\TaskProfile::class, ['addtabon' => \Profile::class]);
+    }
+    if (class_exists(\ProjectTask::class)) {
+        Plugin::registerClass(\GlpiPlugin\Mdoverhaul\TaskActivityTab::class, ['addtabon' => \ProjectTask::class]);
     }
     // The settings page remains available even when all optional modules are off.
     $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['mdoverhaul'] = 'front/config.php';
@@ -43,6 +50,7 @@ function plugin_init_mdoverhaul(): void
         }
         $styles[] = 'css/task-workspace.css';
         $scripts[] = 'js/task-workspace.js';
+        $scripts[] = 'js/task-activity.js';
     }
     if ($settings['kanban_restyling']) {
         $styles[] = 'css/task-kanban.css';
