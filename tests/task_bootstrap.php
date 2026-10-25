@@ -86,6 +86,17 @@ final class ProjectTask
     public function getFromResultSet(array $row): void { $this->fields = $row; }
     public function post_getFromDB(): void { $this->team = $this->fields['team_users'] ?? []; }
     public function getFromDB(int $id): bool { $this->fields = self::$rows[$id] ?? []; $this->post_getFromDB(); return $this->fields !== []; }
+    public function check(int $id, int $right, ?array &$input = null): void { if (!$this->can($id, $right, $input)) { throw new RuntimeException('native ProjectTask create denied'); } }
+    public function add(array $values): int|false {
+        if (!self::canCreate()) { return false; }
+        $project = new Project();
+        $pid = (int)($values['projects_id'] ?? 0);
+        if ($pid < 1 || !$project->getFromDB($pid) || !$project->can($pid, UPDATE)) { return false; }
+        $id = max([0, ...array_keys(self::$rows)]) + 1;
+        self::$rows[$id] = ['id'=>$id,'entities_id'=>(int)$project->fields['entities_id'],'users_id'=>Session::getLoginUserID(), 'percent_done'=>0,'projectstates_id'=>0] + $values;
+        $this->fields = self::$rows[$id];
+        return $id;
+    }
     public function update(array $values): bool { $id = (int)($values['id'] ?? 0); if (!$this->can($id, UPDATE)) return false; self::$rows[$id] = array_replace(self::$rows[$id], $values); $this->fields = self::$rows[$id]; return true; }
     public static function canView(): bool { return Session::$projectRead || Session::$taskRead; }
     public static function canCreate(): bool { return Session::$create; }
@@ -119,7 +130,7 @@ final class Dropdown
     public static function show(string $type, array $options = []): bool
     {
         if ($type !== Project::class) { return false; }
-        echo '<select name="project" aria-label="Seleziona il progetto per creare la task"><option value="0">—</option>';
+        echo '<select name="' . htmlspecialchars((string)($options['name'] ?? 'project'), ENT_QUOTES) . '" aria-label="Seleziona il progetto per creare la task"><option value="0">—</option>';
         foreach (Project::$rows as $id => $row) {
             $project = new Project();
             if ($project->getFromDB((int) $id) && $project->can((int) $id, READ)
