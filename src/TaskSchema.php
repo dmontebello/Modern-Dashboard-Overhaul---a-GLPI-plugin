@@ -74,6 +74,8 @@ final class TaskSchema
         }
         // New rights start at zero for every profile; existing grants are preserved.
         $migration->addRight(StandaloneTask::$rightname, 0, []);
+        require_once __DIR__ . '/TaskActivitySchema.php';
+        TaskActivitySchema::install();
         $migration->executeMigration();
         if (isset($GLPI_CACHE)) { $GLPI_CACHE->set('all_possible_rights', []); }
         Config::setConfigurationValues(Settings::CONTEXT, ['task_schema_version' => self::VERSION]);
