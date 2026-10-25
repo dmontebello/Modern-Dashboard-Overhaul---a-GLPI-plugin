@@ -185,12 +185,13 @@ final class TaskFakeDB
     public array $queries = [];
     public bool $fail = false;
     public bool $hasTaskTable = true;
+    public array $extraTables = ['glpi_plugin_mdoverhaul_tasknotes'=>true,'glpi_plugin_mdoverhaul_taskfiles'=>true];
     public array $schemaFields = [];
     public array $schemaKeys = [];
     public array $profileRights = [];
     public int $creates = 0;
     public int $alterations = 0;
-    public function tableExists($table): bool { return $this->hasTaskTable; }
+    public function tableExists($table): bool { return $table === 'glpi_plugin_mdoverhaul_tasks' ? $this->hasTaskTable : !empty($this->extraTables[$table]); }
     public function fieldExists($table,$field): bool { return isset($this->schemaFields[$field]); }
     public function doQuery($sql): bool
     {
@@ -251,7 +252,7 @@ function taskFixture(): void
     $DB = new TaskFakeDB();
     $DB->schemaFields=array_fill_keys(['id','entities_id','name','content','users_id_owner','users_id_assign','groups_id_assign','status','due_date','date_creation','date_mod','is_deleted'],true);
     (new ReflectionProperty(\GlpiPlugin\Mdoverhaul\TaskSchema::class,'ready'))->setValue(null,null);
-    Config::setConfigurationValues(\GlpiPlugin\Mdoverhaul\Settings::CONTEXT,['task_schema_version'=>'1']);
+    Config::setConfigurationValues(\GlpiPlugin\Mdoverhaul\Settings::CONTEXT,['task_schema_version'=>\GlpiPlugin\Mdoverhaul\TaskSchema::VERSION]);
     CommonDBTM::$storage=[];
     $CFG_GLPI = ['root_doc' => '/glpi'];
     Session::$user = 1;
