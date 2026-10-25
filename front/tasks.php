@@ -355,7 +355,7 @@ if ($group === 'progress') {
 }
 echo '<p class="mdo-tasks-results" role="status">' . count($filtered) . ' ' . $esc($tr('attività mostrate', 'tasks shown'))
     . ($loaded['truncated'] ? ' · ' . $esc($tr('campione parziale', 'partial sample')) : '') . '</p>';
-if ($filtered === [] && ($view !== 'board' || (!$unified && !$standalone))) {
+if ($filtered === [] && $view !== 'board') {
     echo '<div class="mdo-tasks-empty" role="status"><h2>' . $esc($all === []
         ? $tr('Nessuna attività visibile', 'No visible tasks') : $tr('Nessun risultato', 'No results')) . '</h2><p>'
         . $esc($all === [] ? ($standalone ? $tr('Le attività indipendenti accessibili appariranno qui.', 'Accessible independent tasks will appear here.') : $tr('Le attività dei progetti accessibili appariranno qui.', 'Tasks from accessible projects will appear here.'))
