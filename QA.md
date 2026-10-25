@@ -1,4 +1,4 @@
-# QA — Modern Dashboard Overhaul 0.8.1-dev.6 (Dev)
+# QA — Modern Dashboard Overhaul 0.8.1-dev.7 (Dev)
 
 Stato corrente: NON COLLAUDATO LIVE. Gli esiti e ambienti precedenti sotto restano storici.
 
@@ -151,3 +151,8 @@ Verifiche CI sperimentali PHP/JS e suite browser isolate nella workflow `dev6-va
 ## CI finale 0.8.1-dev.6 — fonte verificata
 
 GitHub Actions #40225944788: bundle PASS, publish_dev_zip PASS sul source SHA `080532ab6c6e5774e5445ddd80dec0c938e43726`. PHP: 67 unit, 69 Tasks, 62 Standalone, 44 Task Activity. Chromium: 86 Dashboard, 175 Tasks, 560 Settings, 108 Standalone. Passati sintassi, verifiche documentazione, packaging, checksum e provenienza. Doppio/mocks e Chromium fixture NON EQUIVALGONO al collaudo server GLPI. Restano NON COLLAUDATI LIVE: upgrade schema1→2, backup DB+file, csrf delle nuove route, DnD concorrenza, upload e download, entità e profili. ZIP e checksum in docs/releases/0.8.1-dev.6.build.json; Main invariato.
+
+
+## QA dev.7
+
+Test dedicato `tests/task_creation_php.php`: input comuni, due modalità di creazione, validazione progetto e data, permessi separati, prevenzione SQL/core bypass, CSRF middleware simulato, redirect ed errori con mantenimento valori. Gli esiti definitivi sono nel run CI del source SHA pubblicato. **NON COLLAUDATO LIVE**: Select2 AJAX, scrittura nativa sul core, profili, entità e timezone della vera installazione GLPI 11.0.9.
