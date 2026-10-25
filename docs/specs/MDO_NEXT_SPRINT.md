@@ -66,3 +66,12 @@ La pianificazione storica sopra (baseline dev.3, P2 ipotetica) rimane riferiment
 - Il core GLPI 11.0.9 include già `Notepad` e `Document_Item` nelle ProjectTask; per StandaloneTask verificare rigorosamente ACL per singolo item di note, documenti e download prima dell'esposizione. Nessun dato sensibile o screenshot dello staging nel repository.
 
 **Stato: solo SPECIFICA, nessun commit di codice né nuova build.** Nuove versioni solo dopo test, documenti, GitHub Actions verde e successivo collaudo staging; Main rimane invariato.
+
+## Nuova pianificazione Tasks dopo dev.7 (decisione del 25 ottobre 2026)
+
+- Dev.6: vista Tutte, Kanban con DnD, note/allegati e **storico completo** consultabile con **Mostra precedenti** (paginazione e ACL), layout form.
+- Dev.7: nuova task con form unico, progetto facoltativo.
+- **Dev.8**: checklist persistente, spuntabile e riordinabile dentro la task (non Stage/percent_done automatico).
+- **Dev.9**: conversione sicura StandaloneTask → ProjectTask, anche da scheda progetto, con migrazione dei dati e registro audit; relazioni bidirezionali con asset, contratti, licenze e altre task.
+- **0.8.2**: Goals / In scope / Out of scope strutturati nella scheda progetto; evoluzione iProjects successiva.
+- Vedere [specifica dev.8/dev.9/0.8.2](TASKS_CHECKLIST_CONVERSION_LINKS_ROADMAP.md) per semantica, ACL, migrazioni, test e rollback. Gli elenchi storici in questo documento sono sostituiti da queste decisioni per la roadmap futura. **Non implementato; Main invariato.**
