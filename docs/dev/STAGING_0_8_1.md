@@ -137,3 +137,8 @@ Dopo backup coordinato e installazione dello ZIP dev.5, controllare il Kanban Pr
 ## Provenienza release 0.8.1-dev.5 verificata
 
 Sorgente testato `60fb656aad0400a31788bf68760edf390961f166`; GitHub Actions #40189878021 PASS; checksum SHA512 ZIP `f12a4c5b7a0c13daadc6ccff60a85b83a2e3a2dfa8571d26a6d9265d9a875b206eff10577fc3674e9e57abe24176bbe7ae1e0b4624d623ec466e7a3b97475ef5`. Alias Latest corrispondente alla ZIP versionata. Il commit publisher `bda3d9352d3c8fef8c7131df8a9ce9280db3658b` è diverso dal sorgente testato. La CI non sostituisce l'upgrade con backup e il collaudo GLPI sul server dell'utente.
+
+
+## 0.8.1-dev.6 — test staging ancora aperti
+
+Verificare schema 2, ACL, POST Kanban e upload/download storage GLPI. Per rollback servono insieme snapshot DB, plugin e volume documenti; nessun PASS LIVE registrato.
