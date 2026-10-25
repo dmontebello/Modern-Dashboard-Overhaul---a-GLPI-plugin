@@ -58,8 +58,11 @@ check7($stored['due_date']==='2026-10-25 12:30:00' && $stored['status']===2
 check7(TaskCreationService::create($values+['projects_id'=>'0'])['source']==='standalone',
     'numeric zero project creates independent task');
 Session::$standaloneRights=0;
+$previousIndependentCount = count(CommonDBTM::$storage[StandaloneTask::getTable()] ?? []);
 check7(TaskCreationService::create($values+['projects_id'=>0])['error']==='forbidden',
     'no standalone CREATE right denies independent creation');
+check7(count(CommonDBTM::$storage[StandaloneTask::getTable()] ?? []) === $previousIndependentCount,
+    'unauthorised standalone attempt writes no independent row');
 check7(TaskCreationService::create($values+['projects_id'=>1])['ok'],
     'project creation still works without standalone grants');
 Session::$create=false;
