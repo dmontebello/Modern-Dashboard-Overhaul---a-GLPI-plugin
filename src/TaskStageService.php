@@ -15,6 +15,9 @@ final class TaskStageService
 {
     public static function stage(array $task): string
     {
+        if (($task['source'] ?? 'project') === 'standalone') {
+            return [1 => 'todo', 2 => 'doing', 3 => 'done'][(int) ($task['state_id'] ?? 1)] ?? 'todo';
+        }
         $done = (int) ($task['percent_done'] ?? 0);
         return $done >= 100 ? 'done' : ($done <= 0 ? 'todo' : 'doing');
     }
