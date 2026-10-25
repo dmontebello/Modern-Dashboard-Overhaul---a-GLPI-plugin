@@ -112,3 +112,14 @@ migrazione rimangono **NON COLLAUDATO LIVE** fino a questa verifica. Promozione
 ## Prova prioritaria per 0.8.1-dev.3
 
 Il fix elimina il catch(Throwable) intorno al redirect nativo GLPI. Prima di testare controllare in Settings versione 0.8.1-dev.3 e source SHA; usare ZIP versionato e backup coordinato. Selezionare PROGETTO-TEST nel dropdown GLPI, premere Continua e verificare in barra URL `/front/projecttask.form.php?projects_id=ID`. Solo il successivo Salva nel form crea la task. Controllare progetto, elenco, Kanban e permessi. Con ID non valido/nessuna scelta deve apparire errore senza redirect. Annotare PASS/FAIL reali, non dedotti dai mock.
+
+## Sequenza di verifica dopo conferma installazione 0.8.1-dev.3 (25 ottobre 2026)
+
+L'utente riferisce che l'aggiornamento ora funziona, dopo aver distinto `unzip -t` (test archivio) dalla vera estrazione. Rimangono da verificare i singoli flussi live senza dichiarare automaticamente tutto PASS:
+
+1. Assistenza > Tasks > Nuova task > **Task di progetto** > PROGETTO-TEST > Continua > modulo nativo > Salva > ricerca e Kanban.
+2. Settings > `tasks_standalone` opt-in e profilo con lettura + CREATE/UPDATE/DELETE, schema 1; Nuova task > **Indipendente** > crea/edita/completa/cancella/ripristina, senza Project. Non fare concessioni di diritti globali in produzione.
+3. Utente con READMY e utente altra entità, verificare le ACL; ricontrollare versione/commit in Settings.
+4. Ripetere il confronto screenshot sui bug mini Ticket, dashboard Assistenza, legenda, settings dark e spaziature Tasks.
+
+Registrare ogni esito in [STATUS](STATUS.md). Next sprint: [MDO_NEXT_SPRINT](../specs/MDO_NEXT_SPRINT.md).

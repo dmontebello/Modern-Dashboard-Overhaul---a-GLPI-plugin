@@ -114,3 +114,13 @@ Build locale dirty dichiarata; source/build/checksum definitivo dal publisher CI
 ## Registro 0.8.1-dev.3 — 2026-10-25
 
 TASK-01: causa precisa individuata nei sorgenti di GLPI 11.0.9: Html::redirect() lancia RedirectException, che il vecchio front/tasks.php intercettava con catch(Throwable). Il fix esegue la verifica permessi nel try e il redirect FUORI dal catch. Test double esteso per simulare il lancio dell'eccezione. CI non ancora confermata al momento del commit; **NON COLLAUDATO LIVE**. Dopo CI verde collaudare progetto valido -> Continua -> form nativo -> Salva -> elenco/Kanban. Gli altri bug UI e le ACL standalone restano aperti. Schema standalone 1 invariato, rollback con snapshot staging, Main invariato.
+
+## Feedback utente 2026-10-25 — installazione dev.3 e prosecuzione
+
+Dopo il download e la verifica ZIP della 0.8.1-dev.3, l'utente aveva eseguito soltanto `unzip -t` (che non estrae); ha poi seguito la procedura di sostituzione/aggiornamento del plugin e ha risposto **«Funziona, andiamo avanti con lo sviluppo»**. **Riscontro positivo sulla procedura / stato attuale**; non è specificato se tutti i flussi (Continua → form → Salva, StandaloneTask, ACL multi-entità e grafici) siano stati testati. Conservare `NON VERIFICATO LIVE` per i casi non esplicitamente confermati; non cambiare vecchi esiti senza evidenza.
+
+| Data | Versione | Esito comunicato | Cosa NON è ancora certificato | Prossimo passo |
+| --- | --- | --- | --- | --- |
+| 2026-10-25 | 0.8.1-dev.3 | «Funziona» dopo corretta installazione/estrazione | ACL StandaloneTask e ProjectTask, migrazione database, tutte le anomalie dashboard, Search AJAX | [Sprint stabilizzazione e UX](../specs/MDO_NEXT_SPRINT.md) + [collaudo staging](STAGING_0_8_1.md) |
+
+**Prossima candidata funzionale:** 0.8.1-dev.4 soltanto quando sono presenti modifiche di codice con test e documentazione coerenti. La versione attuale resta 0.8.1-dev.3; Main resta 0.8.0.

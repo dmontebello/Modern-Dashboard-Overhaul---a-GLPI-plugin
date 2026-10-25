@@ -21,3 +21,5 @@ If this repository does not contain the stated specification at that path, stop 
 - Each installable Dev candidate must have a visible prerelease version (starting at 0.8.1-dev.1) and identifiable tested source SHA, CI run ID, UTC build time. Never ship a 0.8.1 code base under a file labelled 0.8.0.
 - **For each candidate in the same commit as the code**, update CHANGELOG.md, docs/releases/<version>.md, docs/dev/STATUS.md, README/QA and all impacted install/config/security/architecture docs. Record fixes, exact tests run, mocked vs LIVE GLPI status, code SHA, ZIP checksum, risks, rollback, outstanding work and next steps. Keep history intact.
 - Mock/fixture success is not proof of the reported GLPI 11.0.9 UI regressions. Keep issues open until verified on actual staging. Never merge Main automatically.
+
+- Current follow-up after user successfully installed MDO 0.8.1-dev.3: [Next sprint (staging/Tasks/UI)](docs/specs/MDO_NEXT_SPRINT.md). Do not assume every ProjectTask/StandaloneTask/ACL test passed merely because the installation works. Start with targeted live evidence, then implement minimal fixes on Dev (next code candidate 0.8.1-dev.4).
