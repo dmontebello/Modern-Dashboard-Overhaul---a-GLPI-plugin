@@ -142,3 +142,5 @@ Dopo il download e la verifica ZIP della 0.8.1-dev.3, l'utente aveva eseguito so
 ## Aggiornamento 0.8.1-dev.5
 
 Live 25 ottobre 2026: Kanban ProjectTask in errore con MySQL 1054, query generata ORDER BY `DESC`. Fix dev.5 nel formato ORDER di tre query read-only. La route standalone restituisce accesso negato: in MDO READMY/READALL sono diritti espliciti del profilo, inizialmente non assegnati anche a Super-Admin. Nessun bypass automatico; aggiunto avviso solo per admin. Il log dimostra invece che Continua del progetto 1 ha fatto HTTP 302 e aperto il form ProjectTask con 200. Salvare una task non risulta ancora provato. Correzioni dev.5: NON COLLAUDATO LIVE. Test CI e pubblicazione ancora da verificare; Main invariato. Next: installazione staging, board, profili, ricerca, UI dashboard.
+
+**CI #40189803646 (primo run dev.5): FAIL del test Tasks sulla board vuota in inglese per fixture reinizializzata dai nuovi casi ACL; gli assert SQL e ACL aggiunti risultavano già PASS. Il test è stato corretto ripristinando l'insieme vuoto subito prima dell'assert; secondo run ancora da verificare. Nessuna ZIP dev.5 pubblicata dal run fallito.**

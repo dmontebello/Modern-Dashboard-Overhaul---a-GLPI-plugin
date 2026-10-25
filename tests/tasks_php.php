@@ -181,6 +181,7 @@ Session::$config = false;
 verify(!str_contains(taskPage(['view'=>'list']), 'READMY / READALL'),
     'non-admin does not see administrative profile setup instructions');
 taskFixture();
+ProjectTask::$rows = [];
 Session::$language = 'en_GB';
 verify(str_contains(taskPage(['view' => 'board']), 'No visible tasks'), 'empty state follows GLPI language');
 taskFixture();
