@@ -99,9 +99,11 @@ Html::header('Tasks', '', 'helpdesk', strtolower(TaskMenu::class));
 echo '<div class="mdo-tasks container-xl">';
 echo '<header class="mdo-tasks-head"><div><p class="mdo-tasks-eyebrow">MODERN DASHBOARD OVERHAUL</p>';
 echo '<h1>' . $esc($tr('Attività', 'Tasks')) . '</h1>';
-echo '<p class="text-secondary">' . $esc($standalone
-    ? $tr('Attività indipendenti, senza progetto obbligatorio.', 'Independent tasks, with no required project.')
-    : $tr('Attività di progetto GLPI, separate dai ticket e dalle richieste.', 'Native GLPI project tasks, separate from tickets and requests.')
+echo '<p class="text-secondary">' . $esc($unified
+    ? $tr('Tutte le attività accessibili: di progetto e indipendenti.', 'All accessible project and independent tasks.')
+    : ($standalone
+        ? $tr('Attività indipendenti, senza progetto obbligatorio.', 'Independent tasks, with no required project.')
+        : $tr('Attività di progetto GLPI, separate dai ticket e dalle richieste.', 'Native GLPI project tasks, separate from tickets and requests.'))
 ) . '</p></div><div class="mdo-tasks-actions">';
 if (Project::canView()) {
     echo '<a class="btn btn-outline-secondary" href="' . $esc(Project::getSearchURL()) . '"><i class="ti ti-briefcase me-1"></i>'
@@ -332,7 +334,7 @@ foreach ($states as $id => $name) {
 }
 echo '</select></label>';
 echo '<label>' . $esc($tr('Colonne', 'Group by')) . '<select class="form-select" name="group">';
-foreach (['state' => ($standalone ? $tr('Stato', 'Status') : $tr('Stato GLPI', 'GLPI state')), 'progress' => $tr('Avanzamento percentuale', 'Percent complete')] as $key => $label) {
+foreach (['state' => ($standalone ? $tr('Stato', 'Status') : $tr('Stato GLPI', 'GLPI state')), 'progress' => ($unified ? $tr('Fase comune', 'Common stage') : $tr('Avanzamento percentuale', 'Percent complete'))] as $key => $label) {
     if (($standalone && $key === 'progress') || ($unified && $key === 'state')) { continue; }
     echo '<option value="' . $key . '"' . ($group === $key ? ' selected' : '') . '>' . $esc($label) . '</option>';
 }
@@ -355,7 +357,7 @@ echo '<p class="mdo-tasks-hint">' . $esc($unified || $standalone || $group === '
     : $tr('Per modificare una task apri la sua scheda GLPI.',
         'Open the native GLPI task form to make changes.')
 ) . '</p>';
-if ($group === 'progress') {
+if ($group === 'progress' && !$unified) {
     echo '<p class="mdo-tasks-hint">' . $esc($tr(
         'Raggruppamento per avanzamento: le colonne riflettono la percentuale GLPI, senza uno Stage manuale separato.',
         'Grouped by progress: columns reflect GLPI percent complete; there is no separate manual Stage.'
