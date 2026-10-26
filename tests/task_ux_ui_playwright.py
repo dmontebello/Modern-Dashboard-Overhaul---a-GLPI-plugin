@@ -42,7 +42,8 @@ with sync_playwright() as playwright:
       card.dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:transfer}));
     }""")
     assert page.evaluate('window.__ghostCaptured === true'), 'drag ghost captured in viewport'
-    card.evaluate("""card => card.dispatchEvent(new DragEvent('dragend',{bubbles:true}))""")
+    page.locator('[data-mdo-board] .mdo-tasks-card[data-id="3"]').evaluate("""card => card.dispatchEvent(new DragEvent('dragend',{bubbles:true}))""")
+    page.wait_for_function("document.querySelectorAll('.mdo-drag-preview').length === 0",timeout=3000)
     assert page.locator('.mdo-drag-preview').count()==0, 'drag ghost cleaned'
     browser.close()
 print('Task UX repeated Kanban and drag ghost tests PASSED (Chromium fixture)')
