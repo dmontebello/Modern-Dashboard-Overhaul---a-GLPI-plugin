@@ -9,6 +9,7 @@ class CommonDBTM extends CommonGLPI
     public array $fields = [];
     public array $input = [];
     public static function getTable($classname = null) { return 'unused'; }
+    public function maybeDeleted(): bool { return true; }
     public function getID(): int { return (int)($this->fields['id'] ?? 0); }
     public function getEntityID(): int { return (int)($this->fields['entities_id'] ?? 0); }
     public function isRecursive(): bool { return false; }
