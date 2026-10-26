@@ -172,6 +172,7 @@
         event.preventDefault();
         const button = deleteForm.querySelector('[data-mdo-task-delete]');
         if (button?.disabled || !window.confirm(button?.dataset.confirm || 'Move this task to trash?')) return;
+        deleteForm.querySelector('[name="confirm_delete"]').value = '1';
         button.disabled = true;
         const row = deleteForm.closest('[data-mdo-list-row]');
         (async () => {
