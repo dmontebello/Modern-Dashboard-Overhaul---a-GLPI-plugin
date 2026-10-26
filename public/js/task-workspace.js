@@ -15,6 +15,13 @@
     if (!board) return;
     const live = root.querySelector('[data-mdo-live]');
     let dragged = null;
+    let dragPreview = null;
+    const clearDrag = () => {
+      board.querySelectorAll('.mdo-drop-target').forEach(el => el.classList.remove('mdo-drop-target'));
+      dragged?.classList.remove('mdo-card-dragging');
+      dragged = null;
+      if (dragPreview) { dragPreview.remove(); dragPreview = null; }
+    };
     async function move(card, target) {
       if (!card || busy || card.dataset.canMove !== '1') return;
       const oldColumn = card.closest('[data-mdo-column]');
@@ -32,10 +39,25 @@
           body:form.toString()
         });
         const data = await response.json();
+        // GLPI consumes a token even when an authenticated POST returns 403/409.
+        if (typeof data.token === 'string' && data.token) board.dataset.token = data.token;
         if (!response.ok || !data.ok) throw new Error('Stage update rejected');
         destination.querySelector('.mdo-tasks-hint')?.remove();
         destination.append(card);
         card.dataset.version = data.version || '';
+        card.dataset.stage = target;
+        if (card.dataset.source === 'project') {
+          const progress = target === 'todo' ? 0 : target === 'done' ? 100 :
+            Math.max(1, Math.min(99, Number(card.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow')) || 50));
+          const bar = card.querySelector('[role="progressbar"]');
+          if (bar) {
+            bar.setAttribute('aria-valuenow', String(progress));
+            const fill = bar.querySelector('span');
+            if (fill) fill.style.width = progress + '%';
+            const value = bar.nextElementSibling;
+            if (value?.tagName === 'SMALL') value.textContent = progress + '%';
+          }
+        }
         for (const column of board.querySelectorAll('[data-mdo-column]')) {
           const count = column.querySelectorAll('.mdo-tasks-card').length;
           const heading = column.querySelector('header span');
@@ -48,6 +70,14 @@
           }
         }
         if (live) live.textContent = 'Task updated.';
+        root.querySelectorAll('.mdo-tasks-stat').forEach(stat => {
+          const key = new URL(stat.href).searchParams.get('filter');
+          const allCards = board.querySelectorAll('.mdo-tasks-card');
+          const value = key === 'all' ? allCards.length : key === 'open' ?
+            board.querySelectorAll('[data-mdo-column="todo"] .mdo-tasks-card, [data-mdo-column="doing"] .mdo-tasks-card').length :
+            key === 'done' ? board.querySelectorAll('[data-mdo-column="done"] .mdo-tasks-card').length : null;
+          if (value !== null) { const label = stat.querySelector('strong'); if (label) label.textContent = String(value); }
+        });
         const select = card.querySelector('[data-stage-choice]');
         if (select) select.value = target;
       } catch {
@@ -62,10 +92,28 @@
       const card = event.target.closest('.mdo-tasks-card[data-can-move="1"]');
       if (!card) return;
       dragged = card;
-      if (event.dataTransfer) event.dataTransfer.setData('text/plain', card.dataset.source + ':' + card.dataset.id);
+      card.classList.add('mdo-card-dragging');
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', card.dataset.source + ':' + card.dataset.id);
+        dragPreview = card.cloneNode(true);
+        dragPreview.classList.add('mdo-drag-preview');
+        dragPreview.style.width = card.getBoundingClientRect().width + 'px';
+        document.body.append(dragPreview);
+        event.dataTransfer.setDragImage(dragPreview, 30, 24);
+      }
     });
     board.addEventListener('dragover', event => {
-      if (dragged && event.target.closest('[data-mdo-column]')) event.preventDefault();
+      const column = event.target.closest('[data-mdo-column]');
+      if (!dragged || !column || busy) return;
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+      board.querySelectorAll('.mdo-drop-target').forEach(el => el.classList.remove('mdo-drop-target'));
+      column.classList.add('mdo-drop-target');
+    });
+    board.addEventListener('dragleave', event => {
+      const column = event.target.closest('[data-mdo-column]');
+      if (column && !column.contains(event.relatedTarget)) column.classList.remove('mdo-drop-target');
     });
     board.addEventListener('drop', event => {
       const column = event.target.closest('[data-mdo-column]');
@@ -73,9 +121,9 @@
         event.preventDefault();
         void move(dragged, column.dataset.mdoColumn);
       }
-      dragged = null;
+      clearDrag();
     });
-    board.addEventListener('dragend', () => { dragged = null; });
+    board.addEventListener('dragend', clearDrag);
     board.addEventListener('change', event => {
       if (!event.target.matches('[data-stage-choice]')) return;
       const card = event.target.closest('.mdo-tasks-card');
