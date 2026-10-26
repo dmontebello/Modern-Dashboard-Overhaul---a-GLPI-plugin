@@ -162,3 +162,8 @@ Tasks: schema2, diario e allegati. ZIP solo con pipeline e SHA512 verificati; NO
 ## 0.8.1-dev.7 — allineamento
 
 La release 0.8.1-dev.7 usa lo stesso packaging immutabile di dev.6; i file del form unico vengono verificati con lint, test PHP e Playwright. ZIP e SHA512 solo tramite publisher Dev.
+
+
+## 0.8.1-dev.8 — stabilizzazione Tasks UX
+
+Questa candidata corregge la ripetizione dei trascinamenti del Kanban con token CSRF GLPI11 rinnovato, aggiunge la card ghost e la colonna di drop evidenziata, e consente il soft-delete da lista combinata soltanto se l'item ha il diritto DELETE. Modulo StandaloneTask conservato, senza nuove tabelle o migrazioni. CI automatica non sostituisce test sul GLPI reale; Main invariato. Dettagli e rollback in `docs/releases/0.8.1-dev.8.md`.
