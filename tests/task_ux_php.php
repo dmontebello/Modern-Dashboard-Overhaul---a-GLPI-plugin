@@ -34,7 +34,7 @@ $html=taskPage(['source'=>'all','view'=>'list']);
 uxCheck(str_contains($html, 'mdo-task-delete-form') && str_contains($html, 'confirm_delete'),
     'combined list renders permission-gated trash action');
 [$status,$result]=deleteRequest('standalone',$id);
-uxCheck($status===200 && $result['ok'] && !empty($result['token']),'deletion returns renewed token');
+uxCheck($status===200 && $result['ok'] && !empty($result['token']), 'deletion returns renewed token; status=' . $status . ' result=' . json_encode($result));
 uxCheck(!empty(CommonDBTM::$storage[StandaloneTask::getTable()][$id]['is_deleted']),
     'standalone soft-deleted, no purge');
 [$status,$result]=deleteRequest('standalone',$id);
