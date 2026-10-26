@@ -100,7 +100,7 @@ Html::$redirect=null;
 $html=taskPage(['source'=>'standalone','view'=>'board']);
 expect(str_contains($html,'data-task-type="standalone"') && !str_contains($html,'<script>hostile()'),'standalone board type/ID and escaping');
 expect(!str_contains($html,'role="progressbar"') && !str_contains($html,'Progetto non accessibile'),'no fake progress percentage or restricted-project placeholder for independent tasks');
-taskPage(['source'=>'standalone']);
+taskPage(['source'=>'standalone','view'=>'list']);
 expect(Search::$calls['list'][0]===StandaloneTask::class,'independent list uses native Search for its own itemtype');
 Session::$user=1; Session::$standaloneRights=StandaloneTask::READMY|CREATE|UPDATE|DELETE;
 $html=taskPage(['source'=>'standalone','new'=>'1']);
