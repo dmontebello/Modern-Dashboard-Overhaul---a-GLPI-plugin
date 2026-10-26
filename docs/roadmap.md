@@ -10,6 +10,7 @@
 | 0.8.1-dev.7 | Creazione task unica, progetto facoltativo (sviluppo; vedere backlog) | MDO-TASK-007 |
 | 0.8.1-dev.8 | Priorità collaudo 26/10: drag ripetuto, drag ghost, eliminazione da lista | MDO-TASK-014, MDO-UI-003, MDO-TASK-015 |
 | 0.8.1-dev.9 | Correzione Kanban stato nativo, All drag, contatori | MDO-TASK-016, MDO-TASK-017, MDO-TASK-018 |
+| 0.8.1-dev.10 | Native ProjectState DnD, All Kanban default, card compatte | MDO-TASK-019, MDO-UI-004, MDO-UI-005 |
 | Successiva prerelease | Checklist persistente e riordinabile nella task | MDO-TASK-008 |
 | Dopo checklist | Conversione Standalone→ProjectTask + relazioni bidirezionali asset/contract/license/task | MDO-TASK-009, MDO-TASK-010 |
 | 0.8.2 | Brief di progetto strutturato (Goals/In scope/Out of scope), poi evoluzione iProjects | MDO-PROJ-001 |

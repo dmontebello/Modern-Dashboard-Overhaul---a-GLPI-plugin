@@ -12,7 +12,7 @@ class CommonGLPI {}
 require_once __DIR__ . '/common_db_double.php';
 final class Config
 {
-    public static array $values = [];
+    public static array $values = ['core'=>['projecttask_unstarted_states_id'=>1,'projecttask_inprogress_states_id'=>2,'projecttask_completed_states_id'=>3]];
     public static function getConfigurationValues(string $context): array { return self::$values[$context] ?? []; }
     public static function setConfigurationValues(string $context, array $values): void { self::$values[$context] = array_replace(self::$values[$context] ?? [], $values); }
 }

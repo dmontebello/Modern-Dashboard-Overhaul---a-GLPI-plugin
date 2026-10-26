@@ -178,3 +178,8 @@ Segnalazione LIVE dev.8: Project mostra soltanto Processing; All DnD non funzion
 
 **MDO-TASK-016/017/018: IN COLLAUDO OPERATIVO**: colonne ProjectState compresi stati vuoti, drag nella vista All per Project/Independent, contatori immediati. Prove LIVE ancora aperte: Project con sola task Processing mostra altri stati a 0; DnD stesso elemento ripetuto in Project/Independent/All; 2 TODO e 1 Processing -> 1 TODO e 2 Processing senza refresh; DB/persistenza/ACL/CSRF; verificare auto_projectstates impostato a 0 su spostamento nativo. Stato dopo il fix NON CHIUSO. Main 0.8.0 invariato, niente deploy automatico, nessuna migrazione DB rispetto a dev.8. Checklist e conversioni rimangono in backlog.
 
+
+
+## QA 0.8.1-dev.10 — feedback GLPI
+
+Utente con dev.9: Project Kanban mostra percentuali e non stati; solo Independent trascinabili; vuole card stile Notion (~260×78) e All→Kanban default. Root cause nel default group=progress e nella guardia auto_percent_done; implementata mappatura ProjectState core configurata, senza modifiche alla percentuale automatica, e default group=state Project. Test su GLPI reale NON ESEGUITO. Verificare contatori, mapping, tre trascinamenti ripetuti, form e accessibilità.

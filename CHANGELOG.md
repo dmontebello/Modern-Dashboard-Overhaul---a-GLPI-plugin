@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.1-dev.10 — Kanban UX, bugfix Project
+
+- Default All / Kanban; Project raggruppa per stati GLPI nativi anziché 0/1–99/100%; mixed All usa ProjectState GLPI configurati e non sovrascrive percent_done automatico; card compatte circa 260×78, dettagli raggiungibili nei form. **NON COLLAUDATO LIVE**.
+
+
 ## 0.8.1-dev.9 — correzione Stati Kanban (26/10/2026)
 
 - Colonne native dei progetti complete anche senza task, spostamento tramite ProjectTask, fasi condivise in All e contatori immediati. Bug segnalati nel collaudo live della dev.8, fix ancora NON COLLAUDATO LIVE. Checklist/relazioni posticipate.

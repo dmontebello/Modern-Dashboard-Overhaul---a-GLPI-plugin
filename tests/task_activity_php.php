@@ -102,4 +102,7 @@ t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('project',1,'state-999','')['err
   'unknown native state denied');
 t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('standalone',1,'state-4','')['error']==='invalid',
   'independent task cannot accept native ProjectState ID');
+t(\GlpiPlugin\Mdoverhaul\TaskStageService::stage(['source'=>'project','state_id'=>2,'percent_done'=>0], true)==='doing', 'All maps GLPI native Processing to Doing even with 0 percent');
+t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('project',1,'doing','', 'all')['ok'], 'All moves ProjectTask via mapped native status');
+t(ProjectTask::$rows[1]['projectstates_id']===2, 'All retains configured native ProjectState');
 echo "$n task activity tests PASSED (isolated doubles, NON COLLAUDATO LIVE)\n";

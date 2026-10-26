@@ -210,3 +210,13 @@ Utente: Independent tutte le colonne OK; Project soltanto gli stati occupati; dr
 
 **MDO-TASK-016/017/018: IN COLLAUDO OPERATIVO**: colonne ProjectState compresi stati vuoti, drag nella vista All per Project/Independent, contatori immediati. Prove LIVE ancora aperte: Project con sola task Processing mostra altri stati a 0; DnD stesso elemento ripetuto in Project/Independent/All; 2 TODO e 1 Processing -> 1 TODO e 2 Processing senza refresh; DB/persistenza/ACL/CSRF; verificare auto_projectstates impostato a 0 su spostamento nativo. Stato dopo il fix NON CHIUSO. Main 0.8.0 invariato, niente deploy automatico, nessuna migrazione DB rispetto a dev.8. Checklist e conversioni rimangono in backlog.
 
+
+
+## Feedback operativo 26/10 — candidata dev.10
+
+Dev.9 non è accettata: soltanto Independent drag funziona, Project mostra percentuali invece di stati; richieste card compatte 260×78 e default All Kanban. Fix dev.10 in feature branch: mapping da configurazione ProjectState, default stato Project, All board, card compatte. **NON COLLAUDATO LIVE**. MDO-TASK-019, MDO-UI-004, MDO-UI-005 IN SVILUPPO. Non dichiarare dev.9 risolta e non modificare Main.
+
+
+## 0.8.1-dev.10 — fix Kanban native-first
+
+In sviluppo: mapping GLPI ProjectState, All Kanban default e card compatte. NON COLLAUDATO LIVE.

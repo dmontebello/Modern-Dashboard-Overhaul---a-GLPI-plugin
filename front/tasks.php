@@ -42,8 +42,8 @@ if ($standalone && !StandaloneTask::canView()) { Session::checkRight(StandaloneT
 if (!$standalone && !ProjectTask::canView()) { Session::checkRight('projecttask', ProjectTask::READMY); return; }
 $itemtype = $standalone ? StandaloneTask::class : ProjectTask::class;
 
-$view = $scalar('view') === 'board' ? 'board' : 'list';
-$group = $scalar('group', 'progress') === 'state' ? 'state' : 'progress';
+$view = $scalar('view', 'board') === 'list' ? 'list' : 'board';
+$group = $scalar('group', 'state') === 'progress' ? 'progress' : 'state';
 if ($standalone) { $group = 'state'; }
 // All uses the shared three-stage model; GLPI-specific state grouping is Project-only.
 if ($unified) { $group = 'progress'; }
@@ -260,7 +260,7 @@ try {
 $all = $loaded['tasks'];
 foreach ($all as &$record) {
     $record['source'] = $record['source'] ?? 'project';
-    $record['stage'] = TaskStageService::stage($record);
+    $record['stage'] = TaskStageService::stage($record, $unified);
 }
 unset($record);
 $scope = TaskBoard::filter($all, $q, 'all', $stateId, $projectId, $dueFilter);
@@ -436,7 +436,7 @@ foreach ($filtered as $task) {
     $columns[$column]['items'][] = $task;
 }
 echo '<p class="mdo-tasks-hint" id="mdo-board-scroll">' . $esc($tr('Scorri orizzontalmente per vedere le colonne.', 'Scroll horizontally to see columns.')) . '</p>';
-echo '<div class="mdo-tasks-board" data-mdo-board data-endpoint="' . $esc(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task-stage.php') . '" data-token="' . $esc(Session::getNewCSRFToken()) . '" role="region" aria-label="Kanban" aria-describedby="mdo-board-scroll" tabindex="0">';
+echo '<div class="mdo-tasks-board" data-mdo-board data-endpoint="' . $esc(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task-stage.php') . '" data-token="' . $esc(Session::getNewCSRFToken()) . '" data-mode="' . $esc($unified ? 'all' : $group) . '" role="region" aria-label="Kanban" aria-describedby="mdo-board-scroll" tabindex="0">';
 foreach ($columns as $columnKey => $column) {
     echo '<section class="mdo-tasks-column" data-mdo-column="' . $esc((string)$columnKey) . '"><header><h2>' . $esc($column['name']) . '</h2><span>' . count($column['items']) . '</span></header>';
     echo '<div class="mdo-tasks-column-body">';
@@ -445,7 +445,10 @@ foreach ($columns as $columnKey => $column) {
     }
     foreach ($column['items'] as $task) {
         $item = TaskStageService::item($task['source'], (int) $task['id']);
-        $canMove = $item !== null && $item->can((int) $task['id'], UPDATE) && ($task['source'] !== 'project' || $group === 'state' || empty($item->fields['auto_percent_done'])) && ($unified || $standalone || $group === 'progress' || $group === 'state');
+        $canMove = $item !== null && $item->can((int) $task['id'], UPDATE)
+            && ($task['source'] !== 'project' || ($unified
+                ? TaskStageService::canMoveMixedProject($item->fields)
+                : ($group === 'state' || empty($item->fields['auto_percent_done']))));
         echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '" data-stage="' . $esc($columnKey) . '" data-group="' . $esc($group) . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">' 
             . $esc($task['name'] ?: '—') . '</a>';
         if ($task['project_readable']) {
@@ -455,7 +458,7 @@ foreach ($columns as $columnKey => $column) {
             echo '<span class="mdo-tasks-project">' . $esc($tr('Progetto non accessibile', 'Restricted project')) . '</span>';
         }
         if ($task['description'] !== '') {
-            echo '<p>' . $esc($task['description']) . '</p>';
+            echo '<p class="mdo-tasks-card-description">' . $esc($task['description']) . '</p>';
         }
         echo '<a class="mdo-tasks-journal" href="' . $esc(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task-activity.php?source=' . rawurlencode($task['source']) . '&id=' . (int)$task['id']) . '">' . $esc($tr('Diario e allegati', 'Activity and files')) . '</a>';
         echo '<div class="mdo-tasks-card-meta"><span class="mdo-tasks-state">' . $esc((string)$task['state']) . '</span>';

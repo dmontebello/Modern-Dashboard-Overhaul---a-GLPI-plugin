@@ -123,3 +123,20 @@
 .mdo-card-dragging{opacity:.48;border-style:dashed;}
 .mdo-drag-preview{position:fixed!important;top:0;left:0;z-index:99999;pointer-events:none;opacity:.96;box-shadow:0 12px 32px rgba(0,0,0,.28);transform:rotate(-2deg);background:var(--mdo-task-surface);}
 @media(prefers-reduced-motion:reduce){.mdo-tasks-column{transition:none;}.mdo-drag-preview{transform:none;}}
+
+/* Dev.10 compact Notion-scale Kanban. Details remain in native form and activity diary. */
+.mdo-tasks-board{gap:10px;min-height:260px}
+.mdo-tasks-column{flex:0 0 284px;max-width:284px}
+.mdo-tasks-column>header{padding:9px 11px;min-height:40px}
+.mdo-tasks-column-body{gap:7px;padding:8px}
+.mdo-tasks-card{width:100%;min-height:78px;padding:9px 10px;display:flex;flex-direction:column;gap:3px;border-radius:7px}
+.mdo-tasks-card>small:first-child{font-size:10px;line-height:1.1}
+.mdo-tasks-card-title{font-size:13px;line-height:1.25;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mdo-tasks-project{font-size:11px;line-height:1.2;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mdo-tasks-card .mdo-tasks-card-description,.mdo-tasks-card .mdo-tasks-date,.mdo-tasks-card .mdo-tasks-progress,.mdo-tasks-card .mdo-tasks-card-meta,.mdo-tasks-card>.mdo-tasks-journal,.mdo-tasks-card>.mdo-tasks-progress+small{display:none}
+.mdo-tasks-card{position:relative}
+.mdo-tasks-card>.mdo-stage-control{display:flex;position:absolute;right:7px;bottom:6px;width:115px;margin:0;opacity:0;pointer-events:none;transition:opacity .12s ease}
+.mdo-tasks-card>.mdo-stage-control select{min-height:26px;height:26px;font-size:11px;padding:2px 4px}
+.mdo-tasks-card>.mdo-stage-control{font-size:0}
+.mdo-tasks-card:hover>.mdo-stage-control,.mdo-tasks-card:focus-within>.mdo-stage-control{opacity:1;pointer-events:auto}
+@media(max-width:720px){.mdo-tasks-column{flex:0 0 min(284px,85vw);max-width:min(284px,85vw)}}

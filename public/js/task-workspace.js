@@ -30,7 +30,7 @@
       busy = true;
       const form = new URLSearchParams({
         source: card.dataset.source, id: card.dataset.id, stage: target,
-        version: card.dataset.version || '', _glpi_csrf_token: board.dataset.token
+        version: card.dataset.version || '', mode: board.dataset.mode || 'progress', _glpi_csrf_token: board.dataset.token
       });
       try {
         const response = await fetch(board.dataset.endpoint, {
@@ -46,6 +46,10 @@
         destination.append(card);
         card.dataset.version = data.version || '';
         card.dataset.stage = target;
+        if (typeof data.state_label === 'string') {
+          const state = card.querySelector('.mdo-tasks-state');
+          if (state) state.textContent = data.state_label;
+        }
         if (card.dataset.source === 'project' && !target.startsWith('state-')) {
           const state = card.querySelector('.mdo-tasks-state');
           if (state) state.dataset.stage = target;

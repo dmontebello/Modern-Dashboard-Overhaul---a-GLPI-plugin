@@ -3,9 +3,9 @@
 > **NUOVE CHAT CTO / DEVELOPER / CODEX:** punto di ingresso operativo **[START HERE — MDO](docs/project/start-here.md)**. Consultare [focus corrente](docs/project/current-focus.md), [backlog con stati](docs/product/backlog.md), [roadmap](docs/roadmap.md), [decisioni](docs/product/decisions.md) e [stato implementato](docs/implementation-state.md). Lo sviluppo è su `Dev`; `Main` rimane la release pubblicata. Verificare sempre GitHub e CI sullo SHA attuale.
 
 
- > **Candidata Dev 0.8.1-dev.9:** [Note](docs/releases/0.8.1-dev.9.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
+ > **Candidata Dev 0.8.1-dev.10:** [Note](docs/releases/0.8.1-dev.10.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
 
-**Versione:** `0.8.1-dev.9` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
+**Versione:** `0.8.1-dev.10` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
 Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
@@ -158,3 +158,7 @@ Fix trascinamento successivo al primo POST con rotazione CSRF, anteprima della c
 ## Dev.9 — correzioni Kanban in collaudo
 
 Stati ProjectTask GLPI sempre visibili, trascinamento nativo fra stati, vista All con fasi comuni e contatori aggiornati subito. **Non collaudata live.** [Note](docs/releases/0.8.1-dev.9.md).
+
+## Dev.10 — Tasks state-first e compatte
+
+Apertura All / Kanban, vista Project raggruppata per stati GLPI nativi, mapping sicuro per drag misto All e card compatte in stile Notion (~260×78), dettagli conservati nei form e nel diario. **NON COLLAUDATO LIVE**. [Note](docs/releases/0.8.1-dev.10.md).

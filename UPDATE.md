@@ -102,3 +102,8 @@ Versione senza nuove tabelle rispetto allo schema2. Salvare database, plugin, co
 ## 0.8.1-dev.9 — Kanban stato nativo / All
 
 Nessuna migrazione prevista. Fare backup coordinato DB+plugin+config+volume GLPI; verificare ZIP, checksum e metadati dopo pubblicazione. Testare tutte le colonne, trasferimenti Project/All/Independent e contatori immediati. Main non aggiornato; **NON COLLAUDATO LIVE**.
+
+
+## 0.8.1-dev.10 — correzioni visuali Kanban
+
+Solo PHP/JS/CSS, senza nuove migrazioni DB. Backup coordinato DB+plugin+config+GLPI_DOC_DIR prima dell'installazione. Project e All devono mostrare gli stati previsti; non interpretare percent_done come stato Project; testare drag nativo con ACL. Main invariato, NON COLLAUDATO LIVE.
