@@ -4,7 +4,7 @@ use Glpi\Plugin\Hooks;
 use GlpiPlugin\Mdoverhaul\Dashboard;
 use GlpiPlugin\Mdoverhaul\Settings;
 
-define('PLUGIN_MDOVERHAUL_VERSION', '0.8.1-dev.8');
+define('PLUGIN_MDOVERHAUL_VERSION', '0.8.1-dev.9');
 require_once __DIR__ . '/src/BuildInfo.php';
 require_once __DIR__ . '/src/Settings.php';
 require_once __DIR__ . '/src/FeedFormatter.php';

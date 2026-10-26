@@ -173,3 +173,8 @@ Form unificato `front/task.form.php` con TaskCreationService: lo stesso POST val
 
 
 **0.8.1-dev.8** — conferma aggiornamento UX/ACL alla candidata sopra, non collaudata live.
+
+
+## 0.8.1-dev.9 — Kanban, stati e contatori
+
+Nuova candidata di correzione del collaudo: catalogo completo ProjectState GLPI, comprese colonne a zero task; per ProjectTask spostamento autorizzato su stato nativo, nella vista All stage To do/Doing/Done per entrambi i tipi; aggiornamento immediato dei contatori sulla risposta POST senza reload. Nessuna migrazione, Main invariato. Backup coordinato database/plugin/config/storage privato prima della verifica su GLPI reale. **NON COLLAUDATO LIVE.** Vedere `docs/releases/0.8.1-dev.9.md` e backlog MDO-TASK-016/017/018.

@@ -45,3 +45,8 @@ MDO-TASK-007 è in sviluppo sul branch dedicato. Form unico senza scelta prelimi
 ## Focus 26 ottobre 2026 — nuovo feedback di collaudo
 
 **P0 ora:** correggere DnD dopo il primo spostamento (token CSRF consumato GLPI11) e UX visuale drag; **P1:** eliminazione per riga dalla lista Tutte con DELETE per item, cestino, conferma e AJAX. Sviluppo dev.8 UX su branch dedicato. L'utente preferisce immediatezza e visualizzazione alle estensioni standalone: lasciare le indipendenti opzionali, non rimuovere dati o cambiare modello senza decisione esplicita. Checklist posticipata. Prova live del fix e CI ancora da acquisire, Main invariato.
+
+
+## Priorità 26/10 — Kanban dev.9
+
+Tre P0 in sviluppo: Project tutte colonne stati, All DnD misto, numeri colonne immediati. Implementare test PHP e Chromium e verificare LIVE in staging prima di CHIUSA. In Dev.9 solo bugfix, checklist e conversione rinviate. Non modificare Main.

@@ -46,8 +46,13 @@
         destination.append(card);
         card.dataset.version = data.version || '';
         card.dataset.stage = target;
+        if (card.dataset.source === 'project' && !target.startsWith('state-')) {
+          const state = card.querySelector('.mdo-tasks-state');
+          if (state) state.dataset.stage = target;
+        }
         if (card.dataset.source === 'project') {
-          const progress = target === 'todo' ? 0 : target === 'done' ? 100 :
+          const progress = typeof data.percent_done === 'number' ? data.percent_done :
+            target === 'todo' ? 0 : target === 'done' ? 100 :
             Math.max(1, Math.min(99, Number(card.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow')) || 50));
           const bar = card.querySelector('[role="progressbar"]');
           if (bar) {
@@ -60,7 +65,7 @@
         }
         for (const column of board.querySelectorAll('[data-mdo-column]')) {
           const count = column.querySelectorAll('.mdo-tasks-card').length;
-          const heading = column.querySelector('header span');
+          const heading = column.querySelector(':scope > header > span');
           if (heading) heading.textContent = String(count);
           if (!count && !column.querySelector('.mdo-tasks-column-body .mdo-tasks-hint')) {
             const empty = document.createElement('p');
@@ -70,6 +75,10 @@
           }
         }
         if (live) live.textContent = 'Task updated.';
+        // Counts are derived from the cards actually present after each drop.
+        // An empty destination must retain its header and a moved card counts immediately.
+        const totalLabel = root.querySelector('.mdo-tasks-results');
+        if (totalLabel) totalLabel.dataset.visibleCount = String(board.querySelectorAll('.mdo-tasks-card').length);
         root.querySelectorAll('.mdo-tasks-stat').forEach(stat => {
           const key = new URL(stat.href).searchParams.get('filter');
           const allCards = board.querySelectorAll('.mdo-tasks-card');

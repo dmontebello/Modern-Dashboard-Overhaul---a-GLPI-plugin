@@ -18,6 +18,15 @@ for ($id = 1; $id <= $count; $id++) {
         'real_end_date' => $id % 10 === 0 ? '2025-03-10 09:00:00' : '',
         'content' => 'Descrizione di esempio per verificare leggibilità, contrasto e titoli lunghi.'];
 }
+if (!empty($options['independent_count'])) {
+    $flags = array_fill_keys(array_keys(\GlpiPlugin\Mdoverhaul\Settings::defaults()), '0');
+    $flags['task_workspace'] = $flags['tasks_standalone'] = '1';
+    \GlpiPlugin\Mdoverhaul\Settings::save($flags);
+    Session::$standaloneRights = \GlpiPlugin\Mdoverhaul\StandaloneTask::READMY | CREATE | UPDATE;
+    for ($n = 1; $n <= min(10, (int)$options['independent_count']); $n++) {
+        (new \GlpiPlugin\Mdoverhaul\StandaloneTask())->add(['name'=>'Independent fixture '.$n, 'entities_id'=>1, 'status'=>$n===1?1:2]);
+    }
+}
 $DB->fail = !empty($options['error']);
 $body = taskPage($options['query'] ?? ['view' => 'board']);
 echo !empty($options['response']) ? json_encode(['body' => $body, 'redirect' => Html::$redirect], JSON_THROW_ON_ERROR) : $body;

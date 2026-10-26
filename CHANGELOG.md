@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.1-dev.9 — correzione Stati Kanban (26/10/2026)
+
+- Colonne native dei progetti complete anche senza task, spostamento tramite ProjectTask, fasi condivise in All e contatori immediati. Bug segnalati nel collaudo live della dev.8, fix ancora NON COLLAUDATO LIVE. Checklist/relazioni posticipate.
+
+
 ## 0.8.1-dev.8 — feedback operativo Kanban/lista
 
 - Token GLPI11 rinnovato dopo ogni POST Kanban per ripetere i drag senza reload; drag preview e colonna evidenziata.

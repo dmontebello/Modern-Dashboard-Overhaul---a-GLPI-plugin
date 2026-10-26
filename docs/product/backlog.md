@@ -37,6 +37,10 @@ Stati consentiti **esattamente**: `TODO`, `IN SVILUPPO`, `IN COLLAUDO OPERATIVO`
 | MDO-UI-003 | UX | [Card segue mouse e drop evidenziato](../releases/0.8.1-dev.8.md) | P0 / dev.8 UX | IN COLLAUDO OPERATIVO | Ghost HTML5 drag e drop target pubblicati su dev.8, CI PASS #40294452605; collaudo live viewport, mouse e accessibilità aperto |
 | MDO-TASK-015 | Feature/sicurezza | [Eliminazione task da lista combinata](../releases/0.8.1-dev.8.md) | P1 / dev.8 UX | IN COLLAUDO OPERATIVO | Soft-delete via GLPI API, check DELETE parent e CSRF; test fixture ACL/cestino/entità PASS #40294452605; resta collaudo LIVE per DELETE, CSRF, conferma e no purge |
 
+| MDO-TASK-016 | Bug UX | [Project Kanban omette stati vuoti](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN SVILUPPO | Catalogo ProjectState nativo completo e aggiornamento stato su task; collaudo live aperto |
+| MDO-TASK-017 | Bug funzionale | [Kanban All non consente drag misto](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN SVILUPPO | Normalizzare tre fasi comuni per ProjectTask/Standalone; prove miste e ACL live aperte |
+| MDO-TASK-018 | Bug UX | [Conteggi colonne restano obsoleti dopo drag](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN SVILUPPO | Aggiornamento DOM in ogni colonna dopo POST, verificare 2→1/1→2 senza reload |
+
 ## Come aggiornare una riga
 
 1. **ID immutabile** e non duplicato; nuova esigenza separabile = nuovo ID. Il cambio versione NON cambia ID.

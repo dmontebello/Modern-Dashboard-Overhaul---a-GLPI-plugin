@@ -87,3 +87,8 @@ Implementazione del form unico senza nuove migrazioni rispetto allo schema2. ZIP
 ## 0.8.1-dev.8 — stabilization prerelease
 
 Nuova versione richiesta per CSS/JS/PHP e test; dev.7 ZIP immutabile. Contiene fix UX Kanban e list soft-delete; checklist successiva. Publisher immutabile con SHA512 e metadati solo dopo CI verde. Main invariato; commit solo .md non avviano CI.
+
+
+## 0.8.1-dev.9 — solo correzioni Kanban
+
+Nuovo numero prerelease per PHP/JS e test, senza riutilizzare ZIP dev.8. Checklist originariamente pianificata per dev.9 rinviata; documentare CI, source SHA e checksum soltanto dopo la pubblicazione. Nessuna CI per soli Markdown.

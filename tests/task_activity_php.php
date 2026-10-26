@@ -94,4 +94,12 @@ t(ProjectTask::$rows[1]['percent_done']===100 && ProjectTask::$rows[1]['projects
 ProjectTask::$rows[1]['auto_percent_done']=1;
 t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('project',1,'todo','')['status']===409,
     'automatic ProjectTask percent cannot be overridden');
+$native=\GlpiPlugin\Mdoverhaul\TaskStageService::move('project',1,'state-4','');
+t($native['ok'] && $native['stage']==='state-4','native ProjectState stage moved');
+t((int)ProjectTask::$rows[1]['projectstates_id']===4 && (int)ProjectTask::$rows[1]['auto_projectstates']===0,
+  'native state saved without automatic overwrite');
+t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('project',1,'state-999','')['error']==='unknown_state',
+  'unknown native state denied');
+t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('standalone',1,'state-4','')['error']==='invalid',
+  'independent task cannot accept native ProjectState ID');
 echo "$n task activity tests PASSED (isolated doubles, NON COLLAUDATO LIVE)\n";

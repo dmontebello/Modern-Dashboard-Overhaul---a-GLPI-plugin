@@ -48,8 +48,9 @@ final class TaskStageService
     public static function move(string $source, int $id, string $stage, string $expected): array
     {
         if ((int) Session::getLoginUserID() < 1 || $id < 1
-            || !isset(self::labels()[$stage])
+            || (!isset(self::labels()[$stage]) && !preg_match('/^state-[1-9][0-9]{0,9}$/D', $stage))
             || !in_array($source, ['project', 'standalone'], true)
+            || ($source === 'standalone' && str_starts_with($stage, 'state-'))
             || strlen($expected) > 64) {
             return ['status' => 400, 'ok' => false, 'error' => 'invalid'];
         }
@@ -68,6 +69,22 @@ final class TaskStageService
             return ['status' => 409, 'ok' => false, 'error' => 'stale'];
         }
 
+        if (str_starts_with($stage, 'state-')) {
+            if ($source !== 'project') { return ['status'=>400,'ok'=>false,'error'=>'invalid']; }
+            $stateId = (int)substr($stage, 6);
+            if (!isset(TaskBoard::projectStates()[$stateId])) { return ['status'=>400,'ok'=>false,'error'=>'unknown_state']; }
+            $changed = (int)($item->fields['projectstates_id'] ?? 0) !== $stateId;
+            if ($changed && !$item->update(['id'=>$id,'projectstates_id'=>$stateId,'auto_projectstates'=>0])) {
+                return ['status'=>409,'ok'=>false,'error'=>'update_failed'];
+            }
+            $item->getFromDB($id);
+            if ((int)($item->fields['projectstates_id'] ?? 0) !== $stateId) {
+                return ['status'=>409,'ok'=>false,'error'=>'native_state_mismatch'];
+            }
+            return ['status'=>200,'ok'=>true,'stage'=>$stage,
+                'version'=>(string)($item->fields['date_mod'] ?? ''),
+                'percent_done'=>(int)($item->fields['percent_done'] ?? 0)];
+        }
         if ($source === 'standalone') {
             $wanted = array_search($stage, [1 => 'todo', 2 => 'doing', 3 => 'done'], true);
             $current = (int) ($item->fields['status'] ?? 0);
@@ -98,6 +115,7 @@ final class TaskStageService
             return ['status' => 409, 'ok' => false, 'error' => 'native_state_mismatch'];
         }
         return ['status' => 200, 'ok' => true, 'stage' => $stageNow,
-            'version' => (string) ($item->fields['date_mod'] ?? '')];
+            'version' => (string) ($item->fields['date_mod'] ?? ''),
+            'percent_done' => $source === 'project' ? (int)($item->fields['percent_done'] ?? 0) : null];
     }
 }

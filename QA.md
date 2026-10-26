@@ -166,3 +166,8 @@ Test dedicato `tests/task_creation_php.php`: input comuni, due modalità di crea
 ## QA 0.8.1-dev.8
 
 Feedback live: primo drag funziona, secondo drag non funziona senza reload. Bug attribuito al riutilizzo del token consumato dal middleware GLPI11; fix proposto server+client. Validare 3+ drag consecutivi, drag ghost, drop target, aggiornamento progresso e contatori; eliminazione autorizzata e negata, no purge, entità, CSRF/retry e conferma. Fixture: `tests/task_ux_php.php`, `tests/task_ux_ui_playwright.py`. **TEST LIVE DOPO FIX NON ESEGUITO**.
+
+
+## QA 0.8.1-dev.9
+
+Segnalazione LIVE dev.8: Project mostra soltanto Processing; All DnD non funziona; header count resta 2/1 fino a refresh; Independent già mostra tutte le colonne. Fix proposto: catalogo ProjectState nativo + colonne vuote, mixed sempre tre stage, API stage nativo per Project, aggiornamento contatori immediato. PHP/Chromium in fixture da verificare via CI. **NON COLLAUDATO LIVE** dopo il fix.
