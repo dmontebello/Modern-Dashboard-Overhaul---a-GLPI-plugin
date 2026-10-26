@@ -28,7 +28,9 @@ with sync_playwright() as playwright:
     assert card.count()==1, 'editable card is present'
     for i,stage in enumerate(['done','doing','todo'],start=1):
         card.locator('[data-stage-choice]').select_option(stage)
-        page.wait_for_function('([stage,i]) => window.__calls.length === i && !!document.querySelector("[data-mdo-column="+stage+"] .mdo-tasks-card[data-can-move=\\"1\\"]")',[stage,i])
+        page.wait_for_function("""(info) => window.__calls.length === info.i &&
+            !!document.querySelector('[data-mdo-column="' + info.stage + '"] .mdo-tasks-card[data-can-move="1"]')""",
+            arg={'stage':stage,'i':i})
         assert page.locator('[data-mdo-board]').get_attribute('data-token')=='rotated-'+str(i)
     calls=page.evaluate('window.__calls')
     assert [c['stage'] for c in calls]==['done','doing','todo'],calls
