@@ -203,3 +203,10 @@ Sviluppo feature branch, NON COLLAUDATO LIVE: bug live DnD reiterato, anteprima 
 ## Feedback GLPI 26 ottobre 2026 — dev.9 Kanban (in sviluppo)
 
 Utente: Independent tutte le colonne OK; Project soltanto gli stati occupati; drag All KO; conteggi delle intestazioni non aggiornati immediatamente. Candidato 0.8.1-dev.9 su branch feature dedicato: catalogo ProjectState (inclusi vuoti), drag stato nativo autorizzato, mixed stage normalizzati, DOM count aggiornato; verificare con CI e collaudo reale. **Non risolto live**. Main e produzione invariati.
+
+## Consuntivo 0.8.1-dev.9 — 26 ottobre 2026
+
+**PUBBLICATA SU Dev, NON COLLAUDATA LIVE.** [GitHub Actions #40306267311](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40306267311): `bundle` PASS e `publish_dev_zip` PASS. Source SHA `0c6e810711a2c08c7a111573b57b516a27c4065d`, ZIP `Modern_Dashboard_Overhaul_0.8.1-dev.9.zip`, manifest e sidecar SHA512 `6ada5ce06f3bb97db1fed21d24a0cc3e1fed7a3d2722f37750819876abb018077315c90c96670af300589ebc84621cb1ab75f694191f0c1454ba851a97148658`. Provenienza completa in `docs/releases/0.8.1-dev.9.build.json` (build UTC 2026-10-26T10:19:10Z). Suite PHP: 67 unit, 72 Tasks, 62 Standalone, 48 Activity, 26 creazione e 11 UX delete. Chromium: 86 Dashboard, 175 Tasks, test DnD ripetuto e mixed All per due sorgenti, 72 form, 560 Settings e 108 Standalone. Tutto su GLPI doubles e Chromium fixture, NON equivalenti al backend reale.
+
+**MDO-TASK-016/017/018: IN COLLAUDO OPERATIVO**: colonne ProjectState compresi stati vuoti, drag nella vista All per Project/Independent, contatori immediati. Prove LIVE ancora aperte: Project con sola task Processing mostra altri stati a 0; DnD stesso elemento ripetuto in Project/Independent/All; 2 TODO e 1 Processing -> 1 TODO e 2 Processing senza refresh; DB/persistenza/ACL/CSRF; verificare auto_projectstates impostato a 0 su spostamento nativo. Stato dopo il fix NON CHIUSO. Main 0.8.0 invariato, niente deploy automatico, nessuna migrazione DB rispetto a dev.8. Checklist e conversioni rimangono in backlog.
+
