@@ -170,3 +170,6 @@ Form unificato `front/task.form.php` con TaskCreationService: lo stesso POST val
 ## Dev.8 — Kanban/lista UX
 
 `front/task-stage.php` rinnova token GLPI dopo POST validato dal middleware (anche errore applicativo). `public/js/task-workspace.js` aggiorna il token, evita full reload, mostra ghost HTML5 e target di drop. `front/task-delete.php` delega soft-delete a `CommonDBTM::delete` dopo `can(DELETE)` per item ed entità, senza SQL core; solo in lista combinata e solo con diritti. Nessuna nuova tabella, modello separato StandaloneTask conservato.
+
+
+**0.8.1-dev.8** — conferma aggiornamento UX/ACL alla candidata sopra, non collaudata live.
