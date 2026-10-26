@@ -29,7 +29,7 @@ with sync_playwright() as playwright:
     for i,stage in enumerate(['done','doing','todo'],start=1):
         card.locator('[data-stage-choice]').select_option(stage)
         page.wait_for_timeout(180)
-        print('DEBUG UX', i, stage, page.evaluate('() => ({calls:window.__calls,live:document.querySelector("[data-mdo-live]")?.textContent, cols:[...document.querySelectorAll("[data-mdo-column]")].map(x=>[x.dataset.mdoColumn,x.querySelectorAll(".mdo-tasks-card").length])})')))
+        print('DEBUG UX', i, stage, page.evaluate('window.__calls'), page.locator('[data-mdo-column]').count())
         page.wait_for_function("""(info) => window.__calls.length === info.i &&
             !!document.querySelector('[data-mdo-column="' + info.stage + '"] .mdo-tasks-card[data-can-move="1"]')""",
             arg={'stage':stage,'i':i})
