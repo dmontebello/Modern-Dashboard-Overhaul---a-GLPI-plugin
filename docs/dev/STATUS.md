@@ -194,3 +194,7 @@ Su branch feature `feature/mdo-0.8.1-dev.6` / PR Draft #3: vista `Tutte`, lista/
 ## Feedback collaudo reale 26/10/2026 — UX Tasks e Kanban
 
 Utente vede tre task nella lista combinata; osserva che il primo DnD funziona e i successivi necessitano refresh, chiede card che segue il mouse, pulsante Elimina sulla lista e maggiore immediatezza. Diagnosi su codice: il token CSRF generato una sola volta dalla board veniva riutilizzato anche dopo il POST GLPI11 che lo consuma. Fix su feature branch dev.8 con rotazione token a ogni POST e ghost drag; nuova route soft-delete con ACL item e conferma. **IN SVILUPPO, NON COLLAUDATO LIVE** fino a CI/ZIP e test sul server. Nessuna dismissione automatica delle indipendenti: esiste già opt-out e l'utente valuta progetto Tasks come alternativa. Checklist rinviata a favore dei bug UX; vedi backlog e dev.8 release notes.
+
+## Stato 0.8.1-dev.8 — UX Kanban (candidato)
+
+Sviluppo feature branch, NON COLLAUDATO LIVE: bug live DnD reiterato, anteprima drag e riga elimina autorizzata. Checklist differita; CI e artefatto da verificare. Main invariato.
