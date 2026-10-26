@@ -374,7 +374,7 @@ if ($unified && $view === 'list') {
     echo '<div class="mdo-tasks-native-search"><table class="table table-vcenter"><thead><tr><th>' .
         $esc($tr('Attività', 'Task')) . '</th><th>' . $esc($tr('Tipo', 'Type')) .
         '</th><th>' . $esc($tr('Fase', 'Stage')) . '</th><th>' . $esc($tr('Progetto', 'Project')) .
-        '</th></tr></thead><tbody>';
+        '</th><th class="text-end">' . $esc($tr('Azioni', 'Actions')) . '</th></tr></thead><tbody>';
     foreach ($page as $record) {
         $url = ($record['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL())
             . '?id=' . (int)$record['id'];
