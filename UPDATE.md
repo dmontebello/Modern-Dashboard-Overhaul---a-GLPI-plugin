@@ -97,3 +97,8 @@ La creazione con progetto usa ProjectTask nativa e senza progetto StandaloneTask
 ## 0.8.1-dev.8 — UX Kanban e lista
 
 Versione senza nuove tabelle rispetto allo schema2. Salvare database, plugin, configurazione e storage GLPI prima dell'upgrade; verificare SHA512 e metadata; provare molti spostamenti consecutivi, permessi DELETE ed eliminazione nel cestino, non purge. Non aggiornare Main automaticamente. **NON COLLAUDATA LIVE**.
+
+
+## 0.8.1-dev.9 — Kanban stato nativo / All
+
+Nessuna migrazione prevista. Fare backup coordinato DB+plugin+config+volume GLPI; verificare ZIP, checksum e metadati dopo pubblicazione. Testare tutte le colonne, trasferimenti Project/All/Independent e contatori immediati. Main non aggiornato; **NON COLLAUDATO LIVE**.
