@@ -39,3 +39,8 @@ Form unico e servizio di creazione in sviluppo sul branch `feature/mdo-0.8.1-dev
 ## Dev.8 UX — stato da verificare
 
 Bug LIVE segnalato 26 ottobre: DnD solo una volta, schermata combinata lista 3 attività. Codice in sviluppo su feature branch dev.8: token CSRF rinnovato, drag ghost visuale, soft-delete in lista via ACL native. Non è prova LIVE del FIX. NESSUNA modifica al server/produzione/Main. Nuova ZIP solo dopo CI ufficiale; prima i test fixture PHP/Chromium.
+
+
+## Dev.9 feedback collaudo reale — 26/10/2026
+
+Evidenza LIVE: colonne Project incomplete, trascinamento nella vista All non funziona, contatori obsoleti. Correzione in branch feature con ProjectState nativo e mixed stage, ma nessun PASS LIVE sul fix. Source SHA/CI/ZIP da registrare soltanto dopo il gate. Non attribuire questi sintomi al codice Main.
