@@ -89,3 +89,7 @@ L'utente richiede **conversione/migrazione**, non un mero collegamento al proget
 ## Checkpoint 25 ottobre 2026 — Dev.6 pubblicata
 
 Build `0.8.1-dev.6` verificata da GitHub Actions #40225944788, source SHA `080532ab6c6e5774e5445ddd80dec0c938e43726`; ZIP e checksum sulla branch Dev, non Main. Dev.8 checklist, dev.9 conversione + link bidirezionali e 0.8.2 iProjects rimangono REQUISITI NON IMPLEMENTATI. Manca il collaudo live della dev.6. Documentazione ufficiale: `docs/dev/STATUS.md` e `docs/releases/0.8.1-dev.6.build.json`.
+
+## Reprioritizzazione feedback operativo 26 ottobre 2026
+
+Dopo il collaudo della dev.7 l'utente ha prioritizzato bug DnD (primo spostamento OK, successivi KO senza refresh), anteprima drag, comando Elimina e maggiore immediatezza. La candidata dev.8 viene usata per stabilizzare questa UX e i relativi controlli di sicurezza. Le checklist approvate sono POSTICIPATE alla prerelease successiva senza cambiare scope; conversione e link bidirezionali sono spostati più avanti e richiedono una nuova pianificazione prima della release. Nessuna rimozione delle task indipendenti o migrazione automatica in un progetto: restano opzionali e conservate nel database. L'utente può scegliere manualmente di usare un progetto Tasks con ProjectTask native.
