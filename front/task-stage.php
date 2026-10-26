@@ -39,9 +39,7 @@ try {
 }
 http_response_code($result['status']);
 unset($result['status']);
-// GLPI consumes POST CSRF tokens. Rotate after every accepted drag, so repeated
-// moves work without a full page reload. Do not issue tokens on denied POST.
-if (!empty($result['ok'])) {
-    $result['token'] = Session::getNewCSRFToken();
-}
+// GLPI consumes the CSRF token on every accepted POST, including ACL/conflict
+// failures. Rotate it even on a 4xx response so the next action can be retried.
+$result['token'] = Session::getNewCSRFToken();
 echo json_encode($result, JSON_THROW_ON_ERROR);
