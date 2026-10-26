@@ -99,8 +99,12 @@
         dragPreview = card.cloneNode(true);
         dragPreview.classList.add('mdo-drag-preview');
         dragPreview.style.width = card.getBoundingClientRect().width + 'px';
+        // Chromium needs the custom drag image inside the viewport at capture time.
+        dragPreview.style.left = Math.max(0, event.clientX - 30) + 'px';
+        dragPreview.style.top = Math.max(0, event.clientY - 24) + 'px';
         document.body.append(dragPreview);
         event.dataTransfer.setDragImage(dragPreview, 30, 24);
+        requestAnimationFrame(() => { if (dragPreview) { dragPreview.remove(); dragPreview = null; } });
       }
     });
     board.addEventListener('dragover', event => {
