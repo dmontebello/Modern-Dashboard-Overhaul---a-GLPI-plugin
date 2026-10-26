@@ -56,3 +56,8 @@ Evidenza LIVE: colonne Project incomplete, trascinamento nella vista All non fun
 ## Dev.10 — feedback screenshot 26/10
 
 Evidenza LIVE dev.9: Project su percentuali, non sui ProjectState; ProjectTask non trascinabili, Independent OK. Candidate fixes in feature branch dev.10: route default All Kanban, Project state-first, mapping core ProjectStates per All, compact cards 260×78. NO test GLPI reale post-fix, CI e artifact da verificare; Main 0.8.0 intatto.
+
+
+## Dev.10 pubblicata — CI 26/10/2026
+
+Source tested `9ddd6396523eea8a4d6edf1c3ac90c2023769a1c`; Actions [#40321113463](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40321113463) PASS (bundle + publish). Artefatto immutabile `Modern_Dashboard_Overhaul_0.8.1-dev.10.zip`, SHA512 `fd874d54955f9e58d58788231ec2e30b8d505c5089cc91f72ff2ee18b8ad62b8912f20ce8c4e2d6a96d74abed5fbd7f6bd4883e2e4ce97de1a268b70dc60ccd2`; metadati `docs/releases/0.8.1-dev.10.build.json`. Stato dei fix MDO-TASK-019, MDO-UI-004, MDO-UI-005: **IN COLLAUDO OPERATIVO**, NON certificati LIVE. Main resta 0.8.0. All / Kanban e Project / stato GLPI di default, card ~260×78; mappatura nativa stato usata in All quando presente nella configurazione GLPI o univoca per nome. Verificare mapping reale e automatic-progress del progetto, contatori e permessi. In assenza di mapping univoco non inventare ID o aggirare ACL.
