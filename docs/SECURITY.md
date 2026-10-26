@@ -94,3 +94,7 @@ Endpoint stage: ACL READ+UPDATE per item, entità, CSRF middleware GLPI e date_m
 ## 0.8.1-dev.7 — allineamento
 
 Il servizio dev.7 consente solo campi allowlist. Progetto ID non valido/non autorizzato causa errore senza ricadere su Standalone; POST verificato da middleware CSRF GLPI, `check(-1,CREATE)` nativo prima di `add`, redirect fuori catch GLPI11. Nessun bypass entità/profili. NON COLLAUDATO LIVE.
+
+## Dev.8 UX — eliminazione e rotazione token
+
+POST `front/task-delete.php`: centrale e plugin attivo, itemtype allowlist, ID positivo, conferma server, parent can READ e DELETE specifico, `maybeDeleted`, soft-delete GLPI senza purge e filtro entità. Middleware GLPI11 verifica CSRF prima del controller; token ruotato per AJAX quando il middleware ha accettato il POST, anche su 4xx. La risposta 403 non espone item sensibili. JS aggiorna il token in board e lista. Resta necessaria una prova live dei permessi e del comportamento della cancellazione con sottotask native.
