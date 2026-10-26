@@ -13,10 +13,16 @@ use Session;
  */
 final class TaskStageService
 {
-    public static function stage(array $task): string
+    public static function stage(array $task, bool $preferNativeState = false): string
     {
         if (($task['source'] ?? 'project') === 'standalone') {
             return [1 => 'todo', 2 => 'doing', 3 => 'done'][(int) ($task['state_id'] ?? 1)] ?? 'todo';
+        }
+        if ($preferNativeState && (int) ($task['state_id'] ?? 0) > 0) {
+            $stateId = (int) $task['state_id'];
+            foreach (self::projectStageTargets() as $stage => $id) {
+                if ($id === $stateId) { return $stage; }
+            }
         }
         $done = (int) ($task['percent_done'] ?? 0);
         return $done >= 100 ? 'done' : ($done <= 0 ? 'todo' : 'doing');
@@ -25,6 +31,62 @@ final class TaskStageService
     public static function labels(): array
     {
         return ['todo' => 'To do', 'doing' => 'Doing', 'done' => 'Done'];
+    }
+
+    /**
+     * Match shared Kanban stages to *real* native GLPI ProjectStates.
+     * Prefer the three mappings explicitly configured under GLPI core; fall
+     * back to unique, conventional native state names only when unambiguous.
+     * Do not invent arbitrary IDs or write directly to core tables.
+     *
+     * @return array<string,int> stage => existing ProjectState ID
+     */
+    public static function projectStageTargets(): array
+    {
+        $states = TaskBoard::projectStates();
+        $core = \\Config::getConfigurationValues('core');
+        $keys = [
+            'todo' => 'projecttask_unstarted_states_id',
+            'doing' => 'projecttask_inprogress_states_id',
+            'done' => 'projecttask_completed_states_id',
+        ];
+        $aliases = [
+            'todo' => ['new', 'to do', 'todo', 'not started', 'da fare', 'non iniziata', 'non iniziato', 'nuova', 'nuovo'],
+            'doing' => ['processing', 'in progress', 'doing', 'working', 'in corso', 'in lavorazione'],
+            'done' => ['done', 'completed', 'complete', 'finished', 'completata', 'completato', 'terminata', 'terminato'],
+        ];
+        $targets = [];
+        foreach ($keys as $stage => $setting) {
+            $id = (int) ($core[$setting] ?? 0);
+            if ($id > 0 && isset($states[$id]) && !in_array($id, $targets, true)) {
+                $targets[$stage] = $id;
+            }
+        }
+        foreach ($aliases as $stage => $names) {
+            if (isset($targets[$stage])) { continue; }
+            $matches = [];
+            foreach ($states as $id => $name) {
+                $normalized = function_exists('mb_strtolower')
+                    ? mb_strtolower(trim($name), 'UTF-8') : strtolower(trim($name));
+                if (in_array($normalized, $names, true) && !in_array((int)$id, $targets, true)) {
+                    $matches[] = (int)$id;
+                }
+            }
+            if (count($matches) === 1) {
+                $targets[$stage] = $matches[0];
+            }
+        }
+        return $targets;
+    }
+
+    /**
+     * A project using automatic percentage may still change its native state
+     * where all three real ProjectState targets are unambiguous.
+     */
+    public static function canMoveMixedProject(array $fields): bool
+    {
+        return count(self::projectStageTargets()) === 3
+            || empty($fields['auto_percent_done']);
     }
 
     public static function item(string $source, int $id): ProjectTask|StandaloneTask|null
@@ -45,13 +107,14 @@ final class TaskStageService
     /**
      * @return array{status:int,ok:bool,error?:string,stage?:string,version?:string}
      */
-    public static function move(string $source, int $id, string $stage, string $expected): array
+    public static function move(string $source, int $id, string $stage, string $expected, string $mode = 'progress'): array
     {
         if ((int) Session::getLoginUserID() < 1 || $id < 1
             || (!isset(self::labels()[$stage]) && !preg_match('/^state-[1-9][0-9]{0,9}$/D', $stage))
             || !in_array($source, ['project', 'standalone'], true)
             || ($source === 'standalone' && str_starts_with($stage, 'state-'))
-            || strlen($expected) > 64) {
+            || strlen($expected) > 64
+            || !in_array($mode, ['progress', 'all', 'state'], true)) {
             return ['status' => 400, 'ok' => false, 'error' => 'invalid'];
         }
 
@@ -84,6 +147,32 @@ final class TaskStageService
             return ['status'=>200,'ok'=>true,'stage'=>$stage,
                 'version'=>(string)($item->fields['date_mod'] ?? ''),
                 'percent_done'=>(int)($item->fields['percent_done'] ?? 0)];
+        }
+        // Mixed All view uses native states when a valid native target exists.
+        // Never reject a project merely because its percent_done is automatic:
+        // a native state change is separate from its calculated progress.
+        if ($source === 'project' && $mode === 'all' && !str_starts_with($stage, 'state-')) {
+            $targetId = self::projectStageTargets()[$stage] ?? 0;
+            if ($targetId > 0) {
+                if ((int) ($item->fields['projectstates_id'] ?? 0) !== $targetId
+                    && !$item->update(['id' => $id, 'projectstates_id' => $targetId, 'auto_projectstates' => 0])) {
+                    return ['status'=>409, 'ok'=>false, 'error'=>'update_failed'];
+                }
+                $item->getFromDB($id);
+                $stateId = (int)($item->fields['projectstates_id'] ?? 0);
+                if ($stateId !== $targetId) {
+                    return ['status'=>409, 'ok'=>false, 'error'=>'native_state_mismatch'];
+                }
+                return [
+                    'status'=>200, 'ok'=>true, 'stage'=>$stage,
+                    'version'=>(string)($item->fields['date_mod'] ?? ''),
+                    'percent_done'=>(int)($item->fields['percent_done'] ?? 0),
+                    'state_label'=>(string)(TaskBoard::projectStates()[$targetId] ?? ''),
+                ];
+            }
+            if (!empty($item->fields['auto_percent_done'])) {
+                return ['status'=>409, 'ok'=>false, 'error'=>'stage_mapping_unavailable'];
+            }
         }
         if ($source === 'standalone') {
             $wanted = array_search($stage, [1 => 'todo', 2 => 'doing', 3 => 'done'], true);
