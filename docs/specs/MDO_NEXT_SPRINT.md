@@ -85,3 +85,8 @@ La pianificazione storica sopra (baseline dev.3, P2 ipotetica) rimane riferiment
 ## Aggiornamento 0.8.1-dev.7
 
 MDO-TASK-007 dev.7 in sviluppo; codice form unico, progetto facoltativo, campi comuni e due modelli distinti. Test CI e collaudo GLPI prima di chiudere. Next dev.8 checklist.
+
+
+## Dev.9 — collaudo Kanban 26 ottobre 2026
+
+0.8.1-dev.9 is a Kanban QA bugfix candidate (MDO-TASK-016/017/018), NOT the earlier planned Standalone→ProjectTask conversion. Previous conversion/linked elements and checklist scopes remain in backlog for later milestone. GLPI native status catalogue + mixed stages and live counters need staging sign-off.
