@@ -347,10 +347,12 @@ if ($projectId > 0 && isset($projects[$projectId])) {
     echo '<a class="btn btn-outline-secondary" href="' . $esc($projectForm($projectId) . '&forcetab=Project%243') . '">'
         . $esc($tr('Apri il Kanban nativo del progetto', 'Open native project Kanban')) . '</a>';
 }
-echo '<p class="mdo-tasks-hint">' . $esc($tr(
-    'Kanban in sola lettura: per modificare una task apri la sua scheda GLPI.',
-    'Read-only Kanban: open the native GLPI task form to make changes.'
-)) . '</p>';
+echo '<p class="mdo-tasks-hint">' . $esc($unified || $standalone || $group === 'progress'
+    ? $tr('Trascina le card modificabili tra le colonne o usa il selettore Sposta in. Le altre si aprono nella scheda GLPI.',
+        'Drag editable cards between columns or use Move to. Other tasks open in their native GLPI forms.')
+    : $tr('Per modificare una task apri la sua scheda GLPI.',
+        'Open the native GLPI task form to make changes.')
+) . '</p>';
 if ($group === 'progress') {
     echo '<p class="mdo-tasks-hint">' . $esc($tr(
         'Raggruppamento per avanzamento: le colonne riflettono la percentuale GLPI, senza uno Stage manuale separato.',
