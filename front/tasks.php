@@ -443,7 +443,7 @@ foreach ($columns as $columnKey => $column) {
     }
     foreach ($column['items'] as $task) {
         $item = TaskStageService::item($task['source'], (int) $task['id']);
-        $canMove = $item !== null && $item->can((int) $task['id'], UPDATE) && ($task['source'] !== 'project' || empty($item->fields['auto_percent_done'])) && ($unified || $standalone || $group === 'progress' || $group === 'state');
+        $canMove = $item !== null && $item->can((int) $task['id'], UPDATE) && ($task['source'] !== 'project' || $group === 'state' || empty($item->fields['auto_percent_done'])) && ($unified || $standalone || $group === 'progress' || $group === 'state');
         echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '" data-stage="' . $esc($columnKey) . '" data-group="' . $esc($group) . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">' 
             . $esc($task['name'] ?: '—') . '</a>';
         if ($task['project_readable']) {
