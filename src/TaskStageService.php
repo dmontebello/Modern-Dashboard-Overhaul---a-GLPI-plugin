@@ -50,6 +50,7 @@ final class TaskStageService
         if ((int) Session::getLoginUserID() < 1 || $id < 1
             || (!isset(self::labels()[$stage]) && !preg_match('/^state-[1-9][0-9]{0,9}$/D', $stage))
             || !in_array($source, ['project', 'standalone'], true)
+            || ($source === 'standalone' && str_starts_with($stage, 'state-'))
             || strlen($expected) > 64) {
             return ['status' => 400, 'ok' => false, 'error' => 'invalid'];
         }
