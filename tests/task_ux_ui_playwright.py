@@ -84,6 +84,6 @@ with sync_playwright() as playwright:
     native_card.locator('[data-stage-choice]').select_option('state-4')
     page.wait_for_function('window.__calls.length===1')
     assert page.locator('[data-mdo-column="state-4"] > header > span').inner_text()=='1', 'native state count updates'
-    assert page.locator(f'[data-mdo-column="{old}"] > header > span').inner_text()=='1', 'source native count updates'
+    assert page.locator(f'[data-mdo-column="{old}"] > header > span').inner_text()=='0', 'source native count updates'
     browser.close()
 print('Task UX repeated Kanban and drag ghost tests PASSED (Chromium fixture)')
