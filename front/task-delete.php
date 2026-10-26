@@ -56,7 +56,7 @@ if (is_string($source) && in_array($source, ['project','standalone'], true)
 }
 if ($ajax) {
     http_response_code($status);
-    $result['token'] = Session::getNewCSRFToken();
+    $result['token'] = Session::getNewCSRFToken(true);
     echo json_encode($result, JSON_THROW_ON_ERROR);
     return;
 }
