@@ -390,7 +390,7 @@ if ($unified && $view === 'list') {
                 . '<input type="hidden" name="_glpi_csrf_token" value="' . $esc(Session::getNewCSRFToken()) . '">'
                 . '<input type="hidden" name="source" value="' . $esc($record['source']) . '">'
                 . '<input type="hidden" name="id" value="' . (int)$record['id'] . '">'
-                . '<input type="hidden" name="confirm_delete" value="1">'
+                . '<input type="hidden" name="confirm_delete" value="0">'
                 . '<button type="submit" class="btn btn-outline-danger btn-sm" aria-label="' . $esc($tr('Elimina task', 'Delete task') . ': ' . $record['name']) . '" data-mdo-task-delete data-confirm="' . $esc($tr('Spostare questa task nel cestino?', 'Move this task to trash?')) . '">'
                 . '<i class="ti ti-trash" aria-hidden="true"></i> ' . $esc($tr('Elimina', 'Delete')) . '</button></form>';
         }
