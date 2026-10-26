@@ -133,3 +133,8 @@ MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggi
 ## 0.8.1-dev.7 — allineamento
 
 Per dev.7 la ZIP include form unico e test: verificare version 0.8.1-dev.7, changelog, QA, note, release manifest/build-info e checksum; la pubblicazione su Dev è condizionata a PHP/Playwright e ai gate esistenti, Main invariato.
+
+
+## 0.8.1-dev.8 — stabilizzazione Tasks UX
+
+Questa candidata corregge la ripetizione dei trascinamenti del Kanban con token CSRF GLPI11 rinnovato, aggiunge la card ghost e la colonna di drop evidenziata, e consente il soft-delete da lista combinata soltanto se l'item ha il diritto DELETE. Modulo StandaloneTask conservato, senza nuove tabelle o migrazioni. CI automatica non sostituisce test sul GLPI reale; Main invariato. Dettagli e rollback in `docs/releases/0.8.1-dev.8.md`.
