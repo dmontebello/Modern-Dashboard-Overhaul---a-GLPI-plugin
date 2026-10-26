@@ -98,3 +98,6 @@ Il servizio dev.7 consente solo campi allowlist. Progetto ID non valido/non auto
 ## Dev.8 UX — eliminazione e rotazione token
 
 POST `front/task-delete.php`: centrale e plugin attivo, itemtype allowlist, ID positivo, conferma server, parent can READ e DELETE specifico, `maybeDeleted`, soft-delete GLPI senza purge e filtro entità. Middleware GLPI11 verifica CSRF prima del controller; token ruotato per AJAX quando il middleware ha accettato il POST, anche su 4xx. La risposta 403 non espone item sensibili. JS aggiorna il token in board e lista. Resta necessaria una prova live dei permessi e del comportamento della cancellazione con sottotask native.
+
+
+**0.8.1-dev.8** — conferma aggiornamento UX/ACL alla candidata sopra, non collaudata live.
