@@ -97,6 +97,13 @@ final class ProjectTask
         $this->fields = self::$rows[$id];
         return $id;
     }
+    public function maybeDeleted(): bool { return true; }
+    public function delete(array $values, $force = false): bool {
+        $id = (int)($values['id'] ?? 0);
+        if ($force || !$this->can($id, DELETE)) return false;
+        self::$rows[$id]['is_deleted'] = 1;
+        return true;
+    }
     public function update(array $values): bool { $id = (int)($values['id'] ?? 0); if (!$this->can($id, UPDATE)) return false; self::$rows[$id] = array_replace(self::$rows[$id], $values); $this->fields = self::$rows[$id]; return true; }
     public static function canView(): bool { return Session::$projectRead || Session::$taskRead; }
     public static function canCreate(): bool { return Session::$create; }
