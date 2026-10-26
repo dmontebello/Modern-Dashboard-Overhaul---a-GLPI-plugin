@@ -41,6 +41,10 @@ Stati consentiti **esattamente**: `TODO`, `IN SVILUPPO`, `IN COLLAUDO OPERATIVO`
 | MDO-TASK-017 | Bug funzionale | [Kanban All non consente drag misto](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN COLLAUDO OPERATIVO | Dev.9 CI PASS #40306267311, Chromium testa drop ProjectTask e Independent nello stesso All; prova LIVE e ACL aperte |
 | MDO-TASK-018 | Bug UX | [Conteggi colonne restano obsoleti dopo drag](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN COLLAUDO OPERATIVO | Dev.9 CI PASS #40306267311, header count ricalcolato dopo POST; verificare LIVE 2→1 / 1→2 senza reload |
 
+| MDO-TASK-019 | Bug funzionale | [Project e All DnD con percentuale automatica](../releases/0.8.1-dev.10.md) | P0 / dev.10 | IN SVILUPPO | GLPI LIVE: solo Independent trascinabili; mapping ProjectState e percent_done distinte, prove ancora da svolgere |
+| MDO-UI-004 | UX | [Card Kanban compatte 260×78](../releases/0.8.1-dev.10.md) | P1 / dev.10 | IN SVILUPPO | Sintesi delle card, dettaglio conservato nel form; verificare browser responsive |
+| MDO-UI-005 | UX | [Default All → Kanban e stato GLPI Project](../releases/0.8.1-dev.10.md) | P0 / dev.10 | IN SVILUPPO | Default server e voce menu; test live e permessi ancora aperti |
+
 ## Come aggiornare una riga
 
 1. **ID immutabile** e non duplicato; nuova esigenza separabile = nuovo ID. Il cambio versione NON cambia ID.
