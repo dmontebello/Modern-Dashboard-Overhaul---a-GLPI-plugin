@@ -35,7 +35,7 @@ final class TaskMenu extends CommonGLPI
         }
         return [
             'title' => 'Tasks',
-            'page'  => '/plugins/mdoverhaul/front/tasks.php',
+            'page'  => '/plugins/mdoverhaul/front/tasks.php?source=all&view=board',
             'icon'  => self::getIcon(),
             'links' => [
                 'search' => '/plugins/mdoverhaul/front/tasks.php',
