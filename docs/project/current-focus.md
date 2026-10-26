@@ -57,3 +57,8 @@ Tre P0 in sviluppo: Project tutte colonne stati, All DnD misto, numeri colonne i
 
 **MDO-TASK-016/017/018: IN COLLAUDO OPERATIVO**: colonne ProjectState compresi stati vuoti, drag nella vista All per Project/Independent, contatori immediati. Prove LIVE ancora aperte: Project con sola task Processing mostra altri stati a 0; DnD stesso elemento ripetuto in Project/Independent/All; 2 TODO e 1 Processing -> 1 TODO e 2 Processing senza refresh; DB/persistenza/ACL/CSRF; verificare auto_projectstates impostato a 0 su spostamento nativo. Stato dopo il fix NON CHIUSO. Main 0.8.0 invariato, niente deploy automatico, nessuna migrazione DB rispetto a dev.8. Checklist e conversioni rimangono in backlog.
 
+
+
+## Nuovo focus 26 ottobre 2026 — Project Kanban non trascinabile
+
+Bug LIVE dev.9: Project mostra 0/1-99/100 e solo Independent DnD. Fix candidato dev.10: Project = stati GLPI nativi di default; All = Kanban default; se core configura 3 stati, il drag All aggiorna nativamente ProjectState senza toccare percent_done automatico; UI card 260×78. Collaudo real-world e fallback su mapping assente ancora da fare. Checklist e conversione restano futuri. Main invariato.
