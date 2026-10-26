@@ -142,7 +142,7 @@ taskFixture();
 $html = taskPage(['new' => '1', 'kind'=>'project']);
 verify(str_contains($html, 'name="project"') && str_contains($html, 'Progetto consentito')
     && !str_contains($html, 'SEGRETO altra entità'), 'native project selector shows permitted projects only');
-$html = taskPage([]);
+$html = taskPage(['view'=>'list','source'=>'project']);
 verify(str_contains($html, 'mdo-tasks-native-search') && str_contains($html, 'search-no-forced-height')
     && str_contains($html, 'non crea automaticamente attività'), 'native search embedded directly below Tasks tabs with first-task hint');
 taskFixture();
@@ -168,7 +168,7 @@ verify(array_column(TaskBoard::sort($rows, 'due'), 'id') === [4, 3, 1], 'due sor
 verify(array_column(TaskBoard::sort($rows, 'name'), 'id') === [1, 3, 4], 'natural title sorting');
 $html = taskPage(['view' => 'board', 'project' => '1', 'due' => 'week', 'board_sort' => 'name']);
 verify(str_contains($html, 'forcetab=Project%243') && str_contains($html, 'aria-current="page"'), 'native project Kanban link and active navigation');
-taskPage(['project' => '1', 'due' => 'week', 'board_sort' => 'name']);
+taskPage(['source'=>'project','view'=>'list','project' => '1', 'due' => 'week', 'board_sort' => 'name']);
 parse_str((string) parse_url(Search::$calls['list'][1]['target'], PHP_URL_QUERY), $retained);
 verify($retained['due'] === 'week' && $retained['board_sort'] === 'name' && $retained['project'] === '1', 'native list target preserves board preferences without translating native criteria');
 $html = taskPage(['view' => 'board', 'group' => 'progress']);
@@ -177,9 +177,9 @@ ProjectTask::$rows[1]['percent_done'] = 100;
 ProjectTask::$rows[1]['real_end_date'] = '2025-03-10 09:00:00';
 $html = taskPage(['view' => 'board', 'project' => '1']);
 verify(str_contains($html, 'Fine effettiva') && !str_contains($html, 'mdo-tasks-overdue'), 'actual end displayed separately and completed task has no overdue badge');
-verify(str_contains(taskPage(['view' => 'board', 'q' => 'nonexistent']), 'data-mdo-column="todo"'), 'project board empty state');
+verify(str_contains(taskPage(['view'=>'board','source'=>'project','q'=>'nonexistent']), 'data-mdo-column="state-4"'), 'project board empty state');
 ProjectTask::$rows = [];
-verify(str_contains(taskPage(['view' => 'board']), 'data-mdo-column="done"'), 'project board has empty-dataset state');
+verify(str_contains(taskPage(['view'=>'board','source'=>'project']), 'data-mdo-column="state-4"'), 'project board has empty-dataset state');
 // Missing standalone rights must not expose the tab or task data; only an admin
 // with config:UPDATE receives a clear profile-setup explanation.
 taskFixture();
