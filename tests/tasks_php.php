@@ -16,6 +16,12 @@ function verify(bool $valid, string $message): void
 }
 set_error_handler(static function (int $severity, string $message): never { throw new ErrorException($message, 0, $severity); });
 taskFixture();
+$nativeStates = TaskBoard::projectStates();
+verify(count($nativeStates) === 4 && $nativeStates[4] === 'Deferred', 'native states include empty state catalogue');
+$htmlStates = taskPage(['view'=>'board','source'=>'project','group'=>'state']);
+verify(str_contains($htmlStates, 'data-mdo-column="state-4"') && str_contains($htmlStates, 'Deferred'), 'empty ProjectState column visible');
+$htmlMixed = taskPage(['view'=>'board','source'=>'all','group'=>'state']);
+verify(str_contains($htmlMixed, 'data-mdo-column="todo"') && str_contains($htmlMixed, 'data-mdo-column="doing"') && str_contains($htmlMixed, 'data-mdo-column="done"'), 'mixed All board uses common stages even with group state param');
 $board = TaskBoard::load();
 verify(count($board['tasks']) === 3, 'active entity isolation before per-item ACL');
 verify($board['tasks'][0]['state_id'] === 2 && $board['tasks'][0]['state'] === 'Bloccato', 'native ProjectState key and table');
