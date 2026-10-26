@@ -31,6 +31,8 @@ $task=new StandaloneTask();
 $id=$task->add(['name'=>'Deletable','entities_id'=>1]);
 uxCheck(is_int($id) && $id>0,'test standalone persisted');
 $html=taskPage(['source'=>'all','view'=>'list']);
+$boardPage=taskPage(['source'=>'all','view'=>'board']);
+uxCheck(str_contains($boardPage, 'name="source" value="all"'), 'unified filters preserve All instead of forcing Project');
 uxCheck(str_contains($html, 'mdo-task-delete-form') && str_contains($html, 'confirm_delete'),
     'combined list renders permission-gated trash action');
 [$status,$result]=deleteRequest('standalone',$id);
