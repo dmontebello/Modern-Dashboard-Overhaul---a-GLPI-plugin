@@ -120,3 +120,10 @@ Testare su GLPI reale ACL, Stage, storico note paginato, allegati privati, upgra
 ## 0.8.1-dev.7 — allineamento
 
 Test dev.7: nuovo form unico senza scelta, progetto vuoto/0/valido/negato/fuori entità, create grant solo-ProjectTask/solo-Standalone, manipolazione ID array e overflows, CSRF, redirect e fallimenti senza doppia task, Select2 AJAX reale, due date in timezone GLPI. NON COLLAUDATO LIVE.
+
+## Matrice dev.8 UX
+
+- DnD stessa ProjectTask 3+ volte e StandaloneTask 3+ volte senza reload, GET finale coerente; CSRF valido a ogni POST, 403/409 gestiti, no bypass ACL.
+- Drag ghost segue mouse, drop target chiaro/scuro, mouse/touch/tastiera, focus; percent_done e status native non equivalenti.
+- Lista Tutte 0/3/1000 righe, badge e colonna Azioni: profili READ, UPDATE senza DELETE, DELETE; entità diverse, URL POST diretto, doppio invio, confirm=0/1.
+- Eliminazione nel cestino GLPI, senza purge; verificare cascade nativa dei subtasks, storico, allegati, backup/restore. **NON COLLAUDATO LIVE**.
