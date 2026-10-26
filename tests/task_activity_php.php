@@ -14,6 +14,7 @@ use GlpiPlugin\Mdoverhaul\TaskSchema;
 final class ActivityTestDB
 {
     public function __construct(private TaskFakeDB $base) {}
+    public function setProjectStates(array $states): void { $this->base->projectStatesOverride = $states; }
     public function __call(string $method, array $args) { return $this->base->$method(...$args); }
     public function insert(string $table, array $values): bool
     {
@@ -107,6 +108,7 @@ t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('project',1,'doing','', 'all')['
 t(ProjectTask::$rows[1]['projectstates_id']===2, 'All retains configured native ProjectState');
 // Incomplete GLPI mapping must never rewrite ProjectTask.percent_done.
 Config::$values['core'] = [];
+$DB->setProjectStates([1=>['id'=>1,'name'=>'Queued'],2=>['id'=>2,'name'=>'Active review'],3=>['id'=>3,'name'=>'Archived'],4=>['id'=>4,'name'=>'Deferred']]);
 ProjectTask::$rows[1]['auto_percent_done'] = 0;
 $beforeUnmapped = ProjectTask::$rows[1];
 t(\GlpiPlugin\Mdoverhaul\TaskStageService::move('project', 1, 'done', '', 'all')['error'] === 'stage_mapping_unavailable',

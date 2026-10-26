@@ -24,7 +24,7 @@ with sync_playwright() as playwright:
        };
     }""")
     page.add_script_tag(content=script)
-    card=page.locator('.mdo-tasks-card[data-can-move="1"][data-id="3"]')
+    card=page.locator('.mdo-tasks-card[data-can-move="1"][data-source="standalone"]').first
     assert card.count()==1, 'editable card is present'
     for i,stage in enumerate(['done','doing','todo'],start=1):
         card.locator('[data-stage-choice]').select_option(stage)
@@ -32,7 +32,7 @@ with sync_playwright() as playwright:
             !!document.querySelector('[data-mdo-column="' + info.stage + '"] .mdo-tasks-card[data-can-move="1"]')""",
             arg={'stage':stage,'i':i},timeout=8000)
         assert page.locator('[data-mdo-board]').get_attribute('data-token')=='rotated-'+str(i)
-        expected={'todo':1+int(stage=='todo'), 'doing':2+int(stage=='doing'), 'done':int(stage=='done')}
+        expected={'todo':1+int(stage=='todo'), 'doing':1+int(stage=='doing'), 'done':1+int(stage=='done')}
         counts={key:int(page.locator(f'[data-mdo-column="{key}"] > header > span').inner_text()) for key in expected}
         assert counts == expected, f'live counters after {stage}: {counts} vs {expected}'
     calls=page.evaluate('window.__calls')

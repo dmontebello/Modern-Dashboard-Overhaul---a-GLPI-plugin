@@ -7,6 +7,7 @@ taskFixture();
 $options = json_decode($argv[1] ?? '{}', true, flags: JSON_THROW_ON_ERROR);
 if (array_key_exists('core_mappings', $options) && !$options['core_mappings']) {
     Config::$values['core'] = [];
+    $DB->projectStatesOverride = [1=>['id'=>1,'name'=>'Queued'],2=>['id'=>2,'name'=>'Active review'],3=>['id'=>3,'name'=>'Archived'],4=>['id'=>4,'name'=>'Deferred']];
 }
 $count = max(0, min(100, (int) ($options['count'] ?? 100)));
 ProjectTask::$rows = [];
