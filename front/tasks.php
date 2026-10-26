@@ -135,7 +135,7 @@ if ($creating) {
     if (Project::canView()) {
         echo '<form id="mdo-project-create" method="get" action="' . $esc($base) . '" class="mdo-tasks-create-form">';
         echo '<input type="hidden" name="continue" value="1">';
-        echo '<input type="hidden" name="kind" value="project"><input type="hidden" name="source" value="' . ($standalone ? 'standalone' : 'project') . '">';
+        echo '<input type="hidden" name="kind" value="project"><input type="hidden" name="source" value="' . $esc($source) . '">';
         echo '<input type="hidden" name="new" value="1"><div class="mdo-tasks-project-picker">';
         echo '<span class="mdo-tasks-project-label">' . $esc($tr('Progetto GLPI', 'GLPI project')) . '</span>';
         $level = ob_get_level();
