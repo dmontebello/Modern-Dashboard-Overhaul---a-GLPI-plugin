@@ -37,9 +37,9 @@ Stati consentiti **esattamente**: `TODO`, `IN SVILUPPO`, `IN COLLAUDO OPERATIVO`
 | MDO-UI-003 | UX | [Card segue mouse e drop evidenziato](../releases/0.8.1-dev.8.md) | P0 / dev.8 UX | IN COLLAUDO OPERATIVO | Ghost HTML5 drag e drop target pubblicati su dev.8, CI PASS #40294452605; collaudo live viewport, mouse e accessibilità aperto |
 | MDO-TASK-015 | Feature/sicurezza | [Eliminazione task da lista combinata](../releases/0.8.1-dev.8.md) | P1 / dev.8 UX | IN COLLAUDO OPERATIVO | Soft-delete via GLPI API, check DELETE parent e CSRF; test fixture ACL/cestino/entità PASS #40294452605; resta collaudo LIVE per DELETE, CSRF, conferma e no purge |
 
-| MDO-TASK-016 | Bug UX | [Project Kanban omette stati vuoti](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN SVILUPPO | Catalogo ProjectState nativo completo e aggiornamento stato su task; collaudo live aperto |
-| MDO-TASK-017 | Bug funzionale | [Kanban All non consente drag misto](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN SVILUPPO | Normalizzare tre fasi comuni per ProjectTask/Standalone; prove miste e ACL live aperte |
-| MDO-TASK-018 | Bug UX | [Conteggi colonne restano obsoleti dopo drag](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN SVILUPPO | Aggiornamento DOM in ogni colonna dopo POST, verificare 2→1/1→2 senza reload |
+| MDO-TASK-016 | Bug UX | [Project Kanban omette stati vuoti](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN COLLAUDO OPERATIVO | Dev.9 ZIP verificata CI PASS #40306267311; tutti gli stati configurati incluse colonne vuote, update nativo; riprovare LIVE |
+| MDO-TASK-017 | Bug funzionale | [Kanban All non consente drag misto](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN COLLAUDO OPERATIVO | Dev.9 CI PASS #40306267311, Chromium testa drop ProjectTask e Independent nello stesso All; prova LIVE e ACL aperte |
+| MDO-TASK-018 | Bug UX | [Conteggi colonne restano obsoleti dopo drag](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN COLLAUDO OPERATIVO | Dev.9 CI PASS #40306267311, header count ricalcolato dopo POST; verificare LIVE 2→1 / 1→2 senza reload |
 
 ## Come aggiornare una riga
 
@@ -50,3 +50,8 @@ Stati consentiti **esattamente**: `TODO`, `IN SVILUPPO`, `IN COLLAUDO OPERATIVO`
 5. Aggiorna contemporaneamente [current-focus](../project/current-focus.md), [implementation-state](../implementation-state.md), QA, specifiche e decisioni toccate. Vedi [developer workflow](../project/developer-workflow.md).
 
 **Le vecchie note append-only in [STATUS](../dev/STATUS.md) e nei changelog restano storia, non un secondo registro degli stati.**
+
+
+## Checkpoint dev.9 — 26 ottobre 2026
+
+MDO-TASK-016/017/018 sono IN COLLAUDO OPERATIVO dopo [Actions #40306267311](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40306267311) PASS e ZIP dev.9 pubblicata su Dev. Codice/fixture passati, nessuna certificazione LIVE sul GLPI utente; non chiudere gli item finché non validati. Main invariato. Checklist e conversione/relazioni ancora previste in milestone successive.
