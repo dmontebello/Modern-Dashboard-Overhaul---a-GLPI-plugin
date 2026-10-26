@@ -69,6 +69,28 @@ with sync_playwright() as playwright:
     page.wait_for_function('window.__calls.length===2')
     assert [c['source'] for c in page.evaluate('window.__calls')]==['project','standalone'], 'All routes POST by source'
     assert int(page.locator('[data-mdo-column="done"] > header > span').inner_text())==2, 'mixed done column increments instantly'
+    # Exercise actual dragstart + drop event handlers, not only the select control.
+    page.evaluate("""() => {
+      const card=document.querySelector('[data-mdo-column="done"] .mdo-tasks-card[data-source="project"]');
+      const destination=document.querySelector('[data-mdo-column="todo"]');
+      const transfer=new DataTransfer();
+      card.dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:transfer}));
+      destination.dispatchEvent(new DragEvent('drop',{bubbles:true,dataTransfer:transfer}));
+    }""")
+    page.wait_for_function('window.__calls.length===3')
+    page.wait_for_function("""() => !!document.querySelector('[data-mdo-column="todo"] .mdo-tasks-card[data-source="project"]')""")
+    assert page.evaluate('window.__calls[2].source')=='project', 'All drag-and-drop routes ProjectTask'
+    page.evaluate("""() => {
+      const card=document.querySelector('[data-mdo-column="done"] .mdo-tasks-card[data-source="standalone"]');
+      const destination=document.querySelector('[data-mdo-column="doing"]');
+      const transfer=new DataTransfer();
+      card.dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:transfer}));
+      destination.dispatchEvent(new DragEvent('drop',{bubbles:true,dataTransfer:transfer}));
+    }""")
+    page.wait_for_function('window.__calls.length===4')
+    page.wait_for_function("""() => !!document.querySelector('[data-mdo-column="doing"] .mdo-tasks-card[data-source="standalone"]')""")
+    assert page.evaluate('window.__calls[3].source')=='standalone', 'All drag-and-drop routes IndependentTask'
+    assert int(page.locator('[data-mdo-column="done"] > header > span').inner_text())==0, 'mixed source header count recalculated'
     # Native ProjectState view exposes empty state columns and supports state moves.
     native=subprocess.check_output([php,str(ROOT/'tests/render_tasks.php'),json.dumps({
       'count':2,'query':{'view':'board','source':'project','group':'state'}})],text=True)
