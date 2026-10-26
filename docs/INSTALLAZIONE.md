@@ -147,3 +147,7 @@ Dopo backup coordinato plugin, DB e volume GLPI_DOC_DIR/mdoverhaul, aggiornare c
 ## 0.8.1-dev.7 — allineamento
 
 0.8.1-dev.7: non aggiunge schema rispetto a schema2 della dev.6; prima di aggiornare lo staging salvare snapshot coerente del DB/plugin/GLPI_DOC_DIR, verificare ZIP e SHA512, poi collaudare creazione con progetto e indipendente.
+
+## Aggiornamento 0.8.1-dev.8 UX
+
+Nessuna migrazione DB aggiuntiva rispetto allo schema2, ma il plugin necessita backup dei volumi e configurazione. Prima dell'upgrade in staging verificare ZIP, checksum e provenance, poi eseguire collaudo di DnD ripetuto e soft-delete. Main invariato, indipendenti opt-in.

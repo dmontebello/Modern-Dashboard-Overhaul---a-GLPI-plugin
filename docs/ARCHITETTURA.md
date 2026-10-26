@@ -166,3 +166,7 @@ MDO Tasks Workspace: vista unificata ProjectTask/StandaloneTask, Kanban con aggi
 ## 0.8.1-dev.7 — allineamento
 
 Form unificato `front/task.form.php` con TaskCreationService: lo stesso POST valida progetto facoltativo e inoltra a ProjectTask::check/add del core o StandaloneTask::check/add del plugin. Nessuna tabella, nessun endpoint SQL autonomo o conversione. Il form avanzato ProjectTask nativo continua dopo la creazione.
+
+## Dev.8 — Kanban/lista UX
+
+`front/task-stage.php` rinnova token GLPI dopo POST validato dal middleware (anche errore applicativo). `public/js/task-workspace.js` aggiorna il token, evita full reload, mostra ghost HTML5 e target di drop. `front/task-delete.php` delega soft-delete a `CommonDBTM::delete` dopo `can(DELETE)` per item ed entità, senza SQL core; solo in lista combinata e solo con diritti. Nessuna nuova tabella, modello separato StandaloneTask conservato.

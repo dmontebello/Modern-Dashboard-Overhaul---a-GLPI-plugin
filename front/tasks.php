@@ -374,14 +374,27 @@ if ($unified && $view === 'list') {
     echo '<div class="mdo-tasks-native-search"><table class="table table-vcenter"><thead><tr><th>' .
         $esc($tr('Attività', 'Task')) . '</th><th>' . $esc($tr('Tipo', 'Type')) .
         '</th><th>' . $esc($tr('Fase', 'Stage')) . '</th><th>' . $esc($tr('Progetto', 'Project')) .
-        '</th></tr></thead><tbody>';
+        '</th><th class="text-end">' . $esc($tr('Azioni', 'Actions')) . '</th></tr></thead><tbody>';
     foreach ($page as $record) {
         $url = ($record['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL())
             . '?id=' . (int)$record['id'];
-        echo '<tr><td><a href="' . $esc($url) . '">' . $esc($record['name']) .
-            '</a></td><td>' . $esc($record['source'] === 'standalone' ? $tr('Indipendente', 'Independent') :
-                $tr('Progetto', 'Project')) . '</td><td>' . $esc(TaskStageService::labels()[$record['stage']]) .
-            '</td><td>' . $esc($record['project_readable'] ? $record['project'] : '') . '</td></tr>';
+        $taskItem = TaskStageService::item($record['source'], (int)$record['id']);
+        $canDelete = $taskItem !== null && $taskItem->can((int)$record['id'], DELETE)
+            && $taskItem->maybeDeleted() && empty($taskItem->fields['is_deleted']);
+        echo '<tr data-mdo-list-row><td><a href="' . $esc($url) . '">' . $esc($record['name']) .
+            '</a></td><td><span class="mdo-task-type-badge">' . $esc($record['source'] === 'standalone' ? $tr('Indipendente', 'Independent') :
+                $tr('Progetto', 'Project')) . '</span></td><td><span class="mdo-task-stage-badge mdo-task-stage-' . $esc($record['stage']) . '">' . $esc(TaskStageService::labels()[$record['stage']]) .
+            '</span></td><td>' . $esc($record['project_readable'] ? $record['project'] : '') . '</td><td class="text-end">';
+        if ($canDelete) {
+            echo '<form class="mdo-task-delete-form" method="post" action="' . $esc(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task-delete.php') . '">'
+                . '<input type="hidden" name="_glpi_csrf_token" value="' . $esc(Session::getNewCSRFToken()) . '">'
+                . '<input type="hidden" name="source" value="' . $esc($record['source']) . '">'
+                . '<input type="hidden" name="id" value="' . (int)$record['id'] . '">'
+                . '<input type="hidden" name="confirm_delete" value="0">'
+                . '<button type="submit" class="btn btn-outline-danger btn-sm" aria-label="' . $esc($tr('Elimina task', 'Delete task') . ': ' . $record['name']) . '" data-mdo-task-delete data-confirm="' . $esc($tr('Spostare questa task nel cestino?', 'Move this task to trash?')) . '">'
+                . '<i class="ti ti-trash" aria-hidden="true"></i> ' . $esc($tr('Elimina', 'Delete')) . '</button></form>';
+        }
+        echo '</td></tr>';
     }
     echo '</tbody></table></div><nav class="mdo-tasks-pages" aria-label="' . $esc($tr('Pagine', 'Pages')) . '">';
     if ($start > 0) {

@@ -82,3 +82,8 @@ La candidata dev.6 aggiunge TaskActivity/TaskAttachment e richiede un bump tecni
 ## Nuovo prerelease 0.8.1-dev.7
 
 Implementazione del form unico senza nuove migrazioni rispetto allo schema2. ZIP `Modern_Dashboard_Overhaul_0.8.1-dev.7.zip`, manifest e SHA512 dal publisher con source SHA testato e run ID; non sovrascrivere dev.6 né modificare Main. Nessuna CI per commit esclusivamente markdown, fermo il gate sulla prossima modifica di codice. NON COLLAUDATO LIVE.
+
+
+## 0.8.1-dev.8 — stabilization prerelease
+
+Nuova versione richiesta per CSS/JS/PHP e test; dev.7 ZIP immutabile. Contiene fix UX Kanban e list soft-delete; checklist successiva. Publisher immutabile con SHA512 e metadati solo dopo CI verde. Main invariato; commit solo .md non avviano CI.

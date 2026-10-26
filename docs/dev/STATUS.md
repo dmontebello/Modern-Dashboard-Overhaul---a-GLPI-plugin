@@ -189,3 +189,12 @@ Su branch feature `feature/mdo-0.8.1-dev.6` / PR Draft #3: vista `Tutte`, lista/
 ## Consuntivo 0.8.1-dev.7 — pubblicazione verificata, 25 ottobre 2026
 
 **MDO-TASK-007 IN COLLAUDO OPERATIVO; NON COLLAUDATO LIVE.** Build GitHub Actions [#40236015750](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40236015750): bundle PASS, publish_dev_zip PASS; source SHA `6aa2654fa81d6e65be4184256d06a81d66603753`, compilazione UTC 2026-10-25T21:34:49Z; archivio immutabile `Modern_Dashboard_Overhaul_0.8.1-dev.7.zip`; SHA512 `4d45752f6c40907adeea3ee40ee2e8c631b965231717aefce0945eba821fd8def701ad0786ffc3897be4d630c24160f05651f3a211e5e9e664081d19c3e2b2c3`. Metadati in [0.8.1-dev.7.build.json](../releases/0.8.1-dev.7.build.json). Test automatici: 67 unit PHP, 69 Tasks, 62 Standalone, 44 Task Activity, 26 creazione unificata; Chromium 86 Dashboard, 175 Tasks, 72 nuova task, 560 Settings, 108 Standalone. 9 test packaging. **Prima pipeline ufficiale fallita solo sul gate documentale UPDATE.md privo della versione dev.7; aggiunta nota, nuovo test di non-scrittura su ACL negato e CI finale verde.** Non confondere mock con salvataggio o permessi reali GLPI 11.0.9. Next steps: backup DB+plugin+GLPI_DOC_DIR, staging test nuovo form con progetto/indipendente, READMY/entità, CSRF, Select2, scadenza, verifica unicità inserimento. `Main` e produzione invariati; prossima feature prevista dev.8 checklist.
+
+
+## Feedback collaudo reale 26/10/2026 — UX Tasks e Kanban
+
+Utente vede tre task nella lista combinata; osserva che il primo DnD funziona e i successivi necessitano refresh, chiede card che segue il mouse, pulsante Elimina sulla lista e maggiore immediatezza. Diagnosi su codice: il token CSRF generato una sola volta dalla board veniva riutilizzato anche dopo il POST GLPI11 che lo consuma. Fix su feature branch dev.8 con rotazione token a ogni POST e ghost drag; nuova route soft-delete con ACL item e conferma. **IN SVILUPPO, NON COLLAUDATO LIVE** fino a CI/ZIP e test sul server. Nessuna dismissione automatica delle indipendenti: esiste già opt-out e l'utente valuta progetto Tasks come alternativa. Checklist rinviata a favore dei bug UX; vedi backlog e dev.8 release notes.
+
+## Stato 0.8.1-dev.8 — UX Kanban (candidato)
+
+Sviluppo feature branch, NON COLLAUDATO LIVE: bug live DnD reiterato, anteprima drag e riga elimina autorizzata. Checklist differita; CI e artefatto da verificare. Main invariato.

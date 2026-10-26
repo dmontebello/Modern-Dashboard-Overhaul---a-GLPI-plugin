@@ -108,3 +108,18 @@
 .mdo-unified-create-form [data-mdo-standalone-fields]{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;border-top:1px solid var(--mdo-task-border);padding-top:14px;width:100%;}
 .mdo-unified-create-form .mdo-tasks-create-actions{justify-content:flex-end;align-self:stretch;gap:14px;margin-top:12px;}
 @media(max-width:560px){.mdo-unified-create-form .mdo-tasks-create-actions{align-items:stretch;}}
+
+/* Pilot UX: readable compact list and interactive Kanban drag feedback. */
+.mdo-tasks-native-search .table{width:100%;border-collapse:separate;border-spacing:0 5px;}
+.mdo-tasks-native-search .table tbody tr{background:var(--mdo-task-surface);box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.mdo-tasks-native-search .table tbody td{padding:12px 14px;vertical-align:middle;}
+.mdo-task-type-badge,.mdo-task-stage-badge{display:inline-flex;align-items:center;border:1px solid var(--mdo-task-border);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;white-space:nowrap;}
+.mdo-task-stage-doing{border-color:var(--tblr-primary,#206bc4);color:var(--tblr-primary,#206bc4);}
+.mdo-task-stage-done{border-color:var(--tblr-success,#21865b);color:var(--tblr-success,#21865b);}
+.mdo-task-delete-form{margin:0!important;display:inline-flex!important;justify-content:flex-end;}
+.mdo-task-delete-form .btn{white-space:nowrap;}
+.mdo-tasks-column{transition:border-color .14s ease,box-shadow .14s ease,background .14s ease;}
+.mdo-tasks-column.mdo-drop-target{border:2px dashed var(--tblr-primary,#206bc4);box-shadow:0 0 0 3px color-mix(in srgb,var(--tblr-primary,#206bc4) 14%,transparent);background:color-mix(in srgb,var(--tblr-primary,#206bc4) 5%,var(--mdo-task-surface));}
+.mdo-card-dragging{opacity:.48;border-style:dashed;}
+.mdo-drag-preview{position:fixed!important;top:0;left:0;z-index:99999;pointer-events:none;opacity:.96;box-shadow:0 12px 32px rgba(0,0,0,.28);transform:rotate(-2deg);background:var(--mdo-task-surface);}
+@media(prefers-reduced-motion:reduce){.mdo-tasks-column{transition:none;}.mdo-drag-preview{transform:none;}}

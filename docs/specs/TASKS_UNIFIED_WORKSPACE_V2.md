@@ -148,3 +148,7 @@ La versione 0.8.1-dev.6 è stata sviluppata e pubblicata su Dev: funzionalità p
 ## Aggiornamento 0.8.1-dev.7
 
 Dev.7 implementato in codice su feature branch; il requisito form unico conserva native ProjectTask e standalone separate. NON COLLAUDATO LIVE.
+
+## Collaudo 26 ottobre 2026 — dev.8 UX
+
+Difetto LIVE osservato: la prima trascinata Kanban funziona, le successive non funzionano finché non si aggiorna la pagina. Nel codice dev.7 la board riutilizzava un token CSRF GLPI11 consumato dal POST. Dev.8 propone token rinnovato in risposte success/failure, anteprima HTML5 della card, colonna target evidenziata, soft-delete per riga in lista combinata con ACL item, CSRF e conferma. Stato FIX: implementato su feature branch, CI/staging da verificare; il bug live NON è ancora CHIUSO. Scope checklist rinviato e indipendenti mantenute opt-in. Nessuna cancellazione o conversione implicita di record.
