@@ -51,3 +51,8 @@ Evidenza LIVE: colonne Project incomplete, trascinamento nella vista All non fun
 
 **MDO-TASK-016/017/018: IN COLLAUDO OPERATIVO**: colonne ProjectState compresi stati vuoti, drag nella vista All per Project/Independent, contatori immediati. Prove LIVE ancora aperte: Project con sola task Processing mostra altri stati a 0; DnD stesso elemento ripetuto in Project/Independent/All; 2 TODO e 1 Processing -> 1 TODO e 2 Processing senza refresh; DB/persistenza/ACL/CSRF; verificare auto_projectstates impostato a 0 su spostamento nativo. Stato dopo il fix NON CHIUSO. Main 0.8.0 invariato, niente deploy automatico, nessuna migrazione DB rispetto a dev.8. Checklist e conversioni rimangono in backlog.
 
+
+
+## Dev.10 — feedback screenshot 26/10
+
+Evidenza LIVE dev.9: Project su percentuali, non sui ProjectState; ProjectTask non trascinabili, Independent OK. Candidate fixes in feature branch dev.10: route default All Kanban, Project state-first, mapping core ProjectStates per All, compact cards 260×78. NO test GLPI reale post-fix, CI e artifact da verificare; Main 0.8.0 intatto.
