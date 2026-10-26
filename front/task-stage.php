@@ -41,5 +41,5 @@ http_response_code($result['status']);
 unset($result['status']);
 // GLPI consumes the CSRF token on every accepted POST, including ACL/conflict
 // failures. Rotate it even on a 4xx response so the next action can be retried.
-$result['token'] = Session::getNewCSRFToken();
+$result['token'] = Session::getNewCSRFToken(true);
 echo json_encode($result, JSON_THROW_ON_ERROR);
