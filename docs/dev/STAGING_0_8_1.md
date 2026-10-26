@@ -147,3 +147,7 @@ Verificare schema 2, ACL, POST Kanban e upload/download storage GLPI. Per rollba
 ## Aggiornamento 0.8.1-dev.7
 
 Verificare su staging dev.7 nuova task unica con/senza progetto, CSRF, permessi, dropdown GLPI AJAX, scadenza, inserimento e redirect senza duplicati.
+
+## Test aggiuntivi 0.8.1-dev.8 — Kanban e lista (26/10/2026)
+
+Registrare screenshot/video e log senza caricarli nel repository pubblico: 1) ripetere tre spostamenti consecutivi della stessa card Project e Independent senza aggiornare; 2) verificare ghost che segue mouse, colonna drop evidenziata, stato in database, percent_done/status corretto, token rinnovato e fallback tastiera; 3) tabella Tutte, pulsante cestino esclusivamente con DELETE, confirm esplicita, DELETE su item e entità negati, nessun purge e refresh dei contatori; 4) fallimenti 403/409 con retry e test JS disattivato; 5) backup coordinato prima dell'upgrade. Nessun PASS LIVE attribuito finché non verificato in staging.
