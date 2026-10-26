@@ -92,3 +92,8 @@ Da dev.4 a dev.5: nessuna nuova tabella, nessun cambio schema o diritto. Corrett
 ## 0.8.1-dev.7 — Form unico Nuova task
 
 La creazione con progetto usa ProjectTask nativa e senza progetto StandaloneTask; nessuna migrazione rispetto allo schema 2 della dev.6. Fare snapshot coordinato DB, plugin e GLPI_DOC_DIR prima della prova. Verificare ZIP immutabile, SHA512 e build-info.json dalla branch Dev. Collaudare permessi per tipo/entità, CSRF e POST con Select2 su staging GLPI. Non promuovere Main senza esiti LIVE.
+
+
+## 0.8.1-dev.8 — UX Kanban e lista
+
+Versione senza nuove tabelle rispetto allo schema2. Salvare database, plugin, configurazione e storage GLPI prima dell'upgrade; verificare SHA512 e metadata; provare molti spostamenti consecutivi, permessi DELETE ed eliminazione nel cestino, non purge. Non aggiornare Main automaticamente. **NON COLLAUDATA LIVE**.
