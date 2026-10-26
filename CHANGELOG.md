@@ -1,4 +1,11 @@
-# Changelog — Modern Dashboard Overhaul
+# Changelog
+
+## 0.8.1-dev.8 — feedback operativo Kanban/lista
+
+- Token GLPI11 rinnovato dopo ogni POST Kanban per ripetere i drag senza reload; drag preview e colonna evidenziata.
+- Lista Tutte: badge e cancellazione soft-delete autorizzata per item, con conferma, CSRF e assenza di purge; UI Ajax.
+- Nessuna dismissione standalone né modifica core GLPI. Checklist pianificata dopo stabilizzazione UX. **NON COLLAUDATO LIVE**.
+
 
 ## 0.8.1-dev.7 — Form unico Nuova task (2026-10-25)
 
