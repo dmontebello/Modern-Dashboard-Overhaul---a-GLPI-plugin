@@ -92,3 +92,8 @@ Nuova versione richiesta per CSS/JS/PHP e test; dev.7 ZIP immutabile. Contiene f
 ## 0.8.1-dev.9 — solo correzioni Kanban
 
 Nuovo numero prerelease per PHP/JS e test, senza riutilizzare ZIP dev.8. Checklist originariamente pianificata per dev.9 rinviata; documentare CI, source SHA e checksum soltanto dopo la pubblicazione. Nessuna CI per soli Markdown.
+
+
+## 0.8.1-dev.10
+
+Prerelease distinta per modifiche PHP/JS/CSS. Nuovo ZIP immutabile solo dopo CI verde, Main invariato, commit solo Markdown senza CI.
