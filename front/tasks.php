@@ -305,7 +305,7 @@ $activeFilters = (int) ($q !== '') + (int) ($projectId > 0) + (int) ($stateId >=
 echo '<details class="mdo-tasks-filter-panel"' . ($activeFilters > 0 ? ' open' : '') . '><summary>'
     . $esc($tr('Filtri e ordinamento', 'Filters and sorting'))
     . ($activeFilters > 0 ? ' · ' . $activeFilters . ' ' . $esc($tr('attivi', 'active')) : '') . '</summary>';
-echo '<form class="mdo-tasks-filters" method="get" action="' . $esc($base) . '"><input type="hidden" name="view" value="board"><input type="hidden" name="source" value="' . ($standalone ? 'standalone' : 'project') . '">';
+echo '<form class="mdo-tasks-filters" method="get" action="' . $esc($base) . '"><input type="hidden" name="view" value="board"><input type="hidden" name="source" value="' . $esc($source) . '">';
 echo '<label>' . $esc($tr('Cerca', 'Search')) . '<input class="form-control" name="q" maxlength="120" value="' . $esc($q) . '" placeholder="Task, ID..."></label>';
 echo '<label>' . $esc($tr('Mostra', 'Show')) . '<select class="form-select" name="filter">';
 foreach (['open' => $tr('Da completare', 'Incomplete'), 'all' => $tr('Tutte', 'All'), 'done' => $tr('Completate', 'Completed'), 'overdue' => $tr('Scadute', 'Overdue')] as $key => $label) {
