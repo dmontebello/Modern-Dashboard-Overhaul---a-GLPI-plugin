@@ -167,6 +167,36 @@
       void navigate(url);
     });
     document.addEventListener('submit', event => {
+      const deleteForm = event.target.closest('.mdo-task-delete-form');
+      if (deleteForm) {
+        event.preventDefault();
+        const button = deleteForm.querySelector('[data-mdo-task-delete]');
+        if (button?.disabled || !window.confirm(button?.dataset.confirm || 'Move this task to trash?')) return;
+        button.disabled = true;
+        const row = deleteForm.closest('[data-mdo-list-row]');
+        (async () => {
+          try {
+            const response = await fetch(deleteForm.action, {
+              method:'POST', credentials:'same-origin',
+              headers:{'Content-Type':'application/x-www-form-urlencoded', 'Accept':'application/json',
+                'X-Requested-With':'XMLHttpRequest'},
+              body:new URLSearchParams(new FormData(deleteForm)).toString()
+            });
+            const data = await response.json();
+            if (data.token) deleteForm.querySelector('[name="_glpi_csrf_token"]').value = data.token;
+            if (!response.ok || !data.ok) throw new Error('Deletion rejected');
+            row?.remove();
+            // Refresh only the workspace region: counters, pagination and filters
+            // are now calculated by the server after a successful deletion.
+            const url = new URL(location.href);
+            if (isTaskUrl(url) && isSafeView(url)) await navigate(url, true);
+          } catch {
+            button.disabled = false;
+            window.alert('Unable to delete task. Check permissions and retry.');
+          }
+        })();
+        return;
+      }
       const form = event.target.closest('.mdo-tasks-filters');
       if (!form || form.method.toLowerCase() !== 'get') return;
       const url = new URL(form.action);
