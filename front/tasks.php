@@ -45,6 +45,8 @@ $itemtype = $standalone ? StandaloneTask::class : ProjectTask::class;
 $view = $scalar('view') === 'board' ? 'board' : 'list';
 $group = $scalar('group', 'progress') === 'state' ? 'state' : 'progress';
 if ($standalone) { $group = 'state'; }
+// All uses the shared three-stage model; GLPI-specific state grouping is Project-only.
+if ($unified) { $group = 'progress'; }
 $filter = $scalar('filter', 'all');
 $filter = in_array($filter, ['open', 'all', 'done', 'overdue'], true) ? $filter : 'all';
 $dueFilter = $scalar('due', 'all');
@@ -331,7 +333,7 @@ foreach ($states as $id => $name) {
 echo '</select></label>';
 echo '<label>' . $esc($tr('Colonne', 'Group by')) . '<select class="form-select" name="group">';
 foreach (['state' => ($standalone ? $tr('Stato', 'Status') : $tr('Stato GLPI', 'GLPI state')), 'progress' => $tr('Avanzamento percentuale', 'Percent complete')] as $key => $label) {
-    if ($standalone && $key === 'progress') { continue; }
+    if (($standalone && $key === 'progress') || ($unified && $key === 'state')) { continue; }
     echo '<option value="' . $key . '"' . ($group === $key ? ' selected' : '') . '>' . $esc($label) . '</option>';
 }
 echo '</select></label>';
@@ -412,6 +414,8 @@ if ($unified && $view === 'list') {
     Html::footer();
     return;
 }
+// Project state grouping must show every GLPI dropdown state, even with zero tasks.
+$nativeStateColumns = (!$unified && !$standalone && $group === 'state') ? TaskBoard::projectStates() : [];
 $columns = ($unified || $standalone) ? [
     'todo' => ['name' => 'To do', 'items' => []],
     'doing' => ['name' => 'Doing', 'items' => []],
@@ -420,12 +424,12 @@ $columns = ($unified || $standalone) ? [
     'todo' => ['name' => '0%', 'items' => []],
     'doing' => ['name' => '1–99%', 'items' => []],
     'done' => ['name' => '100%', 'items' => []],
-] : []);
+] : array_combine(array_map(static fn(int $id): string => 'state-' . $id, array_keys($nativeStateColumns)), array_map(static fn(string $name): array => ['name'=>$name,'items'=>[]], array_values($nativeStateColumns))));
 foreach ($filtered as $task) {
     $column = ($unified || $standalone) ? $task['stage'] : ($group === 'state' ? 'state-' . $task['state_id'] :
         ($task['percent_done'] === 0 ? 'todo' : ($task['percent_done'] >= 100 ? 'done' : 'doing')));
     if (!isset($columns[$column])) {
-        $columns[$column] = ['name' => $states[$task['state_id']], 'items' => []];
+        $columns[$column] = ['name' => $group === 'state' ? ($states[$task['state_id']] ?? $tr('Senza stato', 'No state')) : (TaskStageService::labels()[$column] ?? $column), 'items' => []];
     }
     $columns[$column]['items'][] = $task;
 }
@@ -439,8 +443,8 @@ foreach ($columns as $columnKey => $column) {
     }
     foreach ($column['items'] as $task) {
         $item = TaskStageService::item($task['source'], (int) $task['id']);
-        $canMove = $item !== null && $item->can((int) $task['id'], UPDATE) && ($task['source'] !== 'project' || empty($item->fields['auto_percent_done'])) && ($unified || $standalone || $group === 'progress');
-        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">' 
+        $canMove = $item !== null && $item->can((int) $task['id'], UPDATE) && ($task['source'] !== 'project' || empty($item->fields['auto_percent_done'])) && ($unified || $standalone || $group === 'progress' || $group === 'state');
+        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '" data-stage="' . $esc($columnKey) . '" data-group="' . $esc($group) . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">' 
             . $esc($task['name'] ?: '—') . '</a>';
         if ($task['project_readable']) {
             echo '<a class="mdo-tasks-project" href="' . $esc($projectForm($task['project_id'])) . '">'
@@ -466,10 +470,10 @@ foreach ($columns as $columnKey => $column) {
             . (int) $task['percent_done'] . '" aria-valuemin="0" aria-valuemax="100"><span style="width:'
             . (int) $task['percent_done'] . '%"></span></div><small>' . (int) $task['percent_done'] . '%</small>';
         }
-        if ($canMove && ($unified || $standalone || $group === 'progress')) {
+        if ($canMove) {
             echo '<label class="mdo-stage-control">' . $esc($tr('Sposta in', 'Move to')) . ' <select data-stage-choice aria-label="' . $esc($tr('Sposta attività', 'Move task')) . '">';
-            foreach (TaskStageService::labels() as $stageKey => $stageName) {
-                echo '<option value="' . $stageKey . '"' . ($task['stage'] === $stageKey ? ' selected' : '') . '>' . $esc($stageName) . '</option>';
+            foreach (($group === 'state' && !$unified && !$standalone ? array_combine(array_keys($columns), array_column($columns, 'name')) : TaskStageService::labels()) as $stageKey => $stageName) {
+                echo '<option value="' . $stageKey . '"' . (($group === 'state' && !$unified && !$standalone ? 'state-' . $task['state_id'] : $task['stage']) === $stageKey ? ' selected' : '') . '>' . $esc($stageName) . '</option>';
             }
             echo '</select></label>';
         }
