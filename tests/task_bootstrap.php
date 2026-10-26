@@ -242,7 +242,7 @@ final class TaskFakeDB
             }
         }
         $table = $query['FROM'];
-        $rows = match($table) { 'glpi_projecttasks'=>ProjectTask::$rows,'glpi_projects'=>Project::$rows,default=>CommonDBTM::$storage[$table]??[] };
+        $rows = match($table) { 'glpi_projecttasks'=>ProjectTask::$rows,'glpi_projects'=>Project::$rows,'glpi_projectstates'=>[1=>['id'=>1,'name'=>'New'],2=>['id'=>2,'name'=>'Processing'],3=>['id'=>3,'name'=>'Done'],4=>['id'=>4,'name'=>'Deferred']],default=>CommonDBTM::$storage[$table]??[] };
         $rows = array_filter($rows, static function (array $row) use ($query, $table): bool {
             return self::matches($row,$query['WHERE'],$table);
         });
