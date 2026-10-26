@@ -24,15 +24,13 @@ with sync_playwright() as playwright:
        };
     }""")
     page.add_script_tag(content=script)
-    card=page.locator('.mdo-tasks-card[data-can-move="1"]').first
+    card=page.locator('.mdo-tasks-card[data-can-move="1"][data-id="3"]')
     assert card.count()==1, 'editable card is present'
     for i,stage in enumerate(['done','doing','todo'],start=1):
         card.locator('[data-stage-choice]').select_option(stage)
-        page.wait_for_timeout(180)
-        print('DEBUG UX', i, stage, page.evaluate('window.__calls'), page.locator('[data-mdo-column]').count())
         page.wait_for_function("""(info) => window.__calls.length === info.i &&
             !!document.querySelector('[data-mdo-column="' + info.stage + '"] .mdo-tasks-card[data-can-move="1"]')""",
-            arg={'stage':stage,'i':i})
+            arg={'stage':stage,'i':i},timeout=8000)
         assert page.locator('[data-mdo-board]').get_attribute('data-token')=='rotated-'+str(i)
     calls=page.evaluate('window.__calls')
     assert [c['stage'] for c in calls]==['done','doing','todo'],calls
