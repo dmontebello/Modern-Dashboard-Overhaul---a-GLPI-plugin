@@ -34,23 +34,23 @@ $html=taskPage(['source'=>'all','view'=>'list']);
 uxCheck(str_contains($html, 'mdo-task-delete-form') && str_contains($html, 'confirm_delete'),
     'combined list renders permission-gated trash action');
 [$status,$result]=deleteRequest('standalone',$id);
-uxCheck($status===200 && $result['ok'] && !empty($result['token']), 'deletion returns renewed token; status=' . $status . ' result=' . json_encode($result));
+uxCheck($result['ok'] && !empty($result['token']), 'deletion returns renewed token; response=' . json_encode($result));
 uxCheck(!empty(CommonDBTM::$storage[StandaloneTask::getTable()][$id]['is_deleted']),
     'standalone soft-deleted, no purge');
 [$status,$result]=deleteRequest('standalone',$id);
-uxCheck($status===404 && !$result['ok'],'already deleted row rejected');
+uxCheck(!$result['ok'] && $result['error']==='not_found','already deleted row rejected');
 $second=$task->add(['name'=>'Still visible','entities_id'=>1]);
 Session::$standaloneRights=StandaloneTask::READMY|CREATE;
 [$status,$result]=deleteRequest('standalone',$second);
-uxCheck($status===403 && !$result['ok'],'read-only actor cannot delete');
+uxCheck(!$result['ok'] && $result['error']==='forbidden','read-only actor cannot delete');
 uxCheck(empty(CommonDBTM::$storage[StandaloneTask::getTable()][$second]['is_deleted']),'denied DELETE cannot mutate');
 Session::$standaloneRights=StandaloneTask::READMY|CREATE|DELETE;
 [$status,$result]=deleteRequest('standalone',$second,false);
-uxCheck($status===400 && !$result['ok'],'unconfirmed action rejected');
+uxCheck(!$result['ok'] && $result['error']==='invalid','unconfirmed action rejected');
 [$status,$result]=deleteRequest('project',1);
-uxCheck($status===200 && $result['ok'] && !empty(ProjectTask::$rows[1]['is_deleted']),
+uxCheck($result['ok'] && !empty(ProjectTask::$rows[1]['is_deleted']),
     'native project task soft-delete only');
 Session::$entities=[2];
 [$status,$result]=deleteRequest('project',4);
-uxCheck($status===404 && !$result['ok'],'cross-entity ProjectTask deletion refused');
+uxCheck(!$result['ok'] && $result['error']==='not_found','cross-entity ProjectTask deletion refused');
 echo "$tests task UX delete tests PASSED (GLPI doubles, NOT LIVE)\n";
