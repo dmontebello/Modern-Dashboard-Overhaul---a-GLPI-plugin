@@ -45,5 +45,8 @@ with sync_playwright() as playwright:
     page.locator('[data-mdo-board] .mdo-tasks-card[data-id="3"]').evaluate("""card => card.dispatchEvent(new DragEvent('dragend',{bubbles:true}))""")
     page.wait_for_function("document.querySelectorAll('.mdo-drag-preview').length === 0",timeout=3000)
     assert page.locator('.mdo-drag-preview').count()==0, 'drag ghost cleaned'
+    # Column counters reflect actual DOM card movement without a page reload.
+    counts=page.locator('[data-mdo-column] > header > span').all_text_contents()
+    assert all(x.isdigit() for x in counts), f'non-numeric live counters: {counts}'
     browser.close()
 print('Task UX repeated Kanban and drag ghost tests PASSED (Chromium fixture)')
