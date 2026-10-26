@@ -41,9 +41,9 @@ Stati consentiti **esattamente**: `TODO`, `IN SVILUPPO`, `IN COLLAUDO OPERATIVO`
 | MDO-TASK-017 | Bug funzionale | [Kanban All non consente drag misto](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN COLLAUDO OPERATIVO | Dev.9 CI PASS #40306267311, Chromium testa drop ProjectTask e Independent nello stesso All; prova LIVE e ACL aperte |
 | MDO-TASK-018 | Bug UX | [Conteggi colonne restano obsoleti dopo drag](../releases/0.8.1-dev.9.md) | P0 / dev.9 | IN COLLAUDO OPERATIVO | Dev.9 CI PASS #40306267311, header count ricalcolato dopo POST; verificare LIVE 2→1 / 1→2 senza reload |
 
-| MDO-TASK-019 | Bug funzionale | [Project e All DnD con percentuale automatica](../releases/0.8.1-dev.10.md) | P0 / dev.10 | IN SVILUPPO | GLPI LIVE: solo Independent trascinabili; mapping ProjectState e percent_done distinte, prove ancora da svolgere |
-| MDO-UI-004 | UX | [Card Kanban compatte 260×78](../releases/0.8.1-dev.10.md) | P1 / dev.10 | IN SVILUPPO | Sintesi delle card, dettaglio conservato nel form; verificare browser responsive |
-| MDO-UI-005 | UX | [Default All → Kanban e stato GLPI Project](../releases/0.8.1-dev.10.md) | P0 / dev.10 | IN SVILUPPO | Default server e voce menu; test live e permessi ancora aperti |
+| MDO-TASK-019 | Bug funzionale | [Project e All DnD con percentuale automatica](../releases/0.8.1-dev.10.md) | P0 / dev.10 | IN COLLAUDO OPERATIVO | GLPI LIVE: solo Independent trascinabili; mapping ProjectState e percent_done distinte, CI PASS #40321113463, LIVE da verificare |
+| MDO-UI-004 | UX | [Card Kanban compatte 260×78](../releases/0.8.1-dev.10.md) | P1 / dev.10 | IN COLLAUDO OPERATIVO | Sintesi delle card, dettaglio conservato nel form; Chromium PASS #40321113463, controllare LIVE |
+| MDO-UI-005 | UX | [Default All → Kanban e stato GLPI Project](../releases/0.8.1-dev.10.md) | P0 / dev.10 | IN COLLAUDO OPERATIVO | Default server e voce menu; CI PASS #40321113463, LIVE e permessi ancora da verificare |
 
 ## Come aggiornare una riga
 
@@ -59,3 +59,8 @@ Stati consentiti **esattamente**: `TODO`, `IN SVILUPPO`, `IN COLLAUDO OPERATIVO`
 ## Checkpoint dev.9 — 26 ottobre 2026
 
 MDO-TASK-016/017/018 sono IN COLLAUDO OPERATIVO dopo [Actions #40306267311](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40306267311) PASS e ZIP dev.9 pubblicata su Dev. Codice/fixture passati, nessuna certificazione LIVE sul GLPI utente; non chiudere gli item finché non validati. Main invariato. Checklist e conversione/relazioni ancora previste in milestone successive.
+
+
+## 0.8.1-dev.10 — 26/10/2026
+
+Rilasciata su Dev con [Actions #40321113463](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40321113463) PASS, sorgente `9ddd6396523eea8a4d6edf1c3ac90c2023769a1c`, ZIP immutabile e checksum SHA512 pubblicati. MDO-TASK-019 / MDO-UI-004 / MDO-UI-005 IN COLLAUDO OPERATIVO (non CHIUSA): l'installazione GLPI reale e i permessi devono ancora confermare gli interventi. Nessun deploy su Main. Documentazione-only non avvia CI.
