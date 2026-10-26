@@ -44,7 +44,7 @@ final class TaskStageService
     public static function projectStageTargets(): array
     {
         $states = TaskBoard::projectStates();
-        $core = \\Config::getConfigurationValues('core');
+        $core = \Config::getConfigurationValues('core');
         $keys = [
             'todo' => 'projecttask_unstarted_states_id',
             'doing' => 'projecttask_inprogress_states_id',
