@@ -119,7 +119,7 @@ taskFixture();
 Session::$create = false;
 verify(TaskBoard::creationProjects()['projects'] === [] && !str_contains(taskPage([]), 'Nuova task'), 'reader has no creation choices or CTA');
 taskFixture();
-taskPage(['target' => 'https://evil.invalid', 'criteria' => [['field' => 12, 'value' => 2]], 'start' => 20]);
+taskPage(['view'=>'list','source'=>'project','target' => 'https://evil.invalid', 'criteria' => [['field' => 12, 'value' => 2]], 'start' => 20]);
 verify(Search::$calls['list'][0] === ProjectTask::class && parse_url(Search::$calls['list'][1]['target'], PHP_URL_PATH) === '/glpi/plugins/mdoverhaul/front/tasks.php'
     && !str_contains(Search::$calls['list'][1]['target'], 'evil.invalid'), 'public native Search facade keeps search/sort/pagination in workspace');
 verify(Search::$calls['form'][1]['criteria'][0]['value'] === 2 && Search::$calls['list'][1]['start'] === 20, 'native criteria and pagination delegated unchanged');
