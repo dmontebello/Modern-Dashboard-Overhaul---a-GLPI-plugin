@@ -5,6 +5,9 @@ if (PHP_SAPI !== 'cli') { return; }
 require_once __DIR__ . '/task_bootstrap.php';
 taskFixture();
 $options = json_decode($argv[1] ?? '{}', true, flags: JSON_THROW_ON_ERROR);
+if (array_key_exists('core_mappings', $options) && !$options['core_mappings']) {
+    Config::$values['core'] = [];
+}
 $count = max(0, min(100, (int) ($options['count'] ?? 100)));
 ProjectTask::$rows = [];
 Project::$rows = [1 => ['id' => 1, 'name' => 'Progetto di esempio · interfaccia e accessibilità',

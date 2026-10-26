@@ -5,7 +5,10 @@ namespace GlpiPlugin\Mdoverhaul;
 use DBConnection;
 use RuntimeException;
 
-/** Schema for task journal and private attachment metadata. */
+/** Schema for task journal and private attachment metadata.
+ * New installations use TIMESTAMP. Existing DATETIME columns are converted
+ * separately by a GLPI administrator with migration:timestamps after backup.
+ */
 final class TaskActivitySchema
 {
     public static function install(): void
@@ -20,7 +23,7 @@ final class TaskActivitySchema
                 "items_id int $sign NOT NULL",
                 "users_id int $sign NOT NULL",
                 "content mediumtext NOT NULL",
-                "date_creation datetime NOT NULL",
+                "date_creation timestamp NOT NULL",
                 "is_deleted tinyint NOT NULL DEFAULT 0",
             ],
             TaskSchema::FILES => [
@@ -31,7 +34,7 @@ final class TaskActivitySchema
                 "stored char(64) NOT NULL",
                 "mime varchar(128) NOT NULL",
                 "filesize bigint NOT NULL DEFAULT 0",
-                "date_creation datetime NOT NULL",
+                "date_creation timestamp NOT NULL",
                 "is_deleted tinyint NOT NULL DEFAULT 0",
             ],
         ];

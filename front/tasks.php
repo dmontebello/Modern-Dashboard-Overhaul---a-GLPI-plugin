@@ -43,10 +43,9 @@ if (!$standalone && !ProjectTask::canView()) { Session::checkRight('projecttask'
 $itemtype = $standalone ? StandaloneTask::class : ProjectTask::class;
 
 $view = $scalar('view', 'board') === 'list' ? 'list' : 'board';
-$group = $scalar('group', 'state') === 'progress' ? 'progress' : 'state';
-if ($standalone) { $group = 'state'; }
-// All uses the shared three-stage model; GLPI-specific state grouping is Project-only.
-if ($unified) { $group = 'progress'; }
+// A legacy ?group=progress must never turn Project statuses into percentage columns.
+// All uses shared stages only when the three native GLPI mappings are available.
+$group = $unified ? 'progress' : 'state';
 $filter = $scalar('filter', 'all');
 $filter = in_array($filter, ['open', 'all', 'done', 'overdue'], true) ? $filter : 'all';
 $dueFilter = $scalar('due', 'all');
@@ -205,7 +204,7 @@ if (!$standalone && StandaloneTask::enabled() && !StandaloneTask::canView()
 }
 echo '<nav class="mdo-tasks-view-tabs mdo-tasks-source-tabs" aria-label="' . $esc($tr('Origine attività', 'Task source')) . '">';
 foreach (['all' => [ProjectTask::canView() && StandaloneTask::canView(), $tr('Tutte', 'All')], 'project' => [ProjectTask::canView(), $tr('Progetto', 'Project')], 'standalone' => [StandaloneTask::canView(), $tr('Indipendenti', 'Independent')]] as $key => [$visible, $label]) {
-    if ($visible) { echo '<a class="btn ' . ($source === $key ? 'btn-primary' : 'btn-outline-secondary') . '"' . ($source === $key ? ' aria-current="page"' : '') . ' href="' . $esc($boardUrl(['source'=>$key,'view'=>$view,'project'=>0,'state'=>-1])) . '">' . $esc($label) . '</a>'; }
+    if ($visible) { echo '<a class="btn ' . ($source === $key ? 'btn-primary' : 'btn-outline-secondary') . '"' . ($source === $key ? ' aria-current="page"' : '') . ' href="' . $esc($boardUrl(['source'=>$key,'view'=>$view,'group'=>'state','project'=>0,'state'=>-1])) . '">' . $esc($label) . '</a>'; }
 }
 echo '</nav>';
 echo '<nav class="mdo-tasks-view-tabs" aria-label="' . $esc($tr('Viste delle attività', 'Task views')) . '">';
@@ -334,10 +333,7 @@ foreach ($states as $id => $name) {
 }
 echo '</select></label>';
 echo '<label>' . $esc($tr('Colonne', 'Group by')) . '<select class="form-select" name="group">';
-foreach (['state' => ($standalone ? $tr('Stato', 'Status') : $tr('Stato GLPI', 'GLPI state')), 'progress' => ($unified ? $tr('Fase comune', 'Common stage') : $tr('Avanzamento percentuale', 'Percent complete'))] as $key => $label) {
-    if (($standalone && $key === 'progress') || ($unified && $key === 'state')) { continue; }
-    echo '<option value="' . $key . '"' . ($group === $key ? ' selected' : '') . '>' . $esc($label) . '</option>';
-}
+echo '<option value="' . $esc($group) . '" selected>' . $esc($unified ? $tr('Stato (Project + Indipendenti)', 'Status (Project + Independent)') : ($standalone ? $tr('Stato', 'Status') : $tr('Stato GLPI', 'GLPI status'))) . '</option>';
 echo '</select></label>';
 echo '<label>' . $esc($tr('Ordina per', 'Sort by')) . '<select class="form-select" name="board_sort">';
 foreach (['due' => $tr('Scadenza', 'Due date'), 'name' => $tr('Titolo', 'Title'), 'project' => $tr('Progetto', 'Project'), 'state' => $tr('Stato', 'State'), 'progress' => $tr('Avanzamento', 'Progress')] as $key => $label) {
@@ -351,18 +347,10 @@ if ($projectId > 0 && isset($projects[$projectId])) {
     echo '<a class="btn btn-outline-secondary" href="' . $esc($projectForm($projectId) . '&forcetab=Project%243') . '">'
         . $esc($tr('Apri il Kanban nativo del progetto', 'Open native project Kanban')) . '</a>';
 }
-echo '<p class="mdo-tasks-hint">' . $esc($unified || $standalone || $group === 'progress'
-    ? $tr('Trascina le card modificabili tra le colonne o usa il selettore Sposta in. Le altre si aprono nella scheda GLPI.',
-        'Drag editable cards between columns or use Move to. Other tasks open in their native GLPI forms.')
-    : $tr('Per modificare una task apri la sua scheda GLPI.',
-        'Open the native GLPI task form to make changes.')
-) . '</p>';
-if ($group === 'progress' && !$unified) {
-    echo '<p class="mdo-tasks-hint">' . $esc($tr(
-        'Raggruppamento per avanzamento: le colonne riflettono la percentuale GLPI, senza uno Stage manuale separato.',
-        'Grouped by progress: columns reflect GLPI percent complete; there is no separate manual Stage.'
-    )) . '</p>';
-}
+echo '<p class="mdo-tasks-hint">' . $esc($tr(
+    'Trascina le card modificabili tra gli stati oppure usa Sposta in. Le altre attività si aprono nel modulo GLPI.',
+    'Drag editable cards between statuses or use Move to. Other tasks open in their GLPI forms.'
+)) . '</p>';
 echo '<p class="mdo-tasks-results" role="status">' . count($filtered) . ' ' . $esc($tr('attività mostrate', 'tasks shown'))
     . ($loaded['truncated'] ? ' · ' . $esc($tr('campione parziale', 'partial sample')) : '') . '</p>';
 if ($filtered === [] && $view !== 'board') {
@@ -416,29 +404,59 @@ if ($unified && $view === 'list') {
     Html::footer();
     return;
 }
-// Project state grouping must show every GLPI dropdown state, even with zero tasks.
-$nativeStateColumns = (!$unified && !$standalone && $group === 'state') ? TaskBoard::projectStates() : [];
-$columns = ($unified || $standalone) ? [
-    'todo' => ['name' => 'To do', 'items' => []],
-    'doing' => ['name' => 'Doing', 'items' => []],
-    'done' => ['name' => 'Done', 'items' => []],
-] : ($group === 'progress' ? [
-    'todo' => ['name' => '0%', 'items' => []],
-    'doing' => ['name' => '1–99%', 'items' => []],
-    'done' => ['name' => '100%', 'items' => []],
-] : array_combine(array_map(static fn(int $id): string => 'state-' . $id, array_keys($nativeStateColumns)), array_map(static fn(string $name): array => ['name'=>$name,'items'=>[]], array_values($nativeStateColumns))));
+// Always show native ProjectState statuses, including empty columns. When an
+// installation lacks an unambiguous three-way native mapping, the All board
+// keeps independent stages and Project states in separate, type-safe lanes.
+// Never silently use percent_done as a substitute for a Project status.
+$mixedNativeProject = $unified && count(TaskStageService::projectStageTargets()) !== 3;
+$nativeStateColumns = !$standalone ? TaskBoard::projectStates() : [];
+$projectChoices = [];
+foreach ($nativeStateColumns as $id => $name) {
+    $projectChoices['state-' . $id] = $name;
+}
+$columns = [];
+if ($unified || $standalone) {
+    foreach (TaskStageService::labels() as $stage => $name) {
+        $columns[$stage] = ['name' => $name, 'items' => [],
+            'accept' => $mixedNativeProject ? 'standalone' : 'all', 'drop' => true];
+    }
+}
+if (!$standalone && (!$unified || $mixedNativeProject)) {
+    foreach ($projectChoices as $key => $name) {
+        $columns[$key] = ['name' => $mixedNativeProject ? $tr('Progetto: ', 'Project: ') . $name : $name,
+            'items' => [], 'accept' => 'project', 'drop' => true];
+    }
+}
 foreach ($filtered as $task) {
-    $column = ($unified || $standalone) ? $task['stage'] : ($group === 'state' ? 'state-' . $task['state_id'] :
-        ($task['percent_done'] === 0 ? 'todo' : ($task['percent_done'] >= 100 ? 'done' : 'doing')));
+    $native = $task['source'] === 'project' && (!$unified || $mixedNativeProject);
+    $column = $native ? 'state-' . $task['state_id'] : $task['stage'];
     if (!isset($columns[$column])) {
-        $columns[$column] = ['name' => $group === 'state' ? ($states[$task['state_id']] ?? $tr('Senza stato', 'No state')) : (TaskStageService::labels()[$column] ?? $column), 'items' => []];
+        $columns[$column] = [
+            'name' => $native ? ($states[$task['state_id']] ?? $tr('Senza stato', 'No status'))
+                : (TaskStageService::labels()[$column] ?? $column),
+            'items' => [],
+            'accept' => $native ? 'project' : ($mixedNativeProject ? 'standalone' : 'all'),
+            'drop' => !$native || isset($projectChoices[$column]),
+        ];
     }
     $columns[$column]['items'][] = $task;
+}
+if ($mixedNativeProject) {
+    echo '<p class="mdo-tasks-hint" role="status">' . $esc($tr(
+        'Le fasi comuni non sono associate in modo univoco agli stati GLPI: in Tutte le attività di progetto usano gli stati nativi, quelle indipendenti le proprie fasi. Nessuna percentuale viene alterata.',
+        'Common stages are not mapped unambiguously to GLPI statuses: All shows native Project statuses alongside Independent stages. Percent complete is not overwritten.'
+    )) . '</p>';
+}
+if ($mixedNativeProject && !$projectChoices) {
+    echo '<p class="alert alert-warning" role="status">' . $esc($tr(
+        'Nessuno stato di progetto GLPI configurato: configura gli stati prima di spostare le attività di progetto.',
+        'No GLPI Project statuses configured: configure them before moving Project tasks.'
+    )) . '</p>';
 }
 echo '<p class="mdo-tasks-hint" id="mdo-board-scroll">' . $esc($tr('Scorri orizzontalmente per vedere le colonne.', 'Scroll horizontally to see columns.')) . '</p>';
 echo '<div class="mdo-tasks-board" data-mdo-board data-endpoint="' . $esc(rtrim((string)$CFG_GLPI['root_doc'], '/') . '/plugins/mdoverhaul/front/task-stage.php') . '" data-token="' . $esc(Session::getNewCSRFToken()) . '" data-mode="' . $esc($unified ? 'all' : $group) . '" role="region" aria-label="Kanban" aria-describedby="mdo-board-scroll" tabindex="0">';
 foreach ($columns as $columnKey => $column) {
-    echo '<section class="mdo-tasks-column" data-mdo-column="' . $esc((string)$columnKey) . '"><header><h2>' . $esc($column['name']) . '</h2><span>' . count($column['items']) . '</span></header>';
+    echo '<section class="mdo-tasks-column" data-mdo-column="' . $esc((string)$columnKey) . '" data-accept-source="' . $esc($column['accept']) . '" data-drop-enabled="' . ($column['drop'] ? '1' : '0') . '"><header><h2>' . $esc($column['name']) . '</h2><span>' . count($column['items']) . '</span></header>';
     echo '<div class="mdo-tasks-column-body">';
     if ($column['items'] === []) {
         echo '<p class="mdo-tasks-hint">' . $esc($tr('Nessuna attività', 'No tasks')) . '</p>';
@@ -446,10 +464,9 @@ foreach ($columns as $columnKey => $column) {
     foreach ($column['items'] as $task) {
         $item = TaskStageService::item($task['source'], (int) $task['id']);
         $canMove = $item !== null && $item->can((int) $task['id'], UPDATE)
-            && ($task['source'] !== 'project' || ($unified
-                ? TaskStageService::canMoveMixedProject($item->fields)
-                : ($group === 'state' || empty($item->fields['auto_percent_done']))));
-        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '" data-stage="' . $esc($columnKey) . '" data-group="' . $esc($group) . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">' 
+            && ($task['source'] !== 'project' || !$unified || !$mixedNativeProject
+                || $projectChoices !== []);
+        echo '<article class="mdo-tasks-card" data-task-type="' . $esc($task['source']) . '" data-source="' . $esc($task['source']) . '" data-id="' . (int)$task['id'] . '" data-version="' . $esc((string)($item->fields['date_mod'] ?? '')) . '" data-can-move="' . ($canMove ? '1' : '0') . '" data-complete="' . ($task['percent_done'] >= 100 ? '1' : '0') . '" data-stage="' . $esc($columnKey) . '" data-group="' . $esc($group) . '"' . ($canMove ? ' draggable="true"' : '') . '><small>' . $esc($task['source'] === 'standalone' ? StandaloneTask::getTypeName() : $tr('Task di progetto', 'Project task')) . ' #' . (int)$task['id'] . '</small><a class="mdo-tasks-card-title" href="' . $esc(($task['source'] === 'standalone' ? StandaloneTask::getFormURL() : ProjectTask::getFormURL()) . '?id=' . (int)$task['id']) . '">' 
             . $esc($task['name'] ?: '—') . '</a>';
         if ($task['project_readable']) {
             echo '<a class="mdo-tasks-project" href="' . $esc($projectForm($task['project_id'])) . '">'
@@ -477,8 +494,13 @@ foreach ($columns as $columnKey => $column) {
         }
         if ($canMove) {
             echo '<label class="mdo-stage-control">' . $esc($tr('Sposta in', 'Move to')) . ' <select data-stage-choice aria-label="' . $esc($tr('Sposta attività', 'Move task')) . '">';
-            foreach (($group === 'state' && !$unified && !$standalone ? array_combine(array_keys($columns), array_column($columns, 'name')) : TaskStageService::labels()) as $stageKey => $stageName) {
-                echo '<option value="' . $stageKey . '"' . (($group === 'state' && !$unified && !$standalone ? 'state-' . $task['state_id'] : $task['stage']) === $stageKey ? ' selected' : '') . '>' . $esc($stageName) . '</option>';
+            $nativeChoices = $task['source'] === 'project' && (!$unified || $mixedNativeProject);
+            $choices = $nativeChoices ? $projectChoices : TaskStageService::labels();
+            if (!isset($choices[$columnKey])) {
+                echo '<option value="' . $esc((string)$columnKey) . '" selected disabled>' . $esc($column['name']) . '</option>';
+            }
+            foreach ($choices as $stageKey => $stageName) {
+                echo '<option value="' . $esc((string)$stageKey) . '"' . ($columnKey === $stageKey ? ' selected' : '') . '>' . $esc($stageName) . '</option>';
             }
             echo '</select></label>';
         }

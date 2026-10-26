@@ -64,3 +64,10 @@ MDO-TASK-016/017/018 sono IN COLLAUDO OPERATIVO dopo [Actions #40306267311](http
 ## 0.8.1-dev.10 — 26/10/2026
 
 Rilasciata su Dev con [Actions #40321113463](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40321113463) PASS, sorgente `9ddd6396523eea8a4d6edf1c3ac90c2023769a1c`, ZIP immutabile e checksum SHA512 pubblicati. MDO-TASK-019 / MDO-UI-004 / MDO-UI-005 IN COLLAUDO OPERATIVO (non CHIUSA): l'installazione GLPI reale e i permessi devono ancora confermare gli interventi. Nessun deploy su Main. Documentazione-only non avvia CI.
+
+## Feedback live dev.10 — 26/10/2026; dev.11 candidate
+| ID | Tipo | Titolo e fonte | Priorità / target | Stato operativo | Evidenza / prossima azione |
+|---|---|---|---|---|---|
+| MDO-TASK-020 | Bug | [Project conserva group=progress](../releases/0.8.1-dev.11.md) | P0 / dev.11 | IN SVILUPPO | Correzione status GLPI nativi e passaggio All→Project, test live ancora da eseguire |
+| MDO-TASK-021 | Bug | [All drag Project con mapping parziale](../releases/0.8.1-dev.11.md) | P0 / dev.11 | IN SVILUPPO | Fallback native Project lanes più Independent stages, ACL e drag tipo-sicuro; collaudo live aperto |
+| MDO-TECH-001 | DB | [GLPI warning 2 deprecated datetime columns](../releases/0.8.1-dev.11.md) | P0 / dev.11 | IN SVILUPPO | Due date_creation DATETIME nelle tabelle note/file MDO, nuove installazioni TIMESTAMP; migrazione GLPI amministrativa pre-backup NON ESEGUITA |

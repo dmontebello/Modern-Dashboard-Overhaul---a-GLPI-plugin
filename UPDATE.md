@@ -107,3 +107,7 @@ Nessuna migrazione prevista. Fare backup coordinato DB+plugin+config+volume GLPI
 ## 0.8.1-dev.10 — correzioni visuali Kanban
 
 Solo PHP/JS/CSS, senza nuove migrazioni DB. Backup coordinato DB+plugin+config+GLPI_DOC_DIR prima dell'installazione. Project e All devono mostrare gli stati previsti; non interpretare percent_done come stato Project; testare drag nativo con ACL. Main invariato, NON COLLAUDATO LIVE.
+
+## 0.8.1-dev.11 — Project statuses e migrazione timestamp
+Il fix Kanban non richiede modifiche al database esistente. Le due colonne `date_creation` di MDO tasknotes/taskfiles sono state definite DATETIME nella dev.6–10; le nuove installazioni le definiscono TIMESTAMP. **Non sono convertite automaticamente dall'aggiornamento del plugin.**
+Su un clone staging verificare anzitutto quali siano davvero le due colonne segnalate da GLPI tramite `information_schema.COLUMNS`; backup e restore coordinati di database, plugin, config e `GLPI_DOC_DIR/mdoverhaul` prima di ogni conversione. Verificare valori data e timezone, piano e output del comando nativo GLPI `php bin/console migration:timestamps` nella versione installata. Solo un amministratore autorizzato esegue la migrazione dalla root di GLPI in finestra di manutenzione; verificare tipi finali, note/file e log. Non fare modifiche SQL improvvisate o migrare automaticamente al caricamento della pagina. **NON ESEGUITO LIVE**.

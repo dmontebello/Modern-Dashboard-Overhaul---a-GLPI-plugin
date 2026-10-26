@@ -183,3 +183,6 @@ Segnalazione LIVE dev.8: Project mostra soltanto Processing; All DnD non funzion
 ## QA 0.8.1-dev.10 — feedback GLPI
 
 Utente con dev.9: Project Kanban mostra percentuali e non stati; solo Independent trascinabili; vuole card stile Notion (~260×78) e All→Kanban default. Root cause nel default group=progress e nella guardia auto_percent_done; implementata mappatura ProjectState core configurata, senza modifiche alla percentuale automatica, e default group=state Project. Test su GLPI reale NON ESEGUITO. Verificare contatori, mapping, tre trascinamenti ripetuti, form e accessibilità.
+
+## 0.8.1-dev.11 — Regression QA (26/10/2026)
+User screenshot of dev.10 shows Project percent grouping and inability to drag Project in All. Source-level fix prepared, GLPI LIVE NOT TESTED. Required checks: Project native status after old group=progress URL; All with three mappings and with partial/missing mappings; Project + Independent DnD, CSRF rotation, ACL, date_mod and instant counters; real field types for two datetime warning columns and full backup/restore prior to GLPI timestamps migration. Fixture/CI results must be verified against exact SHA; do not equate them to live acceptance.

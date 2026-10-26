@@ -152,3 +152,8 @@ Dettagli: [release 0.8.1-dev.1](docs/releases/0.8.1-dev.1.md).
 
 ## 0.3.0 — Pilot interno
 - Primo restyling dashboard GLPI 11, compattazione filtri vuoti e CSS modulare.
+
+## 0.8.1-dev.11 — Kanban project states and timestamp compatibility (26/10/2026)
+- Fixed Project grouping persistence of percentages instead of native GLPI ProjectState columns.
+- All mixed board: separate native Project columns on missing mapping, source-safe DnD and no fake percent_done change; retains 3 shared columns when mapping is complete.
+- New journal/attachment date_creation columns TIMESTAMP; preexisting DATETIME must be migrated by GLPI admin after backup, not by plugin on page loads. **NON COLLAUDATO LIVE**.

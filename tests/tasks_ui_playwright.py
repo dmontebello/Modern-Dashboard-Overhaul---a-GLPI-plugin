@@ -101,9 +101,9 @@ def run():
                     page.close()
 
         page = browser.new_page(viewport={"width": 1024, "height": 1000})
-        page.set_content(markup(query={"view": "board", "group": "progress"}))
-        check(page.locator(".mdo-tasks-column > header h2").all_text_contents() == ["0%", "1–99%", "100%"], "progress grouping uses percentages")
-        check(page.get_by_text("Raggruppamento per avanzamento:", exact=False).count() == 1, "progress is explicitly separate from manual Stage")
+        page.set_content(markup(query={"view": "board", "source":"project", "group": "progress"}))
+        check(page.locator(".mdo-tasks-column > header h2").count() == 4, "legacy progress URL always keeps native Project statuses")
+        check(page.locator('[data-mdo-column="state-4"]').count() == 1, "Project empty state preserved")
         page.set_content(markup(error=True))
         check(page.locator('[role="alert"]').count() == 1 and page.locator(".mdo-tasks-card").count() == 0, "safe error state")
 

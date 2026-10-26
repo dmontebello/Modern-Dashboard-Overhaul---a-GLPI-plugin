@@ -35,3 +35,6 @@ Eseguire sintassi PHP/JS/Bash, test PHP con doubles, Playwright viewport/temi, p
 - Consegna: ID, commit URL e branch, versione, build/sha512, CI + stato di tutti i job, file, risultati PASS/FAIL/NON ESEGUITI (mock vs live), documenti realmente pubblicati, blocker e prossimo passo.
 
 Se accesso scrittura assente: dichiararlo e fornire patch; non affermare che GitHub è stato aggiornato.
+
+## Regola di manutenzione 26 ottobre 2026
+Ogni modifica Dev aggiorna nello stesso incarico backlog, current focus, implementation state, release note e QA con ID e prove. Una modifica PHP/JS/test/schema usa una nuova dev.N immutabile; la sola documentazione Markdown non avvia CI. Nessuna migrazione database (`migration:timestamps` inclusa) è automatica o autorizzata dal codice frontend.

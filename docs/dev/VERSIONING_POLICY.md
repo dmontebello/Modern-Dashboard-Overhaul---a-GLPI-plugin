@@ -97,3 +97,6 @@ Nuovo numero prerelease per PHP/JS e test, senza riutilizzare ZIP dev.8. Checkli
 ## 0.8.1-dev.10
 
 Prerelease distinta per modifiche PHP/JS/CSS. Nuovo ZIP immutabile solo dopo CI verde, Main invariato, commit solo Markdown senza CI.
+
+## 0.8.1-dev.11
+New prerelease for PHP/JS/schema and test changes, preserving immutable dev.10 ZIP. Publisher generates versioned ZIP, SHA512 and build-info.json only on successful exact-source CI on Dev; Markdown-only commits still skip CI. Main unchanged. GLPI timestamp migration is not an automatic plugin update.

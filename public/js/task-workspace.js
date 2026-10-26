@@ -22,11 +22,19 @@
       dragged = null;
       if (dragPreview) { dragPreview.remove(); dragPreview = null; }
     };
+    // All may have native Project statuses alongside Independent stages.
+    const accepts = (card, column) => !!card && !!column &&
+      column.dataset.dropEnabled !== '0' &&
+      (!column.dataset.acceptSource || column.dataset.acceptSource === 'all' ||
+        column.dataset.acceptSource === card.dataset.source);
     async function move(card, target) {
       if (!card || busy || card.dataset.canMove !== '1') return;
       const oldColumn = card.closest('[data-mdo-column]');
-      const destination = board.querySelector('[data-mdo-column="' + target + '"] .mdo-tasks-column-body');
-      if (!oldColumn || !destination || oldColumn.dataset.mdoColumn === target) return;
+      const column = Array.from(board.querySelectorAll('[data-mdo-column]'))
+        .find(el => el.dataset.mdoColumn === target);
+      const destination = column?.querySelector('.mdo-tasks-column-body');
+      if (!oldColumn || !destination || !accepts(card, column) ||
+          oldColumn.dataset.mdoColumn === target) return;
       busy = true;
       const form = new URLSearchParams({
         source: card.dataset.source, id: card.dataset.id, stage: target,
@@ -46,6 +54,8 @@
         destination.append(card);
         card.dataset.version = data.version || '';
         card.dataset.stage = target;
+        if (card.dataset.source === 'standalone') card.dataset.complete = target === 'done' ? '1' : '0';
+        else if (typeof data.percent_done === 'number') card.dataset.complete = data.percent_done >= 100 ? '1' : '0';
         if (typeof data.state_label === 'string') {
           const state = card.querySelector('.mdo-tasks-state');
           if (state) state.textContent = data.state_label;
@@ -86,9 +96,9 @@
         root.querySelectorAll('.mdo-tasks-stat').forEach(stat => {
           const key = new URL(stat.href).searchParams.get('filter');
           const allCards = board.querySelectorAll('.mdo-tasks-card');
+          const completed = Array.from(allCards).filter(card => card.dataset.complete === '1').length;
           const value = key === 'all' ? allCards.length : key === 'open' ?
-            board.querySelectorAll('[data-mdo-column="todo"] .mdo-tasks-card, [data-mdo-column="doing"] .mdo-tasks-card').length :
-            key === 'done' ? board.querySelectorAll('[data-mdo-column="done"] .mdo-tasks-card').length : null;
+            allCards.length - completed : key === 'done' ? completed : null;
           if (value !== null) { const label = stat.querySelector('strong'); if (label) label.textContent = String(value); }
         });
         const select = card.querySelector('[data-stage-choice]');
@@ -122,7 +132,7 @@
     });
     board.addEventListener('dragover', event => {
       const column = event.target.closest('[data-mdo-column]');
-      if (!dragged || !column || busy) return;
+      if (!dragged || !accepts(dragged, column) || busy) return;
       event.preventDefault();
       if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
       board.querySelectorAll('.mdo-drop-target').forEach(el => el.classList.remove('mdo-drop-target'));
@@ -134,7 +144,7 @@
     });
     board.addEventListener('drop', event => {
       const column = event.target.closest('[data-mdo-column]');
-      if (column && dragged) {
+      if (accepts(dragged, column)) {
         event.preventDefault();
         void move(dragged, column.dataset.mdoColumn);
       }

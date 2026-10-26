@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
 php=os.environ.get('MDO_PHP') or shutil.which('php')
 body=subprocess.check_output([php,str(ROOT/'tests/render_tasks.php'),json.dumps({
-  'count':3,'query':{'view':'board','source':'project','group':'progress'}})],text=True)
+  'count':3,'independent_count':1,'query':{'view':'board','source':'all','group':'progress'}})],text=True)
 script=(ROOT/'public/js/task-workspace.js').read_text()
 css=(ROOT/'public/css/task-workspace.css').read_text()
 with sync_playwright() as playwright:
@@ -32,7 +32,7 @@ with sync_playwright() as playwright:
             !!document.querySelector('[data-mdo-column="' + info.stage + '"] .mdo-tasks-card[data-can-move="1"]')""",
             arg={'stage':stage,'i':i},timeout=8000)
         assert page.locator('[data-mdo-board]').get_attribute('data-token')=='rotated-'+str(i)
-        expected={'todo':int(stage=='todo'), 'doing':2+int(stage=='doing'), 'done':int(stage=='done')}
+        expected={'todo':1+int(stage=='todo'), 'doing':2+int(stage=='doing'), 'done':int(stage=='done')}
         counts={key:int(page.locator(f'[data-mdo-column="{key}"] > header > span').inner_text()) for key in expected}
         assert counts == expected, f'live counters after {stage}: {counts} vs {expected}'
     calls=page.evaluate('window.__calls')
@@ -107,5 +107,31 @@ with sync_playwright() as playwright:
     page.wait_for_function('window.__calls.length===1')
     assert page.locator('[data-mdo-column="state-4"] > header > span').inner_text()=='1', 'native state count updates'
     assert page.locator(f'[data-mdo-column="{old}"] > header > span').inner_text()=='0', 'source native count updates'
+    # Without complete GLPI core mapping All must expose native Project states;
+    # the Independent stage lanes must reject cross-type drops.
+    unmapped=subprocess.check_output([php,str(ROOT/'tests/render_tasks.php'),json.dumps({
+      'count':2,'independent_count':1,'core_mappings':False,
+      'query':{'view':'board','source':'all'}})],text=True)
+    page.set_content('<html><head><style>'+css+'</style></head><body>'+unmapped+'</body></html>')
+    page.evaluate("""() => {window.__calls=[];window.fetch=async (_url,opts)=>{
+       const q=new URLSearchParams(opts.body);window.__calls.push(Object.fromEntries(q));
+       return {ok:true,json:async()=>({ok:true,stage:q.get('stage'),version:'next',token:'next-token',percent_done:50})};
+    }}""")
+    page.add_script_tag(content=script)
+    assert page.locator('[data-mdo-column="state-4"][data-accept-source="project"]').count()==1
+    assert page.locator('[data-mdo-column="doing"][data-accept-source="standalone"]').count()==1
+    project=page.locator('.mdo-tasks-card[data-source="project"]').first
+    assert project.get_attribute('draggable')=='true'
+    project.locator('[data-stage-choice]').select_option('state-4')
+    page.wait_for_function('window.__calls.length===1')
+    assert page.evaluate('window.__calls[0].stage')=='state-4'
+    independent=page.locator('.mdo-tasks-card[data-source="standalone"]').first
+    independent.evaluate("""card=>{const destination=document.querySelector('[data-mdo-column="state-3"]');
+       const transfer=new DataTransfer();
+       card.dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:transfer}));
+       destination.dispatchEvent(new DragEvent('drop',{bubbles:true,dataTransfer:transfer}));
+       card.dispatchEvent(new DragEvent('dragend',{bubbles:true,dataTransfer:transfer}));
+    }""")
+    assert page.evaluate('window.__calls.length')==1, 'cross-type native drop ignored'
     browser.close()
 print('Task UX repeated Kanban and drag ghost tests PASSED (Chromium fixture)')

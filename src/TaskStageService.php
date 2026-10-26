@@ -85,8 +85,9 @@ final class TaskStageService
      */
     public static function canMoveMixedProject(array $fields): bool
     {
-        return count(self::projectStageTargets()) === 3
-            || empty($fields['auto_percent_done']);
+        // Shared All stages are safe only when each has an existing native ID.
+        // Other installations use separate ProjectState columns instead.
+        return count(self::projectStageTargets()) === 3;
     }
 
     public static function item(string $source, int $id): ProjectTask|StandaloneTask|null
@@ -146,7 +147,8 @@ final class TaskStageService
             }
             return ['status'=>200,'ok'=>true,'stage'=>$stage,
                 'version'=>(string)($item->fields['date_mod'] ?? ''),
-                'percent_done'=>(int)($item->fields['percent_done'] ?? 0)];
+                'percent_done'=>(int)($item->fields['percent_done'] ?? 0),
+                'state_label'=>(string)(TaskBoard::projectStates()[$stateId] ?? '')];
         }
         // Mixed All view uses native states when a valid native target exists.
         // Never reject a project merely because its percent_done is automatic:
@@ -170,9 +172,11 @@ final class TaskStageService
                     'state_label'=>(string)(TaskBoard::projectStates()[$targetId] ?? ''),
                 ];
             }
-            if (!empty($item->fields['auto_percent_done'])) {
-                return ['status'=>409, 'ok'=>false, 'error'=>'stage_mapping_unavailable'];
-            }
+            // A missing native mapping must not silently rewrite progress.
+            return ['status'=>409, 'ok'=>false, 'error'=>'stage_mapping_unavailable'];
+        }
+        if ($source === 'project' && $mode === 'state') {
+            return ['status'=>400, 'ok'=>false, 'error'=>'invalid'];
         }
         if ($source === 'standalone') {
             $wanted = array_search($stage, [1 => 'todo', 2 => 'doing', 3 => 'done'], true);
