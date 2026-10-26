@@ -127,3 +127,6 @@ Test dev.7: nuovo form unico senza scelta, progetto vuoto/0/valido/negato/fuori 
 - Drag ghost segue mouse, drop target chiaro/scuro, mouse/touch/tastiera, focus; percent_done e status native non equivalenti.
 - Lista Tutte 0/3/1000 righe, badge e colonna Azioni: profili READ, UPDATE senza DELETE, DELETE; entità diverse, URL POST diretto, doppio invio, confirm=0/1.
 - Eliminazione nel cestino GLPI, senza purge; verificare cascade nativa dei subtasks, storico, allegati, backup/restore. **NON COLLAUDATO LIVE**.
+
+
+**0.8.1-dev.8** — conferma aggiornamento UX/ACL alla candidata sopra, non collaudata live.
