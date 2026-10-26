@@ -17,6 +17,8 @@ function verify(bool $valid, string $message): void
 set_error_handler(static function (int $severity, string $message): never { throw new ErrorException($message, 0, $severity); });
 taskFixture();
 $nativeStates = TaskBoard::projectStates();
+verify(str_contains(taskPage([]), 'aria-current="page"') && str_contains(taskPage([]), 'data-mdo-board'), 'default route opens Kanban');
+verify(str_contains(taskPage(['source'=>'project','view'=>'board']), 'data-mdo-column="state-4"'), 'Project defaults to native state columns');
 verify(count($nativeStates) === 4 && $nativeStates[4] === 'Deferred', 'native states include empty state catalogue');
 $htmlStates = taskPage(['view'=>'board','source'=>'project','group'=>'state']);
 verify(str_contains($htmlStates, 'data-mdo-column="state-4"') && str_contains($htmlStates, 'Deferred'), 'empty ProjectState column visible');
