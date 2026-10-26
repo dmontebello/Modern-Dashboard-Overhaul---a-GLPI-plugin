@@ -101,6 +101,37 @@ final class TaskBoard
         return $result;
     }
 
+    /**
+     * Full native ProjectState dropdown catalogue, including states without tasks.
+     * Project states are GLPI-wide dropdown values, not per-task activity counts.
+     * Missing/deleted values that are still used by accessible tasks are added
+     * separately by the board renderer, without exposing task metadata.
+     *
+     * @return array<int,string>
+     */
+    public static function projectStates(): array
+    {
+        global $DB;
+        if (!ProjectTask::canView()) {
+            return [];
+        }
+        $states = [];
+        foreach ($DB->request([
+            'SELECT' => ['glpi_projectstates.id', 'glpi_projectstates.name'],
+            'FROM' => 'glpi_projectstates',
+            'ORDER' => ['glpi_projectstates.name ASC'],
+            'LIMIT' => self::MAX_CANDIDATES,
+        ]) as $row) {
+            $id = (int) ($row['id'] ?? 0);
+            $name = trim((string) ($row['name'] ?? ''));
+            if ($id > 0 && $name !== '') {
+                $states[$id] = $name;
+            }
+        }
+        asort($states, SORT_NATURAL | SORT_FLAG_CASE);
+        return $states;
+    }
+
     /** Bounded choices for the native creation form; never create a project here. */
     public static function creationProjects(): array
     {
