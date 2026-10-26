@@ -198,3 +198,8 @@ Utente vede tre task nella lista combinata; osserva che il primo DnD funziona e 
 ## Stato 0.8.1-dev.8 — UX Kanban (candidato)
 
 Sviluppo feature branch, NON COLLAUDATO LIVE: bug live DnD reiterato, anteprima drag e riga elimina autorizzata. Checklist differita; CI e artefatto da verificare. Main invariato.
+
+
+## Feedback GLPI 26 ottobre 2026 — dev.9 Kanban (in sviluppo)
+
+Utente: Independent tutte le colonne OK; Project soltanto gli stati occupati; drag All KO; conteggi delle intestazioni non aggiornati immediatamente. Candidato 0.8.1-dev.9 su branch feature dedicato: catalogo ProjectState (inclusi vuoti), drag stato nativo autorizzato, mixed stage normalizzati, DOM count aggiornato; verificare con CI e collaudo reale. **Non risolto live**. Main e produzione invariati.
