@@ -25,14 +25,15 @@ $source = $_POST['source'] ?? '';
 $stage = $_POST['stage'] ?? '';
 $id = $_POST['id'] ?? null;
 $version = $_POST['version'] ?? '';
-if (!is_string($source) || !is_string($stage) || !is_string($version)
+$mode = $_POST['mode'] ?? 'progress';
+if (!is_string($source) || !is_string($stage) || !is_string($version) || !is_string($mode)
     || !is_scalar($id) || filter_var($id, FILTER_VALIDATE_INT) === false) {
     http_response_code(400);
     echo json_encode(['ok'=>false,'error'=>'invalid']);
     return;
 }
 try {
-    $result = TaskStageService::move($source, (int) $id, $stage, $version);
+    $result = TaskStageService::move($source, (int) $id, $stage, $version, $mode);
 } catch (Throwable $error) {
     Toolbox::logInFile('php-errors', '[mdoverhaul stage] ' . get_class($error) . "\n");
     $result = ['status'=>500,'ok'=>false,'error'=>'server_error'];
