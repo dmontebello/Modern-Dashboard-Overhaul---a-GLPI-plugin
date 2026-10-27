@@ -193,3 +193,6 @@ Run 40362469715: FAIL nei test Chromium dopo il PASS delle suite PHP. La fixture
 
 ## CI dev.11 — 27/10/2026 packaging gate
 Run GitHub Actions #40492822635 on source 63b28cc: PHP tests PASS, Chromium tests PASS; build/package FAIL because ten mandatory manuals lacked 0.8.1-dev.11. New candidate aligns the manuals and makes the early documentation gate use the same version-document list as the final ZIP checker. Until a new Actions run completes, ZIP dev.11 is NOT published and GLPI live remains NOT TESTED. No deployment, DB migration or Main change.
+
+## CI 27/10/2026 — regression packaging test fix
+Run #40507437883 failed in the newly added regression: the fixture used historical `0.8.1-dev.10`, which includes the substring `0.8.1-dev.1`, so the presence-check correctly did not report it missing. Test fixture now uses `0.8.0`, which does not contain the candidate version. No production code or GLPI database change. Full CI and ZIP publication still require new PASS.

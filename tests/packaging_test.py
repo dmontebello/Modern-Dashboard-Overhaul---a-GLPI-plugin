@@ -89,7 +89,7 @@ class PackagingTests(unittest.TestCase):
         self.assertIn('docs/ARCHITETTURA.md', VERSION_DOCS)
         (self.root / 'docs').mkdir()
         manual = self.root / 'docs' / 'ARCHITETTURA.md'
-        manual.write_text('historical 0.8.1-dev.10 manual')
+        manual.write_text('historical 0.8.0 manual')
         errors = documentation_errors(self.root)
         self.assertIn('Current version 0.8.1-dev.1 missing from docs/ARCHITETTURA.md', errors)
         manual.write_text('current 0.8.1-dev.1 architecture')
