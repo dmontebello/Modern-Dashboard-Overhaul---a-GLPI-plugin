@@ -70,3 +70,6 @@ Source tested `9ddd6396523eea8a4d6edf1c3ac90c2023769a1c`; Actions [#40321113463]
 
 ## Feedback 26 ottobre — dev.11 IN SVILUPPO
 Dev.10 sul server: vista Project porta group=progress e mostra 0/1–99/100; All blocca drag Project senza mapping completo. Fix candidato dev.11: Project sempre stati GLPI nativi, All tre fasi condivise solo con mapping valido completo, altrimenti colonne native Project accanto alle fasi Independent e drag source-safe senza modificare percent_done. Due date_creation DATETIME note/file nel plugin possono corrispondere al warning GLPI: nuove definizioni TIMESTAMP; server esistente necessita backup e migration:timestamps GLPI amministrativa dopo verifica della struttura effettiva. **NON COLLAUDATO LIVE; CI da verificare e nessuna migrazione server effettuata.** Main invariata. Backlog: MDO-TASK-020/021, MDO-TECH-001.
+
+## Packaging gate 27/10/2026 — dev.11
+Previous Actions #40492822635 failed only at ZIP validation: ten manuals missing current version, despite PHP and Chromium fixture success. Updated manuals and synchronized early check_dev_docs version list with final check_release; added regression test. Waiting for exact SHA CI to confirm bundle and publisher. Main unchanged; timestamp migration NOT executed; operational Kanban QA still open.

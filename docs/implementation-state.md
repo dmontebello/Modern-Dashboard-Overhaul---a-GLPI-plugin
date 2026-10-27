@@ -64,3 +64,6 @@ Source tested `9ddd6396523eea8a4d6edf1c3ac90c2023769a1c`; Actions [#40321113463]
 
 ## Dev.11 — checkpoint tecnico 26/10/2026
 Source analysis: front/tasks.php propagated group=progress into Project; TaskStageService rejected mixed Project drag when auto_percent_done and native mapping incomplete. Candidate implementation resets Project to native ProjectStates and provides type-safe native Project lanes in All when mapping incomplete; schema for *new* tasknotes/taskfiles now uses TIMESTAMP date_creation. This does not migrate existing GLPI databases; no ALTER, no migration, no deploy. CI on exact SHA and GLPI live acceptance **NOT EXECUTED / NOT VERIFIED** at authoring; source commit, CI and zip provenance must be appended only after success. Main remains 0.8.0.
+
+## Evidence dev.11 packaging regression — 27 October 2026
+Actions #40492822635 (source SHA 63b28cc1191492595e5d9ad5a78cffae8e37a1bc): PHP + browser fixtures passed, ZIP packaging failed: ten manuals missing version 0.8.1-dev.11. Fix: synchronized manual versions and moved check to early doc validation, packaging regression fixture added. Next commit and CI must be verified independently before claiming published package. GLPI LIVE and DB timestamps migration NOT EXECUTED; Main unchanged.

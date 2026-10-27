@@ -11,7 +11,7 @@ import stat
 import sys
 import zipfile
 from pathlib import Path
-from versioning import SEMVER, documentation_errors
+from versioning import SEMVER, VERSION_DOCS, documentation_errors
 
 REQUIRED = [
     'README.md', 'CHANGELOG.md', 'UPDATE.md', 'QA.md', 'LICENSE',
@@ -20,11 +20,7 @@ REQUIRED = [
     'docs/SECURITY.md', 'docs/INTEGRATION.md', 'docs/RELEASE_NOTES_IT.md',
     'tools/README.md', 'tools/maintainer/check_release.py', 'tools/maintainer/package_mdo.py',
 ]
-VERSIONS = ['README.md', 'CHANGELOG.md', 'UPDATE.md', 'QA.md',
-            'docs/ARCHITETTURA.md', 'docs/INSTALLAZIONE.md', 'docs/CONFIGURAZIONE.md',
-            'docs/MAPPA_CARTELLE.md', 'docs/TEST_MATRIX.md', 'docs/RELEASE_PROCESS.md',
-            'docs/SECURITY.md', 'docs/INTEGRATION.md', 'docs/RELEASE_NOTES_IT.md',
-            'tools/README.md']
+VERSIONS = VERSION_DOCS
 REQUIRED_MARKDOWN = [p for p in REQUIRED if p.endswith('.md')]
 FORBIDDEN_PATHS = { 'config/ui.local.php' }
 PRIVATE_STRINGS = [r'ADCON2019', r'\bhfe\.local\b', r'\baren-ep\.com\b', r'\b192\.168\.8\.',

@@ -190,3 +190,6 @@ User screenshot of dev.10 shows Project percent grouping and inability to drag P
 
 ## 27/10/2026 — CI dev.11, test Chromium corretto
 Run 40362469715: FAIL nei test Chromium dopo il PASS delle suite PHP. La fixture genera anche ProjectTask con projectstates_id=0, aggiungendo una colonna senza stato alle quattro configurate. Test aggiornato per verificare cinque colonne e non quattro. La nuova CI e il collaudo GLPI reale sono da verificare; nessuna ZIP dev.11 pubblicata al momento del fix.
+
+## CI dev.11 — 27/10/2026 packaging gate
+Run GitHub Actions #40492822635 on source 63b28cc: PHP tests PASS, Chromium tests PASS; build/package FAIL because ten mandatory manuals lacked 0.8.1-dev.11. New candidate aligns the manuals and makes the early documentation gate use the same version-document list as the final ZIP checker. Until a new Actions run completes, ZIP dev.11 is NOT published and GLPI live remains NOT TESTED. No deployment, DB migration or Main change.

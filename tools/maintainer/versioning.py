@@ -9,6 +9,17 @@ import subprocess
 SEMVER = r"\d+\.\d+\.\d+(?:-dev\.[1-9]\d*)?"
 GENERATED = {"SHA512SUMS", "build-info.json"}
 
+# Single list used by the early documentation gate and the final ZIP verifier.
+# Never silently weaken either check: a new candidate must be present in
+# every required release manual before expensive browser tests start.
+VERSION_DOCS = (
+    'README.md', 'CHANGELOG.md', 'UPDATE.md', 'QA.md',
+    'docs/ARCHITETTURA.md', 'docs/INSTALLAZIONE.md', 'docs/CONFIGURAZIONE.md',
+    'docs/MAPPA_CARTELLE.md', 'docs/TEST_MATRIX.md', 'docs/RELEASE_PROCESS.md',
+    'docs/SECURITY.md', 'docs/INTEGRATION.md', 'docs/RELEASE_NOTES_IT.md',
+    'tools/README.md',
+)
+
 
 def version(root):
     match = re.search(r"define\('PLUGIN_MDOVERHAUL_VERSION', '(" + SEMVER + r")'\)", (Path(root) / 'setup.php').read_text())
@@ -51,7 +62,7 @@ def documentation_errors(root):
         declared = re.search(r'\*\*Versione:\*\* `([^`]+)`', readme.read_text())
         if not declared or declared[1] != ver:
             errors.append('README current version does not match setup.php')
-    for name in ['CHANGELOG.md', 'README.md', 'QA.md', 'docs/dev/STATUS.md', 'docs/dev/VERSIONING_POLICY.md', f'docs/releases/{ver}.md']:
+    for name in dict.fromkeys([*VERSION_DOCS, 'docs/dev/STATUS.md', 'docs/dev/VERSIONING_POLICY.md', f'docs/releases/{ver}.md']):
         path = root / name
         if not path.is_file() or ver not in path.read_text():
             errors.append(f'Current version {ver} missing from {name}')

@@ -11,7 +11,7 @@ from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools/maintainer'))
 from publish_dev import verify, documentation_only_since
-from versioning import documentation_errors, version, included
+from versioning import documentation_errors, version, included, VERSION_DOCS
 
 
 class PackagingTests(unittest.TestCase):
@@ -83,6 +83,18 @@ class PackagingTests(unittest.TestCase):
 
     def test_missing_notes(self):
         self.assertTrue(documentation_errors(self.root))
+
+    def test_early_gate_matches_packager_required_version_docs(self):
+        # A manual omitted from a new prerelease must fail before Playwright.
+        self.assertIn('docs/ARCHITETTURA.md', VERSION_DOCS)
+        (self.root / 'docs').mkdir()
+        manual = self.root / 'docs' / 'ARCHITETTURA.md'
+        manual.write_text('historical 0.8.1-dev.10 manual')
+        errors = documentation_errors(self.root)
+        self.assertIn('Current version 0.8.1-dev.1 missing from docs/ARCHITETTURA.md', errors)
+        manual.write_text('current 0.8.1-dev.1 architecture')
+        self.assertNotIn('Current version 0.8.1-dev.1 missing from docs/ARCHITETTURA.md',
+                         documentation_errors(self.root))
 
     def test_generated_and_legacy_archives_not_nested(self):
         self.assertFalse(included(Path('MDO_Dev_Latest.zip')))
