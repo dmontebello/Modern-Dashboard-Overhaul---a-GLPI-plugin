@@ -186,3 +186,7 @@ Utente con dev.9: Project Kanban mostra percentuali e non stati; solo Independen
 
 ## 0.8.1-dev.11 — Regression QA (26/10/2026)
 User screenshot of dev.10 shows Project percent grouping and inability to drag Project in All. Source-level fix prepared, GLPI LIVE NOT TESTED. Required checks: Project native status after old group=progress URL; All with three mappings and with partial/missing mappings; Project + Independent DnD, CSRF rotation, ACL, date_mod and instant counters; real field types for two datetime warning columns and full backup/restore prior to GLPI timestamps migration. Fixture/CI results must be verified against exact SHA; do not equate them to live acceptance.
+
+
+## 27/10/2026 — CI dev.11, test Chromium corretto
+Run 40362469715: FAIL nei test Chromium dopo il PASS delle suite PHP. La fixture genera anche ProjectTask con projectstates_id=0, aggiungendo una colonna senza stato alle quattro configurate. Test aggiornato per verificare cinque colonne e non quattro. La nuova CI e il collaudo GLPI reale sono da verificare; nessuna ZIP dev.11 pubblicata al momento del fix.

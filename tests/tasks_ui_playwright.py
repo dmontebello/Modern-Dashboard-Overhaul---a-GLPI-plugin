@@ -102,7 +102,7 @@ def run():
 
         page = browser.new_page(viewport={"width": 1024, "height": 1000})
         page.set_content(markup(query={"view": "board", "source":"project", "group": "progress"}))
-        check(page.locator(".mdo-tasks-column > header h2").count() == 4, "legacy progress URL always keeps native Project statuses")
+        check(page.locator('[data-mdo-column^="state-"]').count() == 5, "legacy progress URL includes four configured statuses and the no-status lane")
         check(page.locator('[data-mdo-column="state-4"]').count() == 1, "Project empty state preserved")
         page.set_content(markup(error=True))
         check(page.locator('[role="alert"]').count() == 1 and page.locator(".mdo-tasks-card").count() == 0, "safe error state")
