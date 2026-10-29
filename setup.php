@@ -4,7 +4,7 @@ use Glpi\Plugin\Hooks;
 use GlpiPlugin\Mdoverhaul\Dashboard;
 use GlpiPlugin\Mdoverhaul\Settings;
 
-define('PLUGIN_MDOVERHAUL_VERSION', '0.8.1-dev.11');
+define('PLUGIN_MDOVERHAUL_VERSION', '0.8.1-dev.12');
 require_once __DIR__ . '/src/BuildInfo.php';
 require_once __DIR__ . '/src/Settings.php';
 require_once __DIR__ . '/src/FeedFormatter.php';
@@ -12,8 +12,6 @@ require_once __DIR__ . '/src/Dashboard.php';
 require_once __DIR__ . '/src/TaskMenu.php';
 require_once __DIR__ . '/src/TaskBoard.php';
 require_once __DIR__ . '/src/TaskSchema.php';
-require_once __DIR__ . '/src/StandaloneTask.php';
-require_once __DIR__ . '/src/TaskProfile.php';
 require_once __DIR__ . '/src/TaskStageService.php';
 require_once __DIR__ . '/src/TaskActivity.php';
 require_once __DIR__ . '/src/TaskAttachment.php';
@@ -24,9 +22,6 @@ function plugin_init_mdoverhaul(): void
     global $PLUGIN_HOOKS;
 
     $PLUGIN_HOOKS['csrf_compliant']['mdoverhaul'] = true;
-    if (class_exists(\Profile::class)) {
-        Plugin::registerClass(\GlpiPlugin\Mdoverhaul\TaskProfile::class, ['addtabon' => \Profile::class]);
-    }
     if (class_exists(\ProjectTask::class) && method_exists(Plugin::class, 'registerClass')) {
         Plugin::registerClass(\GlpiPlugin\Mdoverhaul\TaskActivityTab::class, ['addtabon' => \ProjectTask::class]);
     }

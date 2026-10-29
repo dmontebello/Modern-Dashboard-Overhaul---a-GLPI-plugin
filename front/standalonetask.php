@@ -1,5 +1,5 @@
 <?php
 declare(strict_types=1);
-// Native Search URL for this itemtype, preserving the MDO workspace.
-$_GET['source'] = 'standalone';
-require __DIR__ . '/tasks.php';
+// Retired in 0.8.1-dev.12: intentionally no standalone CRUD or data mutation.
+Session::checkCentralAccess();
+Html::displayNotFoundError();

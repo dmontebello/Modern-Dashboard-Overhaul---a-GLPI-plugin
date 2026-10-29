@@ -7,10 +7,15 @@ use ProjectTask;
 
 final class TaskActivityTab extends CommonGLPI
 {
+    private static function text(string $it, string $en): string
+    {
+        return str_starts_with(strtolower((string) \Session::getLanguage()), 'it') ? $it : $en;
+    }
+
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): string
     {
         return $item instanceof ProjectTask && TaskActivity::canRead('project', (int)$item->getID())
-            ? StandaloneTask::text('Diario MDO', 'MDO activity') : '';
+            ? self::text('Diario MDO', 'MDO activity') : '';
     }
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0): bool

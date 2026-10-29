@@ -10,3 +10,6 @@
 | MDO-OD-006 | Criteri 1.0.0 stabili | APERTA; compatibilità, livelli performance, collaudo GLPI reale e rollback |
 
 Queste NON sono già funzionalità in roadmap implementate o decisioni autorizzate implicitamente. Per sbloccare registrare [decisione](decisions.md) e aggiornare [backlog](backlog.md) e [current-focus](../project/current-focus.md). La sequenza dev.7/8/9/0.8.2 è già decisa; i dettagli non equivalenti a GLPI restano da definire.
+
+## 29 ottobre 2026
+La decisione MDO-D-009 supera l'uso di Stage/Status per le task indipendenti. Un eventuale recupero/esportazione delle righe legacy source=standalone rimane una decisione separata da approvare: non è autorizzata alcuna conversione automatica o cancellazione.

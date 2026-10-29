@@ -8,8 +8,7 @@ use ProjectTask;
 use Session;
 
 /**
- * A Kanban stage is a UI-level abstraction: standalone.status or the native
- * ProjectTask percent_done. Never overwrite projectstates_id with a fake state.
+ * Project-only native state transitions; never synthesize statuses from percent_done.
  */
 final class TaskStageService
 {
@@ -90,19 +89,11 @@ final class TaskStageService
         return count(self::projectStageTargets()) === 3;
     }
 
-    public static function item(string $source, int $id): ProjectTask|StandaloneTask|null
+    public static function item(string $source,int $id): ?ProjectTask
     {
-        if ($id < 1 || !in_array($source, ['project', 'standalone'], true)) {
-            return null;
-        }
-        $item = $source === 'project' ? new ProjectTask() : new StandaloneTask();
-        if (($source === 'project' && !ProjectTask::canView())
-            || ($source === 'standalone' && !StandaloneTask::canView())
-            || !$item->getFromDB($id)
-            || !$item->can($id, READ)) {
-            return null;
-        }
-        return $item;
+        if ($source !== 'project' || $id < 1 || !ProjectTask::canView()) return null;
+        $item=new ProjectTask();
+        return $item->getFromDB($id) && $item->can($id,READ) ? $item : null;
     }
 
     /**
@@ -110,13 +101,10 @@ final class TaskStageService
      */
     public static function move(string $source, int $id, string $stage, string $expected, string $mode = 'progress'): array
     {
-        if ((int) Session::getLoginUserID() < 1 || $id < 1
-            || (!isset(self::labels()[$stage]) && !preg_match('/^state-[1-9][0-9]{0,9}$/D', $stage))
-            || !in_array($source, ['project', 'standalone'], true)
-            || ($source === 'standalone' && str_starts_with($stage, 'state-'))
-            || strlen($expected) > 64
-            || !in_array($mode, ['progress', 'all', 'state'], true)) {
-            return ['status' => 400, 'ok' => false, 'error' => 'invalid'];
+        if ((int)Session::getLoginUserID()<1 || $source!=='project' || $id<1
+            || !preg_match('/^state-[1-9][0-9]{0,9}$/D',$stage)
+            || strlen($expected)>64 || $mode!=='state') {
+            return ['status'=>400,'ok'=>false,'error'=>'invalid'];
         }
 
         $item = self::item($source, $id);
@@ -150,65 +138,6 @@ final class TaskStageService
                 'percent_done'=>(int)($item->fields['percent_done'] ?? 0),
                 'state_label'=>(string)(TaskBoard::projectStates()[$stateId] ?? '')];
         }
-        // Mixed All view uses native states when a valid native target exists.
-        // Never reject a project merely because its percent_done is automatic:
-        // a native state change is separate from its calculated progress.
-        if ($source === 'project' && $mode === 'all' && !str_starts_with($stage, 'state-')) {
-            $targetId = self::projectStageTargets()[$stage] ?? 0;
-            if ($targetId > 0) {
-                if ((int) ($item->fields['projectstates_id'] ?? 0) !== $targetId
-                    && !$item->update(['id' => $id, 'projectstates_id' => $targetId, 'auto_projectstates' => 0])) {
-                    return ['status'=>409, 'ok'=>false, 'error'=>'update_failed'];
-                }
-                $item->getFromDB($id);
-                $stateId = (int)($item->fields['projectstates_id'] ?? 0);
-                if ($stateId !== $targetId) {
-                    return ['status'=>409, 'ok'=>false, 'error'=>'native_state_mismatch'];
-                }
-                return [
-                    'status'=>200, 'ok'=>true, 'stage'=>$stage,
-                    'version'=>(string)($item->fields['date_mod'] ?? ''),
-                    'percent_done'=>(int)($item->fields['percent_done'] ?? 0),
-                    'state_label'=>(string)(TaskBoard::projectStates()[$targetId] ?? ''),
-                ];
-            }
-            // A missing native mapping must not silently rewrite progress.
-            return ['status'=>409, 'ok'=>false, 'error'=>'stage_mapping_unavailable'];
-        }
-        if ($source === 'project' && $mode === 'state') {
-            return ['status'=>400, 'ok'=>false, 'error'=>'invalid'];
-        }
-        if ($source === 'standalone') {
-            $wanted = array_search($stage, [1 => 'todo', 2 => 'doing', 3 => 'done'], true);
-            $current = (int) ($item->fields['status'] ?? 0);
-            $update = ['id' => $id, 'status' => $wanted];
-        } else {
-            // Native automatic progress cannot be manually overwritten.
-            if (!empty($item->fields['auto_percent_done'])) {
-                return ['status' => 409, 'ok' => false, 'error' => 'automatic_progress'];
-            }
-            $current = (int) ($item->fields['percent_done'] ?? 0);
-            $wanted = match ($stage) {
-                'todo' => 0,
-                'doing' => $current > 0 && $current < 100 ? $current : 50,
-                default => 100,
-            };
-            $update = ['id' => $id, 'percent_done' => $wanted];
-        }
-        if ($current !== (int) $wanted && !$item->update($update)) {
-            return ['status' => 409, 'ok' => false, 'error' => 'update_failed'];
-        }
-
-        // A client must refresh its model after a successful native update.
-        $item->getFromDB($id);
-        $stageNow = $source === 'standalone'
-            ? ([1 => 'todo', 2 => 'doing', 3 => 'done'][(int) ($item->fields['status'] ?? 0)] ?? '')
-            : self::stage(['percent_done' => (int) ($item->fields['percent_done'] ?? 0)]);
-        if ($stageNow !== $stage) {
-            return ['status' => 409, 'ok' => false, 'error' => 'native_state_mismatch'];
-        }
-        return ['status' => 200, 'ok' => true, 'stage' => $stageNow,
-            'version' => (string) ($item->fields['date_mod'] ?? ''),
-            'percent_done' => $source === 'project' ? (int)($item->fields['percent_done'] ?? 0) : null];
+        return ['status'=>400,'ok'=>false,'error'=>'invalid'];
     }
 }

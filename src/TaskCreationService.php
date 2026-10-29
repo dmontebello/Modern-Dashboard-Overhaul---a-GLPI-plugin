@@ -8,8 +8,7 @@ use Session;
 use Throwable;
 
 /**
- * One create operation, two GLPI itemtypes. Never insert into core tables directly.
- * ProjectTask's project is mandatory; StandaloneTask never receives projects_id.
+ * Only native GLPI ProjectTask creation. A project is mandatory.
  */
 final class TaskCreationService
 {
@@ -25,38 +24,13 @@ final class TaskCreationService
         }
 
         $projectId = $input['projects_id'];
-        if ($projectId > 0) {
-            // No read-right shortcut: GLPI's native parent/update/create checks
-            // decide whether this specific ProjectTask may be created.
-            if (!TaskBoard::canCreateInProject($projectId)) {
-                return self::error('forbidden');
-            }
-            $item = new ProjectTask();
-            $values = [
-                'projects_id' => $projectId,
-                'name' => $input['name'],
-                'content' => $input['content'],
-            ];
-            if ($input['due_date'] !== null) {
-                $values['plan_end_date'] = $input['due_date'];
-            }
-            $source = 'project';
-        } else {
-            if (!StandaloneTask::canCreate()) {
-                return self::error('forbidden');
-            }
-            $item = new StandaloneTask();
-            $values = [
-                'entities_id' => $input['entities_id'],
-                'name' => $input['name'],
-                'content' => $input['content'],
-                'status' => $input['status'],
-                'users_id_assign' => $input['users_id_assign'],
-                'groups_id_assign' => $input['groups_id_assign'],
-                'due_date' => $input['due_date'] ?? '',
-            ];
-            $source = 'standalone';
+        if ($projectId < 1 || !TaskBoard::canCreateInProject($projectId)) {
+            return self::error($projectId < 1 ? 'invalid' : 'forbidden');
         }
+        $item = new ProjectTask();
+        $values = ['projects_id'=>$projectId,'name'=>$input['name'],'content'=>$input['content']];
+        if ($input['due_date'] !== null) { $values['plan_end_date'] = $input['due_date']; }
+        $source = 'project';
 
         try {
             // An item-specific, native GLPI permission check before add().
@@ -95,15 +69,7 @@ final class TaskCreationService
             return null;
         }
         $projectId = self::unsignedId($raw['projects_id'] ?? '');
-        $entity = self::unsignedId($raw['entities_id'] ?? ($_SESSION['glpiactive_entity'] ?? 0));
-        $status = self::unsignedId($raw['status'] ?? 1);
-        $userId = self::unsignedId($raw['users_id_assign'] ?? 0);
-        $groupId = self::unsignedId($raw['groups_id_assign'] ?? 0);
-        if ($projectId === null || $entity === null || $status === null
-            || $userId === null || $groupId === null || !isset(StandaloneTask::statuses()[$status])) {
-            return null;
-        }
-
+        if ($projectId === null || $projectId < 1) { return null; }
         $date = null;
         if ($rawDue !== '') {
             if (strlen($rawDue) > 19
@@ -119,16 +85,7 @@ final class TaskCreationService
                 return null;
             }
         }
-        return [
-            'projects_id' => $projectId,
-            'name' => trim($name),
-            'content' => $content,
-            'due_date' => $date,
-            'entities_id' => $entity,
-            'status' => $status,
-            'users_id_assign' => $userId,
-            'groups_id_assign' => $groupId,
-        ];
+        return ['projects_id'=>$projectId,'name'=>trim($name),'content'=>$content,'due_date'=>$date];
     }
 
     private static function unsignedId(mixed $value): ?int

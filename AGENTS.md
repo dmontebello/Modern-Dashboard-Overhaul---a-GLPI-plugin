@@ -23,3 +23,6 @@
 Prima del push riallinea `CHANGELOG.md`, `QA.md`, `README.md`, note `docs/releases/`, documenti d'impatto, `docs/product/backlog.md`, `docs/implementation-state.md` e `docs/project/current-focus.md`. Esegui lint PHP/JS/Bash/Python, suite e Playwright applicabili, packaging e verifica SHA512; ricontrolla CI remota *per ogni job* sul commit esatto e documenta FAIL/NON ESEGUITO. Per migrazioni e browser usa staging GLPI e registrane esito concreto. Nessuna promozione a `Main` soltanto perché CI è verde.
 
 **Niente segreti, dati personali, URL interni o screenshot di GLPI reale nel repository pubblico.** Se HEAD remoto cambia, preserva il lavoro altrui, no force push; riconcilia prima di scrivere.
+
+## Decisione corrente 29 ottobre 2026
+MDO-D-009 SUPERSEDE le indicazioni storiche su StandaloneTask: solo ProjectTask nativa con progetto obbligatorio. Non ripristinare All/Independent o i vecchi endpoint. Conservare intatti i dati storici, anche gli allegati e il volume privato. Test e documentazione sempre nello stesso commit. Vedi dev.12.

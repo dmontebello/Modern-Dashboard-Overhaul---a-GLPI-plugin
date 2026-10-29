@@ -6,8 +6,7 @@
   const isTaskUrl = url => url.origin === location.origin &&
     url.pathname.endsWith('/plugins/mdoverhaul/front/tasks.php') &&
     !url.searchParams.has('new');
-  const isSafeView = url => url.searchParams.get('source') === 'all' ||
-    url.searchParams.get('view') === 'board';
+  const isSafeView = url => url.searchParams.get('view') === 'board';
   let busy = false;
 
   function initializeBoard(root) {
@@ -22,7 +21,7 @@
       dragged = null;
       if (dragPreview) { dragPreview.remove(); dragPreview = null; }
     };
-    // All may have native Project statuses alongside Independent stages.
+    // Native ProjectState columns accept only ProjectTask cards.
     const accepts = (card, column) => !!card && !!column &&
       column.dataset.dropEnabled !== '0' &&
       (!column.dataset.acceptSource || column.dataset.acceptSource === 'all' ||
@@ -54,17 +53,12 @@
         destination.append(card);
         card.dataset.version = data.version || '';
         card.dataset.stage = target;
-        if (card.dataset.source === 'standalone') card.dataset.complete = target === 'done' ? '1' : '0';
-        else if (typeof data.percent_done === 'number') card.dataset.complete = data.percent_done >= 100 ? '1' : '0';
+        if (typeof data.percent_done === 'number') card.dataset.complete = data.percent_done >= 100 ? '1' : '0';
         if (typeof data.state_label === 'string') {
           const state = card.querySelector('.mdo-tasks-state');
           if (state) state.textContent = data.state_label;
         }
-        if (card.dataset.source === 'project' && !target.startsWith('state-')) {
-          const state = card.querySelector('.mdo-tasks-state');
-          if (state) state.dataset.stage = target;
-        }
-        if (card.dataset.source === 'project') {
+        {
           const progress = typeof data.percent_done === 'number' ? data.percent_done :
             target === 'todo' ? 0 : target === 'done' ? 100 :
             Math.max(1, Math.min(99, Number(card.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow')) || 50));

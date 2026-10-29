@@ -35,3 +35,6 @@
 ## Regole permanenti
 
 Un solo plugin, nessuna modifica al core GLPI; permessi per item/entità sempre lato server; ProjectTask nativa, StandaloneTask separata. Backup coordinato DB/plugin/storage prima di migrazioni. `Dev` sviluppo e ZIP candidate, `Main` pubblicazione controllata; non force push, non deploy automatici. CI fixture ≠ GLPI reale. Le chat **non** aggiornano GitHub per magia: bisogna effettuare una scrittura riuscita e verificarne lo SHA; in assenza di permessi fornire patch.
+
+## Regola attuale 29/10/2026
+MDO-D-009: il plugin offre soltanto ProjectTask nativa collegata a un progetto GLPI. Lo Standalone descritto nelle precedenti versioni è ritirato, ma i dati storici sono conservati senza CRUD. Vedi docs/releases/0.8.1-dev.12.md e MDO-TASK-022.

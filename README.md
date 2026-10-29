@@ -3,9 +3,9 @@
 > **NUOVE CHAT CTO / DEVELOPER / CODEX:** punto di ingresso operativo **[START HERE — MDO](docs/project/start-here.md)**. Consultare [focus corrente](docs/project/current-focus.md), [backlog con stati](docs/product/backlog.md), [roadmap](docs/roadmap.md), [decisioni](docs/product/decisions.md) e [stato implementato](docs/implementation-state.md). Lo sviluppo è su `Dev`; `Main` rimane la release pubblicata. Verificare sempre GitHub e CI sullo SHA attuale.
 
 
- > **Candidata Dev 0.8.1-dev.11:** [Note](docs/releases/0.8.1-dev.11.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
+ > **Candidata Dev 0.8.1-dev.12:** [Note](docs/releases/0.8.1-dev.12.md) · [Stato/handoff](docs/dev/STATUS.md) · [Staging](docs/dev/STAGING_0_8_1.md). **NON COLLAUDATO LIVE**: i bug segnalati attendono il collaudo dell'utente.
 
-**Versione:** `0.8.1-dev.11` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
+**Versione:** `0.8.1-dev.12` (Dev) · **Autore:** Davide Montebello · **Licenza:** MIT
 **ID tecnico/cartella:** `mdoverhaul` · **Target:** GLPI `11.0.x` (`>=11.0.0`, `<11.1.0`)
 
 Un unico plugin GLPI con moduli indipendenti, configurabili da **Configura**: restyling dashboard, widget RSS, Tasks Workspace e restyling Kanban nativo. Non sostituisce GLPI, non modifica i dati dei suoi widget nativi e non richiede servizi aggiuntivi.
@@ -165,3 +165,9 @@ Apertura All / Kanban, vista Project raggruppata per stati GLPI nativi, mapping 
 
 ## 0.8.1-dev.11 — Project statuses, All drag and timestamp warning
 Project now keeps native GLPI status columns even with legacy progress URLs. All supports Project native state lanes when the common three-stage mapping is incomplete; Independent stages are preserved and unsafe progress fallbacks removed. Two MDO journal/attachment date_creation definitions now use TIMESTAMP for *new* installations; existing DB data requires supervised GLPI migration after backup. **NON COLLAUDATO LIVE**. See [release note](docs/releases/0.8.1-dev.11.md).
+
+## 0.8.1-dev.12 — Solo ProjectTask GLPI (29 ottobre 2026)
+
+Decisione MDO-D-009: le nuove task appartengono obbligatoriamente a un progetto GLPI e utilizzano ProjectTask nativa. Elenco con Search GLPI, Kanban con tutti gli stati ProjectState (anche colonne vuote), aggiornamento con permessi item, CSRF e date_mod; percent_done non viene trattato come stato. Sono ritirati tab All/Independent, creazione senza progetto, opzione di configurazione, scheda diritti profilo e CRUD standalone. Gli endpoint legacy non devono consentire nuove scritture.
+
+I dati già esistenti non sono eliminati: tabella glpi_plugin_mdoverhaul_tasks, record note/file source=standalone e volume GLPI_DOC_DIR/mdoverhaul restano intatti per recupero/esportazione separata. Non vengono convertiti automaticamente in ProjectTask. Main resta invariato, test GLPI LIVE NON ESEGUITI. Vedi docs/releases/0.8.1-dev.12.md per dettagli, CI, rollback.

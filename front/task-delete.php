@@ -2,13 +2,11 @@
 declare(strict_types=1);
 
 use GlpiPlugin\Mdoverhaul\Settings;
-use GlpiPlugin\Mdoverhaul\StandaloneTask;
 use GlpiPlugin\Mdoverhaul\TaskStageService;
 
 require_once __DIR__ . '/../src/Settings.php';
 require_once __DIR__ . '/../src/TaskBoard.php';
 require_once __DIR__ . '/../src/TaskSchema.php';
-require_once __DIR__ . '/../src/StandaloneTask.php';
 require_once __DIR__ . '/../src/TaskStageService.php';
 
 Session::checkCentralAccess();
@@ -31,7 +29,7 @@ $id = $_POST['id'] ?? null;
 $confirmed = $_POST['confirm_delete'] ?? null;
 $result = ['ok'=>false,'error'=>'invalid'];
 $status = 400;
-if (is_string($source) && in_array($source, ['project','standalone'], true)
+if (is_string($source) && $source === 'project'
     && (is_string($id) || is_int($id))
     && preg_match('/^[1-9][0-9]{0,9}$/D', (string)$id)
     && $confirmed === '1') {
@@ -66,4 +64,4 @@ if (!$result['ok']) {
     );
 }
 global $CFG_GLPI;
-Html::redirect(rtrim((string)$CFG_GLPI['root_doc'],'/').'/plugins/mdoverhaul/front/tasks.php?source=all&view=list');
+Html::redirect(rtrim((string)$CFG_GLPI['root_doc'],'/').'/plugins/mdoverhaul/front/tasks.php?view=list');

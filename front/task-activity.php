@@ -6,13 +6,11 @@ use GlpiPlugin\Mdoverhaul\TaskActivity;
 use GlpiPlugin\Mdoverhaul\TaskAttachment;
 use GlpiPlugin\Mdoverhaul\TaskMenu;
 use GlpiPlugin\Mdoverhaul\TaskStageService;
-use GlpiPlugin\Mdoverhaul\StandaloneTask;
 use GlpiPlugin\Mdoverhaul\TaskSchema;
 
 require_once __DIR__ . '/../src/Settings.php';
 require_once __DIR__ . '/../src/TaskBoard.php';
 require_once __DIR__ . '/../src/TaskSchema.php';
-require_once __DIR__ . '/../src/StandaloneTask.php';
 require_once __DIR__ . '/../src/TaskStageService.php';
 require_once __DIR__ . '/../src/TaskActivity.php';
 require_once __DIR__ . '/../src/TaskAttachment.php';
@@ -20,7 +18,7 @@ require_once __DIR__ . '/../src/TaskMenu.php';
 
 Session::checkCentralAccess();
 $esc=static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-$trans=[StandaloneTask::class,'text'];
+$trans=static fn(string $it,string $en): string => str_starts_with(strtolower((string)Session::getLanguage()),'it') ? $it : $en;
 if (!Plugin::isPluginActive('mdoverhaul') || !Settings::get()['task_workspace'] || !TaskSchema::isReady()) {
     Html::displayNotFoundError(); return;
 }
@@ -29,7 +27,7 @@ $input=$post?$_POST:$_GET;
 $source=$input['source']??'';
 $rawId=$input['id']??0;
 $id=is_scalar($rawId)?filter_var($rawId,FILTER_VALIDATE_INT):false;
-if (!is_string($source) || !in_array($source,['project','standalone'],true) || $id===false || $id<1) {
+if (!is_string($source) || $source!=='project' || $id===false || $id<1) {
     Html::displayNotFoundError(); return;
 }
 $item=TaskStageService::item($source,$id);
@@ -100,8 +98,7 @@ Html::header($trans('Diario attività','Task activity'), '', 'helpdesk', strtolo
 echo '<div class="mdo-tasks container-xl"><div class="mdo-tasks-create mdo-activity">';
 echo '<h1>'.$esc($trans('Diario e allegati','Activity and attachments')).'</h1>';
 echo '<h2>'.$esc((string)($item->fields['name']??'')).'</h2>';
-echo '<p><a class="btn btn-outline-secondary" href="'.$esc(($source==='standalone'?
-    StandaloneTask::getFormURL():ProjectTask::getFormURL()).'?id='.$id).'">'.
+echo '<p><a class="btn btn-outline-secondary" href="'.$esc(ProjectTask::getFormURL().'?id='.$id).'">'.
     $esc($trans('Torna alla task','Back to task')).'</a></p>';
 echo '<section aria-label="'.$esc($trans('Aggiornamenti','Updates')).'"><h3>'.
     $esc($trans('Aggiornamenti','Updates')).'</h3>';

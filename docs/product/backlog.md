@@ -71,3 +71,10 @@ Rilasciata su Dev con [Actions #40321113463](https://github.com/dmontebello/Mode
 | MDO-TASK-020 | Bug | [Project conserva group=progress](../releases/0.8.1-dev.11.md) | P0 / dev.11 | IN SVILUPPO | Correzione status GLPI nativi e passaggio All→Project, test live ancora da eseguire |
 | MDO-TASK-021 | Bug | [All drag Project con mapping parziale](../releases/0.8.1-dev.11.md) | P0 / dev.11 | IN SVILUPPO | Fallback native Project lanes più Independent stages, ACL e drag tipo-sicuro; collaudo live aperto |
 | MDO-TECH-001 | DB | [GLPI warning 2 deprecated datetime columns](../releases/0.8.1-dev.11.md) | P0 / dev.11 | IN SVILUPPO | Due date_creation DATETIME nelle tabelle note/file MDO, nuove installazioni TIMESTAMP; migrazione GLPI amministrativa pre-backup NON ESEGUITA |
+
+## 29/10/2026 — Decisione Project-only
+| ID | Tipo | Titolo | Priorità | Stato operativo | Evidenza / prossimo passo |
+|---|---|---|---|---|---|
+| MDO-TASK-022 | Rimozione feature | [Dismettere task indipendenti](../releases/0.8.1-dev.12.md) | P0 / dev.12 | IN SVILUPPO | ProjectTask soltanto; test e collaudo live ancora da certificare, nessun DROP dei dati storici |
+
+Superate come requisiti le sezioni Standalone di MDO-TASK-002/003/007/009/017/019/021 e MDO-UI-005: mantenerne gli ID e le prove storiche. Non creare nuove task Standalone.

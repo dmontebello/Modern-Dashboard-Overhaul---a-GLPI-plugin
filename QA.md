@@ -196,3 +196,9 @@ Run GitHub Actions #40492822635 on source 63b28cc: PHP tests PASS, Chromium test
 
 ## CI 27/10/2026 — regression packaging test fix
 Run #40507437883 failed in the newly added regression: the fixture used historical `0.8.1-dev.10`, which includes the substring `0.8.1-dev.1`, so the presence-check correctly did not report it missing. Test fixture now uses `0.8.0`, which does not contain the candidate version. No production code or GLPI database change. Full CI and ZIP publication still require new PASS.
+
+## 0.8.1-dev.12 — Solo ProjectTask GLPI (29 ottobre 2026)
+
+Decisione MDO-D-009: le nuove task appartengono obbligatoriamente a un progetto GLPI e utilizzano ProjectTask nativa. Elenco con Search GLPI, Kanban con tutti gli stati ProjectState (anche colonne vuote), aggiornamento con permessi item, CSRF e date_mod; percent_done non viene trattato come stato. Sono ritirati tab All/Independent, creazione senza progetto, opzione di configurazione, scheda diritti profilo e CRUD standalone. Gli endpoint legacy non devono consentire nuove scritture.
+
+I dati già esistenti non sono eliminati: tabella glpi_plugin_mdoverhaul_tasks, record note/file source=standalone e volume GLPI_DOC_DIR/mdoverhaul restano intatti per recupero/esportazione separata. Non vengono convertiti automaticamente in ProjectTask. Main resta invariato, test GLPI LIVE NON ESEGUITI. Vedi docs/releases/0.8.1-dev.12.md per dettagli, CI, rollback.

@@ -67,3 +67,7 @@ Source analysis: front/tasks.php propagated group=progress into Project; TaskSta
 
 ## Evidence dev.11 packaging regression — 27 October 2026
 Actions #40492822635 (source SHA 63b28cc1191492595e5d9ad5a78cffae8e37a1bc): PHP + browser fixtures passed, ZIP packaging failed: ten manuals missing version 0.8.1-dev.11. Fix: synchronized manual versions and moved check to early doc validation, packaging regression fixture added. Next commit and CI must be verified independently before claiming published package. GLPI LIVE and DB timestamps migration NOT EXECUTED; Main unchanged.
+
+## 0.8.1-dev.12 — ProjectTask GLPI only (29 ottobre 2026)
+
+MDO-D-009 replaces the former standalone model. Only native ProjectTask associated with an existing authorized GLPI project is available for creation, search and Kanban. Native ProjectState columns including empty statuses; per-item ACL and CSRF. All/Independent tabs, standalone CRUD, profile settings and optional-project creation are retired. Never delete the historical glpi_plugin_mdoverhaul_tasks table, source=standalone note/file rows, GLPI_DOC_DIR/mdoverhaul, or old config/rights on upgrade. No automated conversion or DROP. Legacy data is for separately authorized export/restore. GLPI LIVE tests not performed; CI and SHA512 of new candidate to be verified. Main unchanged. Release details docs/releases/0.8.1-dev.12.md.

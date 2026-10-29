@@ -4,7 +4,6 @@ declare(strict_types=1);
 use GlpiPlugin\Mdoverhaul\TaskStageService;
 
 require_once __DIR__ . '/../src/TaskStageService.php';
-require_once __DIR__ . '/../src/StandaloneTask.php';
 require_once __DIR__ . '/../src/TaskSchema.php';
 require_once __DIR__ . '/../src/TaskBoard.php';
 require_once __DIR__ . '/../src/Settings.php';
@@ -25,7 +24,7 @@ $source = $_POST['source'] ?? '';
 $stage = $_POST['stage'] ?? '';
 $id = $_POST['id'] ?? null;
 $version = $_POST['version'] ?? '';
-$mode = $_POST['mode'] ?? 'progress';
+$mode = $_POST['mode'] ?? 'state';
 if (!is_string($source) || !is_string($stage) || !is_string($version) || !is_string($mode)
     || !is_scalar($id) || filter_var($id, FILTER_VALIDATE_INT) === false) {
     http_response_code(400);

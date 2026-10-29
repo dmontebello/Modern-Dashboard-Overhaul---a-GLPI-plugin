@@ -27,3 +27,6 @@ Analisi manutenibilità, prestazioni e cybersecurity secondo [playbook](../proje
 Questo incarico autorizza sola riorganizzazione dei documenti del ramo Dev, non feature, deploy, cambi a Main o N3RA. Qualità, collaudo e rollback rimangono necessari per la promozione.
 
 **Nuova decisione:** `MDO-D-### — data — APPROVATA/PROPOSTA/SUPERATA — alternativa/scelta/motivazione/prove/link`. Per cambiare: aggiungere una nuova voce che dica **SUPERSEDE MDO-D-###**, mai cancellare lo storico.
+
+### MDO-D-009 — 29/10/2026 · APPROVATA · Solo attività legate ai progetti GLPI
+SUPERSEDE MDO-D-003 e la parte Standalone/mista di MDO-D-004/MDO-D-005. ProjectTask nativa associata a un progetto obbligatorio è l'unico modello task dell'applicazione. Ritirare UI, diritti, endpoint e creazione standalone, senza cancellare tabella dati, note, file, ACL storiche o configurazione conservata. Conversione di eventuali dati già salvati solo con progetto separato e consenso, backup e mappatura verificata. [Specifica dev.12](../releases/0.8.1-dev.12.md).

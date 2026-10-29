@@ -157,3 +157,9 @@ Dettagli: [release 0.8.1-dev.1](docs/releases/0.8.1-dev.1.md).
 - Fixed Project grouping persistence of percentages instead of native GLPI ProjectState columns.
 - All mixed board: separate native Project columns on missing mapping, source-safe DnD and no fake percent_done change; retains 3 shared columns when mapping is complete.
 - New journal/attachment date_creation columns TIMESTAMP; preexisting DATETIME must be migrated by GLPI admin after backup, not by plugin on page loads. **NON COLLAUDATO LIVE**.
+
+## 0.8.1-dev.12 — Solo ProjectTask GLPI (29 ottobre 2026)
+
+Decisione MDO-D-009: le nuove task appartengono obbligatoriamente a un progetto GLPI e utilizzano ProjectTask nativa. Elenco con Search GLPI, Kanban con tutti gli stati ProjectState (anche colonne vuote), aggiornamento con permessi item, CSRF e date_mod; percent_done non viene trattato come stato. Sono ritirati tab All/Independent, creazione senza progetto, opzione di configurazione, scheda diritti profilo e CRUD standalone. Gli endpoint legacy non devono consentire nuove scritture.
+
+I dati già esistenti non sono eliminati: tabella glpi_plugin_mdoverhaul_tasks, record note/file source=standalone e volume GLPI_DOC_DIR/mdoverhaul restano intatti per recupero/esportazione separata. Non vengono convertiti automaticamente in ProjectTask. Main resta invariato, test GLPI LIVE NON ESEGUITI. Vedi docs/releases/0.8.1-dev.12.md per dettagli, CI, rollback.

@@ -73,3 +73,7 @@ Dev.10 sul server: vista Project porta group=progress e mostra 0/1–99/100; All
 
 ## Packaging gate 27/10/2026 — dev.11
 Previous Actions #40492822635 failed only at ZIP validation: ten manuals missing current version, despite PHP and Chromium fixture success. Updated manuals and synchronized early check_dev_docs version list with final check_release; added regression test. Waiting for exact SHA CI to confirm bundle and publisher. Main unchanged; timestamp migration NOT executed; operational Kanban QA still open.
+
+## 0.8.1-dev.12 — ProjectTask GLPI only (29 ottobre 2026)
+
+MDO-D-009 replaces the former standalone model. Only native ProjectTask associated with an existing authorized GLPI project is available for creation, search and Kanban. Native ProjectState columns including empty statuses; per-item ACL and CSRF. All/Independent tabs, standalone CRUD, profile settings and optional-project creation are retired. Never delete the historical glpi_plugin_mdoverhaul_tasks table, source=standalone note/file rows, GLPI_DOC_DIR/mdoverhaul, or old config/rights on upgrade. No automated conversion or DROP. Legacy data is for separately authorized export/restore. GLPI LIVE tests not performed; CI and SHA512 of new candidate to be verified. Main unchanged. Release details docs/releases/0.8.1-dev.12.md.

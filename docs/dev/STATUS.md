@@ -228,3 +228,6 @@ Source tested `9ddd6396523eea8a4d6edf1c3ac90c2023769a1c`; Actions [#40321113463]
 
 ## 0.8.1-dev.11 — bugfix candidate, 26 ottobre 2026
 User's dev.10 live feedback: Project shows percentages, All Project DnD blocked, 2 GLPI deprecated DATETIME columns warning. Candidate changes: native Project statuses even with legacy query, mixed All source-safe fallback, schema TIMESTAMP for future notes/file tables. See [dev.11 release note](../releases/0.8.1-dev.11.md). Existing DB migration is separate, authorized GLPI admin operation after backup. MDO-TASK-020/021, MDO-TECH-001 IN SVILUPPO, no live fix acceptance, no GLPI migration or Main change. Verify CI on source SHA, then record test and package provenance.
+
+## 0.8.1-dev.12 — 29 ottobre 2026, Project-only
+Decisione utente: rimuovere task indipendenti a favore di GLPI Project/ProjectTask. Candidata Dev elimina vecchia UI, form opzionale, servizi CRUD e impostazioni, preservando dati e allegati legacy per esportazione separata; i Project mantengono stati nativi e diario MDO. CI, source SHA e ZIP da registrare dopo pubblicazione e verifica. GLPI live NON ESEGUITO, Main intatta.

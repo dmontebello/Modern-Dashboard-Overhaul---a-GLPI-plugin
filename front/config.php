@@ -69,14 +69,8 @@ $fields = [
     ],
     'task_workspace' => [
         $i18n('Tasks Workspace', 'Tasks Workspace'),
-        $i18n('Abilita Assistance → Tasks: ricerca nativa GLPI e Kanban di ProjectTask in sola lettura. Non crea ticket.', 'Enable Assistance → Tasks: native GLPI search and a read-only ProjectTask Kanban. No tickets are created.'),
+        $i18n('Abilita Assistance → Tasks: ricerca nativa GLPI e Kanban modificabile di ProjectTask. Non crea ticket.', 'Enable Assistance → Tasks: native GLPI search and an editable ProjectTask Kanban. No tickets are created.'),
         false,
-    ],
-    'tasks_standalone' => [
-        $i18n('Attività indipendenti', 'Independent tasks'),
-        $i18n('Sotto-opzione Tasks Workspace: attività senza progetto con tabella e diritti dei profili propri. Richiede upgrade del plugin; disattivandola i dati vengono conservati.',
-            'Tasks Workspace sub-option: tasks without a project, with their own table and profile rights. Requires plugin upgrade; disabling preserves data.'),
-        true,
     ],
     'kanban_restyling' => [
         $i18n('Kanban restyling', 'Kanban restyling'),
@@ -103,8 +97,8 @@ foreach (['source_commit' => $i18n('Commit sorgente', 'Source commit'), 'build_i
 }
 echo '</dl>';
 echo '<p class="mdo-settings-intro">' . $escape($i18n(
-    'Le opzioni sono salvate nella configurazione nativa di GLPI. Le attività indipendenti usano una tabella dedicata del plugin; progetti, ticket e dashboard restano nativi.',
-    'Options use GLPI native configuration. Independent tasks use a dedicated plugin table; projects, tickets and dashboards remain native.'
+    'Le opzioni sono salvate nella configurazione nativa GLPI. Le task sono esclusivamente attività native dei progetti; i vecchi dati indipendenti restano archiviati senza accesso dal plugin.',
+    'Options use native GLPI configuration. Tasks now belong exclusively to native GLPI projects; legacy independent-task data is retained but no longer accessible through the plugin.'
 )) . '</p>';
 echo '<form method="post" action="' . $escape($url) . '">';
 echo '<input type="hidden" name="_glpi_csrf_token" value="' . $escape(Session::getNewCSRFToken()) . '">';

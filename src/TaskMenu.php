@@ -25,7 +25,7 @@ final class TaskMenu extends CommonGLPI
 
     public static function canView(): bool
     {
-        return Settings::get()['task_workspace'] && (ProjectTask::canView() || StandaloneTask::canView());
+        return Settings::get()['task_workspace'] && ProjectTask::canView();
     }
 
     public static function getMenuContent(): array|false
@@ -35,7 +35,7 @@ final class TaskMenu extends CommonGLPI
         }
         return [
             'title' => 'Tasks',
-            'page'  => '/plugins/mdoverhaul/front/tasks.php?source=all&view=board',
+            'page'  => '/plugins/mdoverhaul/front/tasks.php?view=board',
             'icon'  => self::getIcon(),
             'links' => [
                 'search' => '/plugins/mdoverhaul/front/tasks.php',

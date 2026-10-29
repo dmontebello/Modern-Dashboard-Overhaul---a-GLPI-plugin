@@ -24,11 +24,8 @@ jobs:
         run: |
           bash tools/verifica-sintassi.sh --local
           php tests/unit_php.php
-          php tests/tasks_php.php
-          php tests/standalone_php.php
-          php tests/task_activity_php.php
-          php tests/task_creation_php.php
-          php tests/task_ux_php.php
+          # Legacy mixed/standalone suites kept as archived evidence, not run against retired surface.
+          php tests/project_only_php.php
           python3 -B tests/packaging_test.py
           python3 -B tools/maintainer/check_dev_docs.py
       - name: Install browser dependencies
@@ -38,11 +35,7 @@ jobs:
       - name: Responsive UI (NON COLLAUDATO LIVE)
         run: |
           python3 tests/ui_playwright.py
-          python3 tests/tasks_ui_playwright.py
-          python3 tests/task_ux_ui_playwright.py
-          python3 tests/task_creation_ui_playwright.py
           python3 tests/settings_ui_playwright.py
-          python3 tests/standalone_ui_playwright.py
       - name: Build exact tested source
         run: |
           mdo_version="$(python3 -c 'import sys; sys.path.insert(0,"tools/maintainer"); from versioning import version; from pathlib import Path; print(version(Path(".")))')"
