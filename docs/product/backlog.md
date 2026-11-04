@@ -81,3 +81,10 @@ Superate come requisiti le sezioni Standalone di MDO-TASK-002/003/007/009/017/01
 
 ## Consuntivo pubblicazione 0.8.1-dev.12 — 29/10/2026
 Sorgente testata `f0debaaff9c01bc43d81dd4e0b108c7f6232d783`; [GitHub Actions #40911100034](https://github.com/dmontebello/Modern-Dashboard-Overhaul---a-GLPI-plugin/actions/runs/40911100034) **SUCCESS** (`bundle` e `publish_dev_zip`). ZIP immutabile `Modern_Dashboard_Overhaul_0.8.1-dev.12.zip` pubblicata su `Dev`; SHA512 `0e7f4c322f1de6459abe83b8b194bb893981a5b77d3d656aeceecabdbabc234c9ec8bfbbf77a2a5c8eace61b9092fe8870676a596203d0244a021d80473529ef`. Provenienza [build.json](../releases/0.8.1-dev.12.build.json). Test PHP/Chromium automatici con doubles PASS; i test legacy Standalone/mixed non sono più eseguiti perché il prodotto è Project-only. **NON COLLAUDATO LIVE**: il codice non è stato installato/testato sull'istanza GLPI dell'utente. `Main` invariata. MDO-TASK-022 **IN COLLAUDO OPERATIVO**, non CHIUSA. Verificare su staging creazione progetto obbligatorio, accesso diretto vecchie URL, endpoint POST e permessi, Project Kanban e note/allegati, dati legacy invariati.
+
+
+## 4 novembre 2026 - Diagnosi avvisi schema GLPI
+| ID | Tipo | Titolo | Priorita | Stato operativo | Evidenza e prossima azione |
+|---|---|---|---|---|---|
+| MDO-TECH-008 | DB | [2 DATETIME legacy](../dev/GLPI_SCHEMA_WARNINGS_SAFE_RUNBOOK.md) | P1 | BLOCCATA | Sorgente MDO storico usa DATETIME in tasknotes/taskfiles; verificare database reale prima di migrazione |
+| MDO-TECH-009 | DB | [3 chiavi signed](../dev/GLPI_SCHEMA_WARNINGS_SAFE_RUNBOOK.md) | P1 | BLOCCATA | Origine delle colonne sconosciuta; interrogazioni di sola lettura e backup/staging prima di intervento |
